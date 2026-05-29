@@ -1,4 +1,14 @@
 export {
+  HiddenInput as FaderHiddenInput,
+  Range as FaderRange,
+  Root as FaderRoot,
+  Scale as FaderScale,
+  Thumb as FaderThumb,
+  Track as FaderTrack,
+  Value as FaderValue,
+} from "./fader/index.ts";
+export { Fader } from "./fader/index.ts";
+export {
   Control as KnobControl,
   HiddenInput as KnobHiddenInput,
   Root as KnobRoot,
@@ -15,6 +25,15 @@ export {
   Value as SliderValue,
 } from "./slider/index.ts";
 export { Slider } from "./slider/index.ts";
+export type {
+  FaderHiddenInputProps,
+  FaderRangeProps,
+  FaderRootProps,
+  FaderScaleProps,
+  FaderThumbProps,
+  FaderTrackProps,
+  FaderValueProps,
+} from "./fader/index.ts";
 export type {
   KnobControlProps,
   KnobHiddenInputProps,

@@ -395,6 +395,143 @@ h3 {
   cursor: default;
 }
 
+.fader {
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
+  color: #f7f9fc;
+}
+
+.fader-strip {
+  display: grid;
+  grid-template-columns: 3rem 3.1rem;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.fader-scale {
+  position: relative;
+  display: block;
+  width: 3rem;
+  height: 12rem;
+  color: #aab5c5;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.fader[data-compact] .fader-scale {
+  height: 9.5rem;
+}
+
+.fader-scale [data-part="scale-mark"] {
+  position: absolute;
+  top: calc((1 - var(--fader-mark-percent)) * 100%);
+  right: 0;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.fader-scale [data-part="scale-mark"]::after {
+  display: inline-block;
+  width: 0.45rem;
+  height: 1px;
+  margin-left: 0.35rem;
+  background: rgba(255, 255, 255, 0.22);
+  content: "";
+  vertical-align: middle;
+}
+
+.fader-scale [data-unity] {
+  color: #ffffff;
+}
+
+.fader-track {
+  position: relative;
+  width: 3.1rem;
+  height: 12rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  outline: none;
+  background:
+    linear-gradient(90deg, transparent 0 44%, rgba(255, 255, 255, 0.18) 44% 56%, transparent 56%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)), #171a20;
+  box-shadow:
+    inset 0 0.15rem 0.6rem rgba(0, 0, 0, 0.34),
+    0 1rem 2rem rgba(0, 0, 0, 0.2);
+  touch-action: none;
+}
+
+.fader-track::after {
+  position: absolute;
+  top: calc((1 - var(--fader-unity-percent)) * 100%);
+  right: -0.25rem;
+  left: -0.25rem;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+  content: "";
+  transform: translateY(-50%);
+}
+
+.fader[data-compact] .fader-track {
+  height: 9.5rem;
+}
+
+.fader-track:hover {
+  border-color: color-mix(in srgb, var(--accent), white 12%);
+}
+
+.fader-range {
+  position: absolute;
+  inset: auto 0 0;
+  height: calc(var(--fader-percent) * 100%);
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--accent), transparent 42%);
+  box-shadow: inset 0 0 0.7rem color-mix(in srgb, var(--accent), transparent 45%);
+}
+
+.fader-thumb {
+  position: absolute;
+  top: calc((1 - var(--fader-percent)) * 100%);
+  left: 50%;
+  width: 4.5rem;
+  height: 1.7rem;
+  border: 0.18rem solid rgba(255, 255, 255, 0.74);
+  border-radius: 6px;
+  outline: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 44%),
+    linear-gradient(90deg, transparent 0 46%, rgba(0, 0, 0, 0.18) 46% 54%, transparent 54%),
+    var(--accent);
+  box-shadow:
+    0 0 0 0.18rem rgba(0, 0, 0, 0.24),
+    0 0.8rem 1.4rem rgba(0, 0, 0, 0.34);
+  transform: translate(-50%, -50%);
+}
+
+.fader-thumb:focus-visible {
+  box-shadow:
+    0 0 0 0.25rem color-mix(in srgb, var(--accent), transparent 55%),
+    0 0.8rem 1.4rem rgba(0, 0, 0, 0.34);
+}
+
+.fader-value {
+  min-width: 5.5rem;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.fader[data-disabled] {
+  opacity: 0.5;
+}
+
+.fader[data-readonly] .fader-track {
+  cursor: default;
+}
+
 .meter-row {
   display: grid;
   grid-template-columns: auto minmax(9rem, 28rem) auto;

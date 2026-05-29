@@ -33,5 +33,31 @@ export function GainKnob() {
 
 Pointer interaction uses vertical up/down dragging.
 
+## Fader
+
+```tsx
+import { Fader } from "@audio-ui/react";
+
+export function ChannelFader() {
+  return (
+    <Fader.Root defaultValue={-6} name="channel-gain">
+      <Fader.Scale />
+      <Fader.Track>
+        <Fader.Range />
+        <Fader.Thumb aria-label="Channel gain" />
+      </Fader.Track>
+      <Fader.Value format={(value) => `${value} dB`} />
+      <Fader.HiddenInput />
+    </Fader.Root>
+  );
+}
+```
+
+Fader is a vertical dB control for console-style channel strips. It defaults to
+`-60..+12 dB`, `0.1 dB` steps, a `0 dB` unity point, and a non-linear scale so the
+throw has more usable resolution around common mix positions. Use `Fader.Scale`
+to render the dB markings, or pass a custom `scale` array to define a different
+fader law.
+
 The React package is headless: it ships behavior, accessibility attributes, data attributes,
-and CSS variables such as `--knob-angle`, but no visual styling.
+and CSS variables such as `--knob-angle` and `--fader-percent`, but no visual styling.

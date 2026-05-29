@@ -1,6 +1,6 @@
 import { StrictMode, useMemo, useState, type CSSProperties } from "react";
 import { createRoot } from "react-dom/client";
-import { Knob, Slider } from "@audio-ui/react";
+import { Fader, Knob, Slider } from "@audio-ui/react";
 import "./styles.css";
 
 interface KnobPreset {
@@ -58,6 +58,8 @@ function App() {
     Object.fromEntries(presets.map((item) => [item.id, item.defaultValue])),
   );
   const [commitValue, setCommitValue] = useState(preset.defaultValue);
+  const [faderValue, setFaderValue] = useState(-6);
+  const [faderCommitValue, setFaderCommitValue] = useState(-6);
   const value = values[preset.id] ?? preset.defaultValue;
   const formattedValue = formatValue(value, preset);
   const percent = useMemo(
@@ -102,7 +104,7 @@ function App() {
       <section className="workspace" style={{ "--accent": preset.accent } as CSSProperties}>
         <header className="workspace-header">
           <div>
-            <p className="eyebrow">Knob and Slider primitives</p>
+            <p className="eyebrow">Knob, Slider, and Fader primitives</p>
             <h2>{preset.label}</h2>
           </div>
           <output className="readout" aria-label={`${preset.label} value`}>
@@ -134,6 +136,13 @@ function App() {
                 step={preset.step}
                 unit={preset.unit}
                 value={value}
+              />
+              <PreviewFader
+                accent="#f5b84b"
+                label="Channel fader"
+                onCommit={setFaderCommitValue}
+                onValueChange={setFaderValue}
+                value={faderValue}
               />
             </div>
             <div className="meter-row" aria-label="Value meter">
@@ -167,6 +176,10 @@ function App() {
               <strong>{Math.round(percent)}%</strong>
               <span>Last commit</span>
               <strong>{formatValue(commitValue, preset)}</strong>
+              <span>Fader</span>
+              <strong>{formatFaderValue(faderValue)}</strong>
+              <span>Fader commit</span>
+              <strong>{formatFaderValue(faderCommitValue)}</strong>
             </div>
           </aside>
         </div>
@@ -263,6 +276,15 @@ function App() {
               step={preset.step}
               unit={preset.unit}
               value={value}
+            />
+          </Variant>
+          <Variant title="Fader">
+            <PreviewFader
+              accent="#f5b84b"
+              compact
+              label="Channel fader compact"
+              onValueChange={setFaderValue}
+              value={faderValue}
             />
           </Variant>
           <Variant title="Slider disabled">
@@ -365,6 +387,51 @@ function PreviewKnob({
   );
 }
 
+interface PreviewFaderProps {
+  accent: string;
+  label: string;
+  value: number;
+  compact?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+  onValueChange: (value: number) => void;
+  onCommit?: (value: number) => void;
+}
+
+function PreviewFader({
+  accent,
+  compact = false,
+  disabled = false,
+  label,
+  onCommit,
+  onValueChange,
+  readOnly = false,
+  value,
+}: PreviewFaderProps) {
+  return (
+    <Fader.Root
+      className="fader"
+      data-compact={compact ? "" : undefined}
+      disabled={disabled}
+      onValueChange={onValueChange}
+      onValueCommit={onCommit}
+      readOnly={readOnly}
+      style={{ "--accent": accent } as CSSProperties}
+      value={value}
+    >
+      <div className="fader-strip">
+        <Fader.Scale className="fader-scale" />
+        <Fader.Track className="fader-track">
+          <Fader.Range className="fader-range" />
+          <Fader.Thumb aria-label={label} className="fader-thumb" />
+        </Fader.Track>
+      </div>
+      <Fader.Value className="fader-value" format={formatFaderValue} />
+      <Fader.HiddenInput name={label.toLowerCase().replaceAll(" ", "-")} />
+    </Fader.Root>
+  );
+}
+
 interface PreviewSliderProps {
   accent: string;
   label: string;
@@ -442,6 +509,14 @@ function formatValue(value: number, preset: KnobPreset) {
 function formatNumber(value: number, unit: string) {
   const roundedValue = Math.abs(value) >= 1000 ? Math.round(value) : value;
   return `${roundedValue.toLocaleString("en-US", { maximumFractionDigits: 1 })} ${unit}`;
+}
+
+function formatFaderValue(value: number) {
+  if (value <= -60) {
+    return "-inf dB";
+  }
+
+  return formatNumber(value, "dB");
 }
 
 createRoot(document.getElementById("root")!).render(
