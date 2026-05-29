@@ -82,6 +82,7 @@ function App() {
         <nav className="component-list" aria-label="Components">
           {presets.map((item) => (
             <button
+              aria-pressed={item.id === preset.id}
               className="component-button"
               data-selected={item.id === preset.id ? "" : undefined}
               key={item.id}
@@ -89,13 +90,14 @@ function App() {
                 setPresetId(item.id);
                 setCommitValue(values[item.id] ?? item.defaultValue);
               }}
+              style={{ "--accent": item.accent } as CSSProperties}
               type="button"
             >
               <span>
                 <strong>{item.label}</strong>
                 <small>{item.detail}</small>
               </span>
-              <span className="status-dot" style={{ "--accent": item.accent } as CSSProperties} />
+              <span className="status-dot" />
             </button>
           ))}
         </nav>
@@ -147,7 +149,18 @@ function App() {
             </div>
             <div className="meter-row" aria-label="Value meter">
               <span>{formatValue(preset.min, preset)}</span>
-              <meter max={preset.max} min={preset.min} value={value} />
+              <span
+                aria-label={`${preset.label} meter`}
+                aria-valuemax={preset.max}
+                aria-valuemin={preset.min}
+                aria-valuenow={value}
+                aria-valuetext={formattedValue}
+                className="meter-track"
+                role="meter"
+                style={{ "--meter-percent": percent / 100 } as CSSProperties}
+              >
+                <span className="meter-fill" />
+              </span>
               <span>{formatValue(preset.max, preset)}</span>
             </div>
           </section>
@@ -239,7 +252,7 @@ function App() {
                 <>
                   <Knob.Control
                     aria-label={`${preset.label} render prop`}
-                    className="strip-control"
+                    className="strip-control strip-control-knob"
                     style={{ "--accent": preset.accent } as CSSProperties}
                   >
                     <Knob.Thumb className="strip-thumb" />
@@ -313,7 +326,7 @@ function App() {
               {(state) => (
                 <>
                   <Slider.Track
-                    className="strip-control"
+                    className="strip-control strip-control-slider"
                     style={{ "--accent": preset.accent } as CSSProperties}
                   >
                     <Slider.Range className="strip-range" />
