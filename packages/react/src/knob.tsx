@@ -1,10 +1,8 @@
 import {
   createKnobState,
   getKnobValueFromLinearDrag,
-  getKnobValueFromPoint,
   getNextKeyboardValue,
   type KnobAngleRange,
-  type KnobDragMode,
   type KnobRange,
   type KnobState,
 } from "@audio-ui/core";
@@ -40,7 +38,6 @@ type RenderProp<TProps extends ElementProps, TState> =
 
 interface KnobContextValue {
   state: KnobState;
-  dragMode: KnobDragMode;
   disabled: boolean;
   readOnly: boolean;
   dragging: boolean;
@@ -59,7 +56,6 @@ export interface KnobRootProps
     KnobAngleRange {
   value?: number;
   defaultValue?: number;
-  dragMode?: KnobDragMode;
   disabled?: boolean;
   readOnly?: boolean;
   name?: string;
@@ -106,7 +102,6 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
   const {
     value,
     defaultValue,
-    dragMode = "radial",
     min,
     max,
     step,
@@ -159,7 +154,6 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
   const contextValue = useMemo<KnobContextValue>(
     () => ({
       state,
-      dragMode,
       disabled,
       readOnly,
       dragging,
@@ -172,7 +166,6 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
     }),
     [
       state,
-      dragMode,
       disabled,
       readOnly,
       dragging,
@@ -192,7 +185,6 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
     "data-disabled": disabled ? "" : undefined,
     "data-readonly": readOnly ? "" : undefined,
     "data-dragging": dragging ? "" : undefined,
-    "data-drag-mode": dragMode,
   });
 
   return (
@@ -228,39 +220,21 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
         return;
       }
 
-      let nextValue: number;
+      const activeDrag = activeDragRef.current;
 
-      if (context.dragMode === "radial") {
-        const rect = element.getBoundingClientRect();
-        nextValue = getKnobValueFromPoint(
-          {
-            centerX: rect.left + rect.width / 2,
-            centerY: rect.top + rect.height / 2,
-            pointX: event.clientX,
-            pointY: event.clientY,
-          },
-          context.state,
-        );
-      } else {
-        const activeDrag = activeDragRef.current;
-
-        if (activeDrag === null || activeDrag.pointerId !== event.pointerId) {
-          return;
-        }
-
-        nextValue = getKnobValueFromLinearDrag(
-          {
-            mode: context.dragMode,
-            startValue: activeDrag.startValue,
-            startX: activeDrag.startX,
-            startY: activeDrag.startY,
-            pointX: event.clientX,
-            pointY: event.clientY,
-            trackSize: activeDrag.trackSize,
-          },
-          context.state,
-        );
+      if (activeDrag === null || activeDrag.pointerId !== event.pointerId) {
+        return;
       }
+
+      const nextValue = getKnobValueFromLinearDrag(
+        {
+          startValue: activeDrag.startValue,
+          startY: activeDrag.startY,
+          pointY: event.clientY,
+          trackSize: activeDrag.trackSize,
+        },
+        context.state,
+      );
 
       context.setValue(nextValue);
     },
@@ -286,10 +260,6 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
       trackSize: Math.max(rect.width, rect.height),
     };
     context.setDragging(true);
-
-    if (context.dragMode === "radial") {
-      updateValueFromPointer(event);
-    }
   };
 
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
@@ -363,7 +333,6 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
     "data-disabled": disabled ? "" : undefined,
     "data-readonly": readOnly ? "" : undefined,
     "data-dragging": context.dragging ? "" : undefined,
-    "data-drag-mode": context.dragMode,
     style: {
       ...style,
       "--knob-value": context.state.value,
@@ -456,8 +425,6 @@ export const Knob = {
   Value,
   HiddenInput,
 };
-
-export type { KnobDragMode };
 
 function useKnobContext(partName: string) {
   const context = useContext(KnobContext);

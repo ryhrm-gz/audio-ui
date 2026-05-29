@@ -8,7 +8,6 @@ export {
 export { Knob } from "./knob.tsx";
 export type {
   KnobControlProps,
-  KnobDragMode,
   KnobHiddenInputProps,
   KnobRootProps,
   KnobThumbProps,
