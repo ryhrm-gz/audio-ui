@@ -6,6 +6,15 @@ export {
   Value as KnobValue,
 } from "./knob/index.ts";
 export { Knob } from "./knob/index.ts";
+export {
+  HiddenInput as SliderHiddenInput,
+  Range as SliderRange,
+  Root as SliderRoot,
+  Thumb as SliderThumb,
+  Track as SliderTrack,
+  Value as SliderValue,
+} from "./slider/index.ts";
+export { Slider } from "./slider/index.ts";
 export type {
   KnobControlProps,
   KnobHiddenInputProps,
@@ -13,3 +22,11 @@ export type {
   KnobThumbProps,
   KnobValueProps,
 } from "./knob/index.ts";
+export type {
+  SliderHiddenInputProps,
+  SliderRangeProps,
+  SliderRootProps,
+  SliderThumbProps,
+  SliderTrackProps,
+  SliderValueProps,
+} from "./slider/index.ts";

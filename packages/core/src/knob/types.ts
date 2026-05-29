@@ -1,8 +1,6 @@
-export interface KnobRange {
-  min?: number;
-  max?: number;
-  step?: number;
-}
+import type { RangeOptions } from "../shared/range.ts";
+
+export interface KnobRange extends RangeOptions {}
 
 export interface KnobAngleRange {
   minAngle?: number;

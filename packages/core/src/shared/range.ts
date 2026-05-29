@@ -1,0 +1,77 @@
+export interface RangeOptions {
+  min?: number;
+  max?: number;
+  step?: number;
+}
+
+export interface ResolvedRange {
+  min: number;
+  max: number;
+  step: number;
+}
+
+export const defaultRangeOptions = {
+  min: 0,
+  max: 100,
+  step: 1,
+} satisfies Required<RangeOptions>;
+
+export function resolveRangeOptions(
+  options: RangeOptions = {},
+  defaults: Required<RangeOptions> = defaultRangeOptions,
+): ResolvedRange {
+  const min = options.min ?? defaults.min;
+  const max = options.max ?? defaults.max;
+  const step = options.step ?? defaults.step;
+
+  return {
+    min: Math.min(min, max),
+    max: Math.max(min, max),
+    step: Number.isFinite(step) && step > 0 ? step : defaults.step,
+  };
+}
+
+export function clampValue(value: number, options: RangeOptions = {}) {
+  const { min, max } = resolveRangeOptions(options);
+  return Math.min(Math.max(value, min), max);
+}
+
+export function snapValueToStep(value: number, options: RangeOptions = {}) {
+  const { min, max, step } = resolveRangeOptions(options);
+  const steppedValue = Math.round((value - min) / step) * step + min;
+  const precision = getDecimalPrecision(step);
+  return clampValue(Number(steppedValue.toFixed(precision)), { min, max, step });
+}
+
+export function normalizeRangeValue(value: number, options: RangeOptions = {}) {
+  const { min, max, step } = resolveRangeOptions(options);
+  return snapValueToStep(value, { min, max, step });
+}
+
+export function getRangePercent(value: number, options: RangeOptions = {}) {
+  const { min, max } = resolveRangeOptions(options);
+  const span = max - min;
+
+  if (span === 0) {
+    return 0;
+  }
+
+  return (clampValue(value, { min, max }) - min) / span;
+}
+
+export function getRangeValueFromPercent(percent: number, options: RangeOptions = {}) {
+  const { min, max, step } = resolveRangeOptions(options);
+  const clampedPercent = Math.min(Math.max(percent, 0), 1);
+  return normalizeRangeValue(min + (max - min) * clampedPercent, { min, max, step });
+}
+
+function getDecimalPrecision(value: number) {
+  const valueText = value.toString();
+  const decimalIndex = valueText.indexOf(".");
+
+  if (decimalIndex === -1) {
+    return 0;
+  }
+
+  return valueText.length - decimalIndex - 1;
+}

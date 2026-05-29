@@ -1,0 +1,22 @@
+import { forwardRef } from "react";
+import { useSliderContext } from "./context.tsx";
+import type { SliderHiddenInputProps } from "./types.ts";
+
+export const HiddenInput = forwardRef<HTMLInputElement, SliderHiddenInputProps>(
+  function HiddenInput(props, ref) {
+    const { name, required, disabled, ...elementProps } = props;
+    const context = useSliderContext("Slider.HiddenInput");
+
+    return (
+      <input
+        {...elementProps}
+        ref={ref}
+        type="hidden"
+        name={name ?? context.name}
+        required={required ?? context.required}
+        disabled={disabled ?? context.disabled}
+        value={context.state.value}
+      />
+    );
+  },
+);

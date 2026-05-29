@@ -1,3 +1,4 @@
+import { resolveRangeOptions } from "../shared/range.ts";
 import type { KnobOptions } from "./types.ts";
 
 export const defaultKnobOptions = {
@@ -9,16 +10,12 @@ export const defaultKnobOptions = {
 } satisfies Required<KnobOptions>;
 
 export function resolveKnobOptions(options: KnobOptions = {}) {
-  const min = options.min ?? defaultKnobOptions.min;
-  const max = options.max ?? defaultKnobOptions.max;
-  const step = options.step ?? defaultKnobOptions.step;
   const minAngle = options.minAngle ?? defaultKnobOptions.minAngle;
   const maxAngle = options.maxAngle ?? defaultKnobOptions.maxAngle;
+  const range = resolveRangeOptions(options, defaultKnobOptions);
 
   return {
-    min: Math.min(min, max),
-    max: Math.max(min, max),
-    step: Number.isFinite(step) && step > 0 ? step : defaultKnobOptions.step,
+    ...range,
     minAngle,
     maxAngle,
   };

@@ -1,12 +1,8 @@
 import type { KnobAngleRange, KnobRange, KnobState } from "@audio-ui/core";
-import type { ComponentPropsWithoutRef, ElementType, ReactElement, ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import type { ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
 
-export type DataAttributes = Record<`data-${string}`, string | number | boolean | undefined>;
-export type ElementProps = Record<string, unknown>;
-export type RenderState<TState> = TState & DataAttributes;
-export type RenderProp<TProps extends ElementProps, TState> =
-  | ReactElement
-  | ((props: TProps, state: RenderState<TState>) => ReactElement | null);
+export type { DataAttributes, ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
 
 export interface KnobRootProps
   extends
@@ -46,5 +42,3 @@ export interface KnobHiddenInputProps extends Omit<
   ComponentPropsWithoutRef<"input">,
   "children" | "type" | "value"
 > {}
-
-export type KnobElement = ElementType;

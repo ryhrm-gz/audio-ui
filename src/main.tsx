@@ -1,6 +1,6 @@
 import { StrictMode, useMemo, useState, type CSSProperties } from "react";
 import { createRoot } from "react-dom/client";
-import { Knob } from "@audio-ui/react";
+import { Knob, Slider } from "@audio-ui/react";
 import "./styles.css";
 
 interface KnobPreset {
@@ -102,7 +102,7 @@ function App() {
       <section className="workspace" style={{ "--accent": preset.accent } as CSSProperties}>
         <header className="workspace-header">
           <div>
-            <p className="eyebrow">Knob primitive</p>
+            <p className="eyebrow">Knob and Slider primitives</p>
             <h2>{preset.label}</h2>
           </div>
           <output className="readout" aria-label={`${preset.label} value`}>
@@ -112,17 +112,30 @@ function App() {
 
         <div className="preview-grid">
           <section className="stage" aria-label="Interactive preview">
-            <PreviewKnob
-              accent={preset.accent}
-              label={preset.label}
-              max={preset.max}
-              min={preset.min}
-              onCommit={setCommitValue}
-              onValueChange={setPresetValue}
-              step={preset.step}
-              unit={preset.unit}
-              value={value}
-            />
+            <div className="preview-stack">
+              <PreviewKnob
+                accent={preset.accent}
+                label={preset.label}
+                max={preset.max}
+                min={preset.min}
+                onCommit={setCommitValue}
+                onValueChange={setPresetValue}
+                step={preset.step}
+                unit={preset.unit}
+                value={value}
+              />
+              <PreviewSlider
+                accent={preset.accent}
+                label={`${preset.label} slider`}
+                max={preset.max}
+                min={preset.min}
+                onCommit={setCommitValue}
+                onValueChange={setPresetValue}
+                step={preset.step}
+                unit={preset.unit}
+                value={value}
+              />
+            </div>
             <div className="meter-row" aria-label="Value meter">
               <span>{formatValue(preset.min, preset)}</span>
               <meter max={preset.max} min={preset.min} value={value} />
@@ -225,6 +238,75 @@ function App() {
               )}
             </Knob.Root>
           </Variant>
+          <Variant title="Slider">
+            <PreviewSlider
+              accent={preset.accent}
+              compact
+              label={`${preset.label} slider compact`}
+              max={preset.max}
+              min={preset.min}
+              onValueChange={setPresetValue}
+              step={preset.step}
+              unit={preset.unit}
+              value={value}
+            />
+          </Variant>
+          <Variant title="Vertical slider">
+            <PreviewSlider
+              accent="#42c3a7"
+              compact
+              label={`${preset.label} vertical slider`}
+              max={preset.max}
+              min={preset.min}
+              onValueChange={setPresetValue}
+              orientation="vertical"
+              step={preset.step}
+              unit={preset.unit}
+              value={value}
+            />
+          </Variant>
+          <Variant title="Slider disabled">
+            <PreviewSlider
+              accent="#8b95a7"
+              compact
+              disabled
+              label={`${preset.label} slider disabled`}
+              max={preset.max}
+              min={preset.min}
+              onValueChange={setPresetValue}
+              step={preset.step}
+              unit={preset.unit}
+              value={value}
+            />
+          </Variant>
+          <Variant title="Slider render prop">
+            <Slider.Root
+              className="render-prop"
+              max={preset.max}
+              min={preset.min}
+              onValueChange={setPresetValue}
+              step={preset.step}
+              value={value}
+            >
+              {(state) => (
+                <>
+                  <Slider.Track
+                    className="strip-control"
+                    style={{ "--accent": preset.accent } as CSSProperties}
+                  >
+                    <Slider.Range className="strip-range" />
+                    <Slider.Thumb
+                      aria-label={`${preset.label} slider render prop`}
+                      className="strip-thumb"
+                    />
+                  </Slider.Track>
+                  <Slider.Value className="strip-value">
+                    {formatValue(state.value, preset)}
+                  </Slider.Value>
+                </>
+              )}
+            </Slider.Root>
+          </Variant>
         </section>
       </section>
     </main>
@@ -280,6 +362,65 @@ function PreviewKnob({
       <Knob.Value className="knob-value" format={(nextValue) => formatNumber(nextValue, unit)} />
       <Knob.HiddenInput name={label.toLowerCase().replaceAll(" ", "-")} />
     </Knob.Root>
+  );
+}
+
+interface PreviewSliderProps {
+  accent: string;
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+  unit: string;
+  value: number;
+  compact?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+  orientation?: "horizontal" | "vertical";
+  onValueChange: (value: number) => void;
+  onCommit?: (value: number) => void;
+}
+
+function PreviewSlider({
+  accent,
+  compact = false,
+  disabled = false,
+  label,
+  max,
+  min,
+  onCommit,
+  onValueChange,
+  orientation = "horizontal",
+  readOnly = false,
+  step,
+  unit,
+  value,
+}: PreviewSliderProps) {
+  return (
+    <Slider.Root
+      className="slider"
+      data-compact={compact ? "" : undefined}
+      disabled={disabled}
+      max={max}
+      min={min}
+      onValueChange={onValueChange}
+      onValueCommit={onCommit}
+      orientation={orientation}
+      readOnly={readOnly}
+      step={step}
+      style={{ "--accent": accent } as CSSProperties}
+      value={value}
+    >
+      <Slider.Track className="slider-track">
+        <Slider.Range className="slider-range" />
+        <Slider.Thumb aria-label={label} className="slider-thumb" />
+      </Slider.Track>
+      <Slider.Value
+        className="slider-value"
+        format={(nextValue) => formatNumber(nextValue, unit)}
+      />
+      <Slider.HiddenInput name={label.toLowerCase().replaceAll(" ", "-")} />
+    </Slider.Root>
   );
 }
 
