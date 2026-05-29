@@ -1,6 +1,13 @@
 import { defineConfig } from "vite-plus";
+import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@audio-ui/core": fileURLToPath(new URL("./packages/core/src/index.ts", import.meta.url)),
+      "@audio-ui/react": fileURLToPath(new URL("./packages/react/src/index.ts", import.meta.url)),
+    },
+  },
   staged: {
     "*": "vp check --fix",
   },
