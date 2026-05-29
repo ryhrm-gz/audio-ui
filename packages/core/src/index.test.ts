@@ -2,6 +2,7 @@ import { expect, test } from "vite-plus/test";
 import {
   createKnobState,
   getKnobAngle,
+  getKnobValueFromLinearDrag,
   getKnobValueFromPoint,
   getNextKeyboardValue,
   normalizeKnobValue,
@@ -35,6 +36,58 @@ test("maps pointer positions to values", () => {
       centerY: 50,
       pointX: 0,
       pointY: 100,
+    }),
+  ).toBe(0);
+});
+
+test("maps vertical drag movement to values", () => {
+  expect(
+    getKnobValueFromLinearDrag({
+      mode: "vertical",
+      startValue: 50,
+      startX: 0,
+      startY: 100,
+      pointX: 0,
+      pointY: 75,
+      trackSize: 100,
+    }),
+  ).toBe(75);
+
+  expect(
+    getKnobValueFromLinearDrag({
+      mode: "vertical",
+      startValue: 50,
+      startX: 0,
+      startY: 100,
+      pointX: 0,
+      pointY: 150,
+      trackSize: 100,
+    }),
+  ).toBe(0);
+});
+
+test("maps horizontal drag movement to values", () => {
+  expect(
+    getKnobValueFromLinearDrag({
+      mode: "horizontal",
+      startValue: 50,
+      startX: 100,
+      startY: 0,
+      pointX: 125,
+      pointY: 0,
+      trackSize: 100,
+    }),
+  ).toBe(75);
+
+  expect(
+    getKnobValueFromLinearDrag({
+      mode: "horizontal",
+      startValue: 50,
+      startX: 100,
+      startY: 0,
+      pointX: 50,
+      pointY: 0,
+      trackSize: 100,
     }),
   ).toBe(0);
 });

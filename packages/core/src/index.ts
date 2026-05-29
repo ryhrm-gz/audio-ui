@@ -11,11 +11,23 @@ export interface KnobAngleRange {
 
 export interface KnobOptions extends KnobRange, KnobAngleRange {}
 
+export type KnobDragMode = "radial" | "vertical" | "horizontal";
+
 export interface KnobPoint {
   centerX: number;
   centerY: number;
   pointX: number;
   pointY: number;
+}
+
+export interface KnobLinearDrag {
+  mode: Exclude<KnobDragMode, "radial">;
+  startValue: number;
+  startX: number;
+  startY: number;
+  pointX: number;
+  pointY: number;
+  trackSize: number;
 }
 
 export interface KnobState {
@@ -107,6 +119,17 @@ export function getKnobValueFromAngle(angle: number, options: KnobOptions = {}) 
 export function getKnobValueFromPoint(point: KnobPoint, options: KnobOptions = {}) {
   const angle = getAngleFromPoint(point);
   return getKnobValueFromAngle(angle, options);
+}
+
+export function getKnobValueFromLinearDrag(drag: KnobLinearDrag, options: KnobRange = {}) {
+  const { min, max, step } = resolveKnobOptions(options);
+  const range = max - min;
+  const trackSize =
+    Number.isFinite(drag.trackSize) && drag.trackSize > 0 ? drag.trackSize : defaultKnobOptions.max;
+  const delta = drag.mode === "vertical" ? drag.startY - drag.pointY : drag.pointX - drag.startX;
+  const nextValue = drag.startValue + range * (delta / trackSize);
+
+  return normalizeKnobValue(nextValue, { min, max, step });
 }
 
 export function createKnobState(value: number, options: KnobOptions = {}): KnobState {

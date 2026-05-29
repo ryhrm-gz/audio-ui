@@ -20,7 +20,7 @@ import { Knob } from "@audio-ui/react";
 
 export function GainKnob() {
   return (
-    <Knob.Root defaultValue={0} min={-60} max={12} step={0.5} name="gain">
+    <Knob.Root defaultValue={0} dragMode="vertical" min={-60} max={12} step={0.5} name="gain">
       <Knob.Control>
         <Knob.Thumb />
       </Knob.Control>
@@ -30,6 +30,9 @@ export function GainKnob() {
   );
 }
 ```
+
+`dragMode` controls pointer interaction. Use `"radial"` for the default rotate-around-the-knob
+behavior, `"vertical"` for up/down dragging, or `"horizontal"` for left/right dragging.
 
 The React package is headless: it ships behavior, accessibility attributes, data attributes,
 and CSS variables such as `--knob-angle`, but no visual styling.

@@ -1,8 +1,10 @@
 import {
   createKnobState,
+  getKnobValueFromLinearDrag,
   getKnobValueFromPoint,
   getNextKeyboardValue,
   type KnobAngleRange,
+  type KnobDragMode,
   type KnobRange,
   type KnobState,
 } from "@audio-ui/core";
@@ -38,6 +40,7 @@ type RenderProp<TProps extends ElementProps, TState> =
 
 interface KnobContextValue {
   state: KnobState;
+  dragMode: KnobDragMode;
   disabled: boolean;
   readOnly: boolean;
   dragging: boolean;
@@ -56,6 +59,7 @@ export interface KnobRootProps
     KnobAngleRange {
   value?: number;
   defaultValue?: number;
+  dragMode?: KnobDragMode;
   disabled?: boolean;
   readOnly?: boolean;
   name?: string;
@@ -88,12 +92,21 @@ export interface KnobHiddenInputProps extends Omit<
   "children" | "type" | "value"
 > {}
 
+interface ActiveDrag {
+  pointerId: number;
+  startValue: number;
+  startX: number;
+  startY: number;
+  trackSize: number;
+}
+
 const KnobContext = createContext<KnobContextValue | undefined>(undefined);
 
 export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(props, ref) {
   const {
     value,
     defaultValue,
+    dragMode = "radial",
     min,
     max,
     step,
@@ -146,6 +159,7 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
   const contextValue = useMemo<KnobContextValue>(
     () => ({
       state,
+      dragMode,
       disabled,
       readOnly,
       dragging,
@@ -158,6 +172,7 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
     }),
     [
       state,
+      dragMode,
       disabled,
       readOnly,
       dragging,
@@ -177,6 +192,7 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
     "data-disabled": disabled ? "" : undefined,
     "data-readonly": readOnly ? "" : undefined,
     "data-dragging": dragging ? "" : undefined,
+    "data-drag-mode": dragMode,
   });
 
   return (
@@ -187,10 +203,19 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
 });
 
 export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Control(props, ref) {
-  const { render, onPointerDown, onPointerMove, onPointerUp, onKeyDown, style, ...elementProps } =
-    props;
+  const {
+    render,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
+    onPointerCancel,
+    onKeyDown,
+    style,
+    ...elementProps
+  } = props;
   const context = useKnobContext("Knob.Control");
   const controlRef = useRef<HTMLDivElement | null>(null);
+  const activeDragRef = useRef<ActiveDrag | null>(null);
   const composedRef = useComposedRefs(ref, controlRef);
   const disabled = context.disabled;
   const readOnly = context.readOnly;
@@ -203,16 +228,39 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
         return;
       }
 
-      const rect = element.getBoundingClientRect();
-      const nextValue = getKnobValueFromPoint(
-        {
-          centerX: rect.left + rect.width / 2,
-          centerY: rect.top + rect.height / 2,
-          pointX: event.clientX,
-          pointY: event.clientY,
-        },
-        context.state,
-      );
+      let nextValue: number;
+
+      if (context.dragMode === "radial") {
+        const rect = element.getBoundingClientRect();
+        nextValue = getKnobValueFromPoint(
+          {
+            centerX: rect.left + rect.width / 2,
+            centerY: rect.top + rect.height / 2,
+            pointX: event.clientX,
+            pointY: event.clientY,
+          },
+          context.state,
+        );
+      } else {
+        const activeDrag = activeDragRef.current;
+
+        if (activeDrag === null || activeDrag.pointerId !== event.pointerId) {
+          return;
+        }
+
+        nextValue = getKnobValueFromLinearDrag(
+          {
+            mode: context.dragMode,
+            startValue: activeDrag.startValue,
+            startX: activeDrag.startX,
+            startY: activeDrag.startY,
+            pointX: event.clientX,
+            pointY: event.clientY,
+            trackSize: activeDrag.trackSize,
+          },
+          context.state,
+        );
+      }
 
       context.setValue(nextValue);
     },
@@ -229,8 +277,19 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
     event.preventDefault();
     event.currentTarget.focus();
     event.currentTarget.setPointerCapture(event.pointerId);
+    const rect = event.currentTarget.getBoundingClientRect();
+    activeDragRef.current = {
+      pointerId: event.pointerId,
+      startValue: context.state.value,
+      startX: event.clientX,
+      startY: event.clientY,
+      trackSize: Math.max(rect.width, rect.height),
+    };
     context.setDragging(true);
-    updateValueFromPointer(event);
+
+    if (context.dragMode === "radial") {
+      updateValueFromPointer(event);
+    }
   };
 
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
@@ -251,7 +310,19 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
     }
 
     context.setDragging(false);
+    activeDragRef.current = null;
     context.commitValue(context.state.value);
+  };
+
+  const handlePointerCancel = (event: PointerEvent<HTMLDivElement>) => {
+    onPointerCancel?.(event);
+
+    if (event.defaultPrevented || disabled || readOnly || !context.dragging) {
+      return;
+    }
+
+    context.setDragging(false);
+    activeDragRef.current = null;
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -292,6 +363,7 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
     "data-disabled": disabled ? "" : undefined,
     "data-readonly": readOnly ? "" : undefined,
     "data-dragging": context.dragging ? "" : undefined,
+    "data-drag-mode": context.dragMode,
     style: {
       ...style,
       "--knob-value": context.state.value,
@@ -301,6 +373,7 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
     onPointerDown: handlePointerDown,
     onPointerMove: handlePointerMove,
     onPointerUp: handlePointerUp,
+    onPointerCancel: handlePointerCancel,
     onKeyDown: handleKeyDown,
   });
 
@@ -383,6 +456,8 @@ export const Knob = {
   Value,
   HiddenInput,
 };
+
+export type { KnobDragMode };
 
 function useKnobContext(partName: string) {
   const context = useContext(KnobContext);

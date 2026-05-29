@@ -1,6 +1,6 @@
 import { StrictMode, useMemo, useState, type CSSProperties } from "react";
 import { createRoot } from "react-dom/client";
-import { Knob } from "@audio-ui/react";
+import { Knob, type KnobDragMode } from "@audio-ui/react";
 import "./styles.css";
 
 interface KnobPreset {
@@ -159,11 +159,39 @@ function App() {
         </div>
 
         <section className="variant-grid" aria-label="Variants">
-          <Variant title="Default">
+          <Variant title="Radial">
             <PreviewKnob
               accent={preset.accent}
               compact
               label={`${preset.label} default`}
+              max={preset.max}
+              min={preset.min}
+              onValueChange={setPresetValue}
+              step={preset.step}
+              unit={preset.unit}
+              value={value}
+            />
+          </Variant>
+          <Variant title="Vertical">
+            <PreviewKnob
+              accent="#42c3a7"
+              compact
+              dragMode="vertical"
+              label={`${preset.label} vertical`}
+              max={preset.max}
+              min={preset.min}
+              onValueChange={setPresetValue}
+              step={preset.step}
+              unit={preset.unit}
+              value={value}
+            />
+          </Variant>
+          <Variant title="Horizontal">
+            <PreviewKnob
+              accent="#6aa9ff"
+              compact
+              dragMode="horizontal"
+              label={`${preset.label} horizontal`}
               max={preset.max}
               min={preset.min}
               onValueChange={setPresetValue}
@@ -240,6 +268,7 @@ interface PreviewKnobProps {
   unit: string;
   value: number;
   compact?: boolean;
+  dragMode?: KnobDragMode;
   disabled?: boolean;
   readOnly?: boolean;
   onValueChange: (value: number) => void;
@@ -250,6 +279,7 @@ function PreviewKnob({
   accent,
   compact = false,
   disabled = false,
+  dragMode = "radial",
   label,
   max,
   min,
@@ -265,6 +295,7 @@ function PreviewKnob({
       className="knob"
       data-compact={compact ? "" : undefined}
       disabled={disabled}
+      dragMode={dragMode}
       max={max}
       min={min}
       onValueChange={onValueChange}
