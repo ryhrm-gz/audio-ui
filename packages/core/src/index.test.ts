@@ -67,6 +67,22 @@ test("handles keyboard step commands", () => {
   expect(getNextKeyboardValue(10, "Escape")).toBeUndefined();
 });
 
+test("normalizes reversed ranges and invalid steps", () => {
+  expect(normalizeKnobValue(75, { min: 100, max: 0, step: -2 })).toBe(75);
+  expect(getNextKeyboardValue(75, "ArrowUp", { min: 100, max: 0, step: -2 })).toBe(76);
+});
+
+test("falls back to a sane drag track size", () => {
+  expect(
+    getKnobValueFromLinearDrag({
+      startValue: 50,
+      startY: 100,
+      pointY: 50,
+      trackSize: 0,
+    }),
+  ).toBe(100);
+});
+
 test("creates a complete serializable state object", () => {
   expect(createKnobState(25)).toEqual({
     value: 25,
