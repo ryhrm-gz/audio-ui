@@ -22,6 +22,9 @@ export default defineConfig({
       typeAware: true,
       typeCheck: true,
     },
+    ignorePatterns: [".agents"],
   },
-  fmt: {},
+  fmt: {
+    ignorePatterns: [".agents"],
+  },
 });
