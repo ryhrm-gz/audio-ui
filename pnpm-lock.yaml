@@ -21,18 +21,35 @@ importers:
       '@types/node':
         specifier: ^25.6.2
         version: 25.9.1
+      '@types/react':
+        specifier: ^19.2.7
+        version: 19.2.15
       '@typescript/native-preview':
         specifier: 7.0.0-dev.20260509.2
         version: 7.0.0-dev.20260509.2
       bumpp:
         specifier: ^11.1.0
         version: 11.1.0
+      react:
+        specifier: ^19.2.1
+        version: 19.2.6
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
       vite-plus:
         specifier: 'catalog:'
         version: 0.1.22(@types/node@25.9.1)(jiti@2.7.0)(typescript@6.0.3)(vite@8.0.14(@types/node@25.9.1)(jiti@2.7.0)(yaml@2.9.0))(yaml@2.9.0)
+
+  packages/core: {}
+
+  packages/react:
+    dependencies:
+      '@audio-ui/core':
+        specifier: workspace:*
+        version: link:../core
+      react:
+        specifier: ^18.0.0 || ^19.0.0
+        version: 19.2.6
 
 packages:
 
@@ -458,6 +475,9 @@ packages:
   '@types/node@25.9.1':
     resolution: {integrity: sha512-xfrlY7UD5rMJk3ZVJP8BNzS28J36YJg+xp+LPXV1TdWxr8uMH5A860QNxYDGQe/ylDSgjxE52Q9VnO7p75tJxg==}
 
+  '@types/react@19.2.15':
+    resolution: {integrity: sha512-eRwcGNHve+E8qtEQSSRl6urh+rFop4v8gm6O8rGv25CodbvFdLjA1vVQ1KkiFE0w0UPOnb8tDiFKL5lp0rtY5Q==}
+
   '@typescript/native-preview-darwin-arm64@7.0.0-dev.20260509.2':
     resolution: {integrity: sha512-oG9KahiCpx4q70Ood/rRJhYio4oIMHEHfX0g0LhfenlSIjIonitZWjUmUVG9N9q1ev9QWcM8pWpDrGGP0Osp3Q==}
     engines: {node: '>=16.20.0'}
@@ -667,6 +687,9 @@ packages:
     resolution: {integrity: sha512-tixWYgm5ZoOD+3g6UTea91eow5z6AAHaho3g0V9CNSNb45gM8SmflpAc+GRd1InC4AqN/07Unrgp56Y94N9hJQ==}
     engines: {node: '>=20.19.0'}
 
+  csstype@3.2.3:
+    resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
+
   defu@6.1.7:
     resolution: {integrity: sha512-7z22QmUWiQ/2d0KkdYmANbRUVABpZ9SNYyH5vx6PZ+nE5bcC0l7uFvEfHlyld/HcGBFTL536ClDt3DEcSlEJAQ==}
 
@@ -827,6 +850,10 @@ packages:
 
   quansync@1.0.0:
     resolution: {integrity: sha512-5xZacEEufv3HSTPQuchrvV6soaiACMFnq1H8wkVioctoH3TRha9Sz66lOxRwPK/qZj7HPiSveih9yAyh98gvqA==}
+
+  react@19.2.6:
+    resolution: {integrity: sha512-sfWGGfavi0xr8Pg0sVsyHMAOziVYKgPLNrS7ig+ivMNb3wbCBw3KxtflsGBAwD3gYQlE/AEZsTLgToRrSCjb0Q==}
+    engines: {node: '>=0.10.0'}
 
   rolldown@1.0.2:
     resolution: {integrity: sha512-oZx5zVDtVB44AW3eaifgDml1gWRDZGvjcfdxonE4swNPG98PrrXjaO/KrnUjzlMnztCCRVlUueA1kCXhARGk6g==}
@@ -1190,6 +1217,10 @@ snapshots:
     dependencies:
       undici-types: 7.24.6
 
+  '@types/react@19.2.15':
+    dependencies:
+      csstype: 3.2.3
+
   '@typescript/native-preview-darwin-arm64@7.0.0-dev.20260509.2':
     optional: true
 
@@ -1315,6 +1346,8 @@ snapshots:
       yaml: 2.9.0
 
   cac@7.0.0: {}
+
+  csstype@3.2.3: {}
 
   defu@6.1.7: {}
 
@@ -1463,6 +1496,8 @@ snapshots:
       source-map-js: 1.2.1
 
   quansync@1.0.0: {}
+
+  react@19.2.6: {}
 
   rolldown@1.0.2:
     dependencies:

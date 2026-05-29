@@ -1,0 +1,21 @@
+{
+  "name": "@audio-ui/core",
+  "version": "0.0.0",
+  "description": "Framework-agnostic audio control primitives.",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "dev": "vp pack --watch"
+  }
+}
