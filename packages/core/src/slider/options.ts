@@ -7,16 +7,19 @@ export const defaultSliderOptions = {
   step: 1,
   orientation: "horizontal",
   inverted: false,
+  origin: "left",
 } satisfies Required<SliderOptions>;
 
 export function resolveSliderOptions(options: SliderOptions = {}) {
   const range = resolveRangeOptions(options, defaultSliderOptions);
   const orientation = options.orientation ?? defaultSliderOptions.orientation;
   const inverted = options.inverted ?? defaultSliderOptions.inverted;
+  const origin = options.origin ?? defaultSliderOptions.origin;
 
   return {
     ...range,
     orientation,
     inverted,
+    origin,
   };
 }

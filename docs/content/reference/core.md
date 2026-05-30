@@ -13,11 +13,11 @@ import { createKnobState, createSliderState, createFaderState } from "@audio-ui/
 
 ## State helpers
 
-| Helper                              | Purpose                                                                               |
-| ----------------------------------- | ------------------------------------------------------------------------------------- |
-| `createKnobState(value, options)`   | Clamps and quantizes a value, then derives percent and rotary angle                   |
-| `createSliderState(value, options)` | Clamps and quantizes a value, then derives percent for horizontal or vertical sliders |
-| `createFaderState(value, options)`  | Applies the fader scale law and derives value, percent, unity, and scale marks        |
+| Helper                              | Purpose                                                                           |
+| ----------------------------------- | --------------------------------------------------------------------------------- |
+| `createKnobState(value, options)`   | Clamps and quantizes a value, then derives percent and rotary angle               |
+| `createSliderState(value, options)` | Clamps and quantizes a value, then derives value, origin, and range-fill percents |
+| `createFaderState(value, options)`  | Applies the fader scale law and derives value, percent, unity, and scale marks    |
 
 ## Value utilities
 

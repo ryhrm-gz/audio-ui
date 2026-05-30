@@ -18,7 +18,7 @@ import { Slider } from "@audio-ui/react";
 
 export function PanSlider() {
   return (
-    <Slider.Root defaultValue={0} min={-100} max={100} step={1} name="pan">
+    <Slider.Root defaultValue={0} min={-100} max={100} step={1} name="pan" origin="center">
       <Slider.Track>
         <Slider.Range />
         <Slider.Thumb aria-label="Pan" />
@@ -41,26 +41,41 @@ export function PanSlider() {
 </Slider.Root>
 ```
 
+## Range origin
+
+Use `origin` to choose where the visual range starts. The default is `left`; `center` works well for pan controls, and `right` fills back from the end of the track.
+
+```tsx
+<Slider.Root origin="center" defaultValue={0} min={-100} max={100}>
+  <Slider.Track>
+    <Slider.Range />
+    <Slider.Thumb aria-label="Pan" />
+  </Slider.Track>
+</Slider.Root>
+```
+
 ## Styling hooks
 
-The root exposes `data-orientation`, `data-inverted`, and `--slider-percent`.
+The root and interactive parts expose `data-orientation`, `data-origin`, `data-inverted`, `--slider-percent`, and range-origin variables.
 
 ```css
 .slider-range {
-  width: calc(var(--slider-percent) * 100%);
+  left: calc(var(--slider-range-start-percent) * 100%);
+  width: calc(var(--slider-range-size-percent) * 100%);
 }
 
 [data-orientation="vertical"] .slider-range {
-  height: calc(var(--slider-percent) * 100%);
+  bottom: calc(var(--slider-range-start-percent) * 100%);
+  height: calc(var(--slider-range-size-percent) * 100%);
 }
 ```
 
 ## Props
 
-| Part           | Key props                                                                                                                                                                 |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Slider.Root`  | `value`, `defaultValue`, `min`, `max`, `step`, `orientation`, `inverted`, `allowTrackClick`, `disabled`, `readOnly`, `name`, `required`, `onValueChange`, `onValueCommit` |
-| `Slider.Track` | Receives pointer and keyboard interaction for the control                                                                                                                 |
-| `Slider.Range` | Visual fill tied to `--slider-percent`                                                                                                                                    |
-| `Slider.Thumb` | Focusable thumb with generated ARIA value metadata                                                                                                                        |
-| `Slider.Value` | `format` for display formatting                                                                                                                                           |
+| Part           | Key props                                                                                                                                                                           |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Slider.Root`  | `value`, `defaultValue`, `min`, `max`, `step`, `orientation`, `origin`, `inverted`, `allowTrackClick`, `disabled`, `readOnly`, `name`, `required`, `onValueChange`, `onValueCommit` |
+| `Slider.Track` | Receives pointer and keyboard interaction for the control                                                                                                                           |
+| `Slider.Range` | Visual fill tied to `--slider-range-start-percent` and `--slider-range-size-percent`                                                                                                |
+| `Slider.Thumb` | Focusable thumb with generated ARIA value metadata                                                                                                                                  |
+| `Slider.Value` | `format` for display formatting                                                                                                                                                     |

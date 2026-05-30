@@ -1,7 +1,12 @@
 import type { RangeValueOptions } from "../shared/range.ts";
 import { resolveSliderOptions } from "./options.ts";
 import type { SliderOptions, SliderState } from "./types.ts";
-import { getSliderPercent, normalizeSliderValue } from "./value.ts";
+import {
+  getSliderOriginPercent,
+  getSliderPercent,
+  getSliderRangePercents,
+  normalizeSliderValue,
+} from "./value.ts";
 
 export function createSliderState(
   value: number,
@@ -12,10 +17,14 @@ export function createSliderState(
     ...resolvedOptions,
     valueStep: options.valueStep,
   });
+  const percent = getSliderPercent(normalizedValue, resolvedOptions);
+  const originPercent = getSliderOriginPercent(resolvedOptions.origin);
 
   return {
     ...resolvedOptions,
     value: normalizedValue,
-    percent: getSliderPercent(normalizedValue, resolvedOptions),
+    percent,
+    originPercent,
+    ...getSliderRangePercents(percent, originPercent),
   };
 }

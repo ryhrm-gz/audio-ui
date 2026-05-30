@@ -1,5 +1,13 @@
 import { createSliderState, getFineStep, type SliderState } from "@audio-ui/core";
-import { forwardRef, useCallback, useId, useMemo, useRef, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { SliderContext, type SliderContextValue, type SliderValueOptions } from "./context.tsx";
 import type { SliderRootProps } from "./types.ts";
@@ -13,6 +21,7 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
     step,
     orientation,
     inverted,
+    origin,
     disabled = false,
     readOnly = false,
     fineControl = true,
@@ -23,6 +32,7 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
     onValueChange,
     onValueCommit,
     render,
+    style,
     ...elementProps
   } = props;
   const isControlled = value !== undefined;
@@ -32,8 +42,8 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
   const [dragging, setDragging] = useState(false);
   const rawValue = isControlled ? value : internalValue;
   const state = useMemo(
-    () => createSliderState(rawValue, { min, max, step, orientation, inverted, valueStep }),
-    [rawValue, min, max, step, orientation, inverted, valueStep],
+    () => createSliderState(rawValue, { min, max, step, orientation, inverted, origin, valueStep }),
+    [rawValue, min, max, step, orientation, inverted, origin, valueStep],
   );
   const valueId = useId();
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -47,10 +57,11 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
         step,
         orientation,
         inverted,
+        origin,
         valueStep: nextValueStep,
       });
     },
-    [fineControl, inverted, max, min, orientation, state.step, step],
+    [fineControl, inverted, max, min, origin, orientation, state.step, step],
   );
 
   const setValue = useCallback(
@@ -115,11 +126,21 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
     ref,
     "data-audio-ui": "slider",
     "data-orientation": state.orientation,
+    "data-origin": state.origin,
     "data-inverted": state.inverted ? "" : undefined,
     "data-disabled": disabled ? "" : undefined,
     "data-readonly": readOnly ? "" : undefined,
     "data-track-click-disabled": allowTrackClick ? undefined : "",
     "data-dragging": dragging ? "" : undefined,
+    style: {
+      ...style,
+      "--slider-value": state.value,
+      "--slider-percent": state.percent,
+      "--slider-origin-percent": state.originPercent,
+      "--slider-range-start-percent": state.rangeStartPercent,
+      "--slider-range-end-percent": state.rangeEndPercent,
+      "--slider-range-size-percent": state.rangeSizePercent,
+    } as CSSProperties,
   });
 
   return (

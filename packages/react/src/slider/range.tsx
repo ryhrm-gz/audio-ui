@@ -16,6 +16,7 @@ export const Range = forwardRef<HTMLSpanElement, SliderRangeProps>(function Rang
     "aria-hidden": true,
     "data-part": "range",
     "data-orientation": context.state.orientation,
+    "data-origin": context.state.origin,
     "data-inverted": context.state.inverted ? "" : undefined,
     "data-disabled": context.disabled ? "" : undefined,
     "data-readonly": context.readOnly ? "" : undefined,
@@ -24,6 +25,10 @@ export const Range = forwardRef<HTMLSpanElement, SliderRangeProps>(function Rang
       ...style,
       "--slider-value": context.state.value,
       "--slider-percent": context.state.percent,
+      "--slider-origin-percent": context.state.originPercent,
+      "--slider-range-start-percent": context.state.rangeStartPercent,
+      "--slider-range-end-percent": context.state.rangeEndPercent,
+      "--slider-range-size-percent": context.state.rangeSizePercent,
     } as CSSProperties,
   });
 

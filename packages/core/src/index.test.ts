@@ -202,8 +202,42 @@ test("creates a complete serializable slider state object", () => {
     max: 100,
     step: 1,
     percent: 0.25,
+    origin: "left",
+    originPercent: 0,
+    rangeStartPercent: 0,
+    rangeEndPercent: 0.25,
+    rangeSizePercent: 0.25,
     orientation: "vertical",
     inverted: true,
+  });
+});
+
+test("creates slider range state from left, center, and right origins", () => {
+  expect(createSliderState(25)).toMatchObject({
+    origin: "left",
+    originPercent: 0,
+    rangeStartPercent: 0,
+    rangeEndPercent: 0.25,
+    rangeSizePercent: 0.25,
+  });
+  expect(createSliderState(25, { origin: "center" })).toMatchObject({
+    origin: "center",
+    originPercent: 0.5,
+    rangeStartPercent: 0.25,
+    rangeEndPercent: 0.5,
+    rangeSizePercent: 0.25,
+  });
+  expect(createSliderState(75, { origin: "center" })).toMatchObject({
+    rangeStartPercent: 0.5,
+    rangeEndPercent: 0.75,
+    rangeSizePercent: 0.25,
+  });
+  expect(createSliderState(25, { origin: "right" })).toMatchObject({
+    origin: "right",
+    originPercent: 1,
+    rangeStartPercent: 0.25,
+    rangeEndPercent: 1,
+    rangeSizePercent: 0.75,
   });
 });
 

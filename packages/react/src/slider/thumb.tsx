@@ -50,6 +50,7 @@ export const Thumb = forwardRef<HTMLSpanElement, SliderThumbProps>(function Thum
     "aria-describedby": context.valueId,
     "data-part": "thumb",
     "data-orientation": context.state.orientation,
+    "data-origin": context.state.origin,
     "data-inverted": context.state.inverted ? "" : undefined,
     "data-disabled": disabled ? "" : undefined,
     "data-readonly": readOnly ? "" : undefined,
@@ -58,6 +59,10 @@ export const Thumb = forwardRef<HTMLSpanElement, SliderThumbProps>(function Thum
       ...style,
       "--slider-value": context.state.value,
       "--slider-percent": context.state.percent,
+      "--slider-origin-percent": context.state.originPercent,
+      "--slider-range-start-percent": context.state.rangeStartPercent,
+      "--slider-range-end-percent": context.state.rangeEndPercent,
+      "--slider-range-size-percent": context.state.rangeSizePercent,
     } as CSSProperties,
     onKeyDown: handleKeyDown,
   });

@@ -16,6 +16,7 @@ describe("Slider", () => {
     );
 
     expect(markup).toContain('data-audio-ui="slider"');
+    expect(markup).toContain('data-origin="left"');
     expect(markup).toContain('data-part="track"');
     expect(markup).toContain('data-part="range"');
     expect(markup).toContain('data-part="thumb"');
@@ -29,6 +30,36 @@ describe("Slider", () => {
     expect(markup).toContain('type="hidden"');
     expect(markup).toContain('name="mix"');
     expect(markup).toContain('value="25"');
+  });
+
+  test("renders center and right origin state for visual ranges", () => {
+    const centerMarkup = renderToStaticMarkup(
+      <Slider.Root defaultValue={-25} max={100} min={-100} origin="center">
+        <Slider.Track>
+          <Slider.Range />
+          <Slider.Thumb aria-label="Pan" />
+        </Slider.Track>
+      </Slider.Root>,
+    );
+    const rightMarkup = renderToStaticMarkup(
+      <Slider.Root defaultValue={25} origin="right">
+        <Slider.Track>
+          <Slider.Range />
+          <Slider.Thumb aria-label="Trim" />
+        </Slider.Track>
+      </Slider.Root>,
+    );
+
+    expect(centerMarkup).toContain('data-origin="center"');
+    expect(centerMarkup).toContain("--slider-origin-percent:0.5");
+    expect(centerMarkup).toContain("--slider-range-start-percent:0.375");
+    expect(centerMarkup).toContain("--slider-range-end-percent:0.5");
+    expect(centerMarkup).toContain("--slider-range-size-percent:0.125");
+    expect(rightMarkup).toContain('data-origin="right"');
+    expect(rightMarkup).toContain("--slider-origin-percent:1");
+    expect(rightMarkup).toContain("--slider-range-start-percent:0.25");
+    expect(rightMarkup).toContain("--slider-range-end-percent:1");
+    expect(rightMarkup).toContain("--slider-range-size-percent:0.75");
   });
 
   test("passes render state to children", () => {

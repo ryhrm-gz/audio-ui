@@ -48,7 +48,8 @@ The React components are headless. Parts expose stable attributes and CSS variab
 }
 
 [data-audio-ui="slider"] [data-part="range"] {
-  width: calc(var(--slider-percent) * 100%);
+  left: calc(var(--slider-range-start-percent) * 100%);
+  width: calc(var(--slider-range-size-percent) * 100%);
 }
 ```
 
@@ -64,7 +65,7 @@ export function PanSlider() {
   const [pan, setPan] = useState(0);
 
   return (
-    <Slider.Root value={pan} onValueChange={setPan} min={-100} max={100} step={1}>
+    <Slider.Root value={pan} onValueChange={setPan} min={-100} max={100} step={1} origin="center">
       <Slider.Track>
         <Slider.Range />
         <Slider.Thumb aria-label="Pan" />

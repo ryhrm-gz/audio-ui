@@ -8,7 +8,7 @@ export interface SliderRootProps
   extends
     Omit<ComponentPropsWithoutRef<"div">, "defaultValue" | "onChange" | "children">,
     SliderRangeOptions,
-    Pick<SliderOptions, "orientation" | "inverted"> {
+    Pick<SliderOptions, "orientation" | "inverted" | "origin"> {
   value?: number;
   defaultValue?: number;
   disabled?: boolean;

@@ -40,6 +40,7 @@ export function ControlDemo({ variant }: ControlDemoProps) {
           max={100}
           min={-100}
           onValueChange={setValue}
+          origin="center"
           step={1}
           value={value}
         >
