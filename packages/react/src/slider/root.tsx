@@ -1,7 +1,7 @@
-import { createSliderState, type SliderState } from "@audio-ui/core";
+import { createSliderState, getFineStep, type SliderState } from "@audio-ui/core";
 import { forwardRef, useCallback, useId, useMemo, useRef, useState } from "react";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
-import { SliderContext, type SliderContextValue } from "./context.tsx";
+import { SliderContext, type SliderContextValue, type SliderValueOptions } from "./context.tsx";
 import type { SliderRootProps } from "./types.ts";
 
 export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(props, ref) {
@@ -15,6 +15,7 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
     inverted,
     disabled = false,
     readOnly = false,
+    fineControl = true,
     allowTrackClick = false,
     name,
     required,
@@ -27,24 +28,35 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
   const isControlled = value !== undefined;
   const initialValue = defaultValue ?? min ?? 0;
   const [internalValue, setInternalValue] = useState(initialValue);
+  const [valueStep, setValueStep] = useState<number | undefined>(undefined);
   const [dragging, setDragging] = useState(false);
   const rawValue = isControlled ? value : internalValue;
   const state = useMemo(
-    () => createSliderState(rawValue, { min, max, step, orientation, inverted }),
-    [rawValue, min, max, step, orientation, inverted],
+    () => createSliderState(rawValue, { min, max, step, orientation, inverted, valueStep }),
+    [rawValue, min, max, step, orientation, inverted, valueStep],
   );
   const valueId = useId();
   const trackRef = useRef<HTMLDivElement | null>(null);
 
   const getStateForValue = useCallback(
-    (nextValue: number): SliderState =>
-      createSliderState(nextValue, { min, max, step, orientation, inverted }),
-    [inverted, max, min, orientation, step],
+    (nextValue: number, options: SliderValueOptions = {}): SliderState => {
+      const nextValueStep = fineControl && options.fine ? getFineStep(state.step) : undefined;
+      return createSliderState(nextValue, {
+        min,
+        max,
+        step,
+        orientation,
+        inverted,
+        valueStep: nextValueStep,
+      });
+    },
+    [fineControl, inverted, max, min, orientation, state.step, step],
   );
 
   const setValue = useCallback(
-    (nextValue: number) => {
-      const nextState = getStateForValue(nextValue);
+    (nextValue: number, options: SliderValueOptions = {}) => {
+      const nextState = getStateForValue(nextValue, options);
+      setValueStep(fineControl && options.fine ? getFineStep(state.step) : undefined);
 
       if (!isControlled) {
         setInternalValue(nextState.value);
@@ -54,12 +66,12 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
         onValueChange?.(nextState.value);
       }
     },
-    [getStateForValue, isControlled, onValueChange, state.value],
+    [fineControl, getStateForValue, isControlled, onValueChange, state.step, state.value],
   );
 
   const commitValue = useCallback(
-    (nextValue: number) => {
-      const nextState = getStateForValue(nextValue);
+    (nextValue: number, options: SliderValueOptions = {}) => {
+      const nextState = getStateForValue(nextValue, options);
       onValueCommit?.(nextState.value);
     },
     [getStateForValue, onValueCommit],
@@ -70,6 +82,7 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
       state,
       disabled,
       readOnly,
+      fineControl,
       allowTrackClick,
       dragging,
       valueId,
@@ -84,6 +97,7 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
       state,
       disabled,
       readOnly,
+      fineControl,
       allowTrackClick,
       dragging,
       valueId,

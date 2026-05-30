@@ -23,6 +23,16 @@ export interface FaderPoint {
   pointY: number;
 }
 
+export interface FaderLinearDrag extends FaderPoint {
+  startValue: number;
+  startPointX: number;
+  startPointY: number;
+}
+
+export interface FaderDragOptions {
+  fine?: boolean;
+}
+
 export interface FaderState {
   value: number;
   min: number;

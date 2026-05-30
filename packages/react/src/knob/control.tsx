@@ -18,6 +18,9 @@ interface ActiveDrag {
   currentValue: number;
   startY: number;
   trackSize: number;
+  fine: boolean;
+  fineStartValue?: number;
+  fineStartY?: number;
 }
 
 export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Control(props, ref) {
@@ -46,21 +49,39 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
         return;
       }
 
+      const fine = context.fineControl && event.shiftKey;
+      const startValue = fine ? activeDrag.fineStartValue : activeDrag.startValue;
+      const startY = fine ? activeDrag.fineStartY : activeDrag.startY;
+
+      if (fine && (startValue === undefined || startY === undefined)) {
+        activeDragRef.current = {
+          ...activeDrag,
+          fine,
+          fineStartValue: activeDrag.currentValue,
+          fineStartY: event.clientY,
+        };
+        return;
+      }
+
       const nextValue = getKnobValueFromLinearDrag(
         {
-          startValue: activeDrag.startValue,
-          startY: activeDrag.startY,
+          startValue: startValue ?? activeDrag.startValue,
+          startY: startY ?? activeDrag.startY,
           pointY: event.clientY,
           trackSize: activeDrag.trackSize,
         },
         context.state,
+        { fine },
       );
 
       activeDragRef.current = {
         ...activeDrag,
         currentValue: nextValue,
+        fine,
+        fineStartValue: fine ? startValue : undefined,
+        fineStartY: fine ? startY : undefined,
       };
-      context.setValue(nextValue);
+      context.setValue(nextValue, { fine });
     },
     [context],
   );
@@ -82,12 +103,16 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
     event.currentTarget.focus();
     event.currentTarget.setPointerCapture(event.pointerId);
     const rect = event.currentTarget.getBoundingClientRect();
+    const fine = context.fineControl && event.shiftKey;
     activeDragRef.current = {
       pointerId: event.pointerId,
       startValue: context.state.value,
       currentValue: context.state.value,
       startY: event.clientY,
       trackSize: Math.max(rect.width, rect.height),
+      fine,
+      fineStartValue: fine ? context.state.value : undefined,
+      fineStartY: fine ? event.clientY : undefined,
     };
     context.setDragging(true);
   };
@@ -109,11 +134,12 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
       return;
     }
 
-    const dragValue = activeDragRef.current?.currentValue ?? context.state.value;
+    const activeDrag = activeDragRef.current;
+    const dragValue = activeDrag?.currentValue ?? context.state.value;
     releasePointerCapture(event);
     context.setDragging(false);
     activeDragRef.current = null;
-    context.commitValue(dragValue);
+    context.commitValue(dragValue, { fine: activeDrag?.fine });
   };
 
   const handlePointerCancel = (event: PointerEvent<HTMLDivElement>) => {
@@ -135,15 +161,16 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
       return;
     }
 
-    const nextValue = getNextKeyboardValue(context.state.value, event.key, context.state);
+    const fine = context.fineControl && event.shiftKey;
+    const nextValue = getNextKeyboardValue(context.state.value, event.key, context.state, { fine });
 
     if (nextValue === undefined) {
       return;
     }
 
     event.preventDefault();
-    context.setValue(nextValue);
-    context.commitValue(nextValue);
+    context.setValue(nextValue, { fine });
+    context.commitValue(nextValue, { fine });
   };
 
   const renderState = getRenderState(context.state, {

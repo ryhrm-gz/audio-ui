@@ -3,15 +3,18 @@ import {
   createFaderState,
   createKnobState,
   createSliderState,
+  getFaderValueFromLinearDrag,
   getFaderValueFromPercent,
   getFaderValueFromPoint,
   getFaderGain,
+  getFineStep,
   getKnobAngle,
   getKnobValueFromLinearDrag,
   getKnobValueFromPoint,
   getNextFaderKeyboardValue,
   getNextKeyboardValue,
   getNextSliderKeyboardValue,
+  getSliderValueFromLinearDrag,
   normalizeFaderValue,
   getSliderValueFromPercent,
   getSliderValueFromPoint,
@@ -73,6 +76,7 @@ test("maps vertical drag movement to values", () => {
 
 test("handles keyboard step commands", () => {
   expect(getNextKeyboardValue(10, "ArrowUp", { step: 2 })).toBe(12);
+  expect(getNextKeyboardValue(10, "ArrowUp", { step: 2 }, { fine: true })).toBe(10.2);
   expect(getNextKeyboardValue(10, "PageDown", { step: 2 })).toBe(0);
   expect(getNextKeyboardValue(10, "End", { max: 24 })).toBe(24);
   expect(getNextKeyboardValue(10, "Escape")).toBeUndefined();
@@ -104,6 +108,14 @@ test("creates a complete serializable state object", () => {
     maxAngle: 135,
     percent: 0.25,
     angle: -67.5,
+  });
+});
+
+test("preserves fine-resolution values without changing the configured step", () => {
+  expect(getFineStep(2)).toBe(0.2);
+  expect(createKnobState(10.24, { step: 2, valueStep: 0.2 })).toMatchObject({
+    value: 10.2,
+    step: 2,
   });
 });
 
@@ -158,8 +170,29 @@ test("maps slider pointer positions to values", () => {
 
 test("handles slider keyboard step commands", () => {
   expect(getNextSliderKeyboardValue(10, "ArrowRight", { step: 2 })).toBe(12);
+  expect(getNextSliderKeyboardValue(10, "ArrowRight", { step: 2 }, { fine: true })).toBe(10.2);
   expect(getNextSliderKeyboardValue(10, "PageUp", { step: 2 })).toBe(30);
   expect(getNextSliderKeyboardValue(10, "Home", { min: -12 })).toBe(-12);
+});
+
+test("maps fine slider drag movement from the drag start", () => {
+  expect(
+    getSliderValueFromLinearDrag(
+      {
+        trackX: 100,
+        trackY: 20,
+        trackWidth: 200,
+        trackHeight: 20,
+        startValue: 25,
+        startPointX: 150,
+        startPointY: 30,
+        pointX: 250,
+        pointY: 30,
+      },
+      { max: 50, min: 0, step: 1 },
+      { fine: true },
+    ),
+  ).toBe(27.5);
 });
 
 test("creates a complete serializable slider state object", () => {
@@ -211,8 +244,37 @@ test("maps fader pointer positions through the fader scale", () => {
 
 test("handles fader keyboard step commands", () => {
   expect(getNextFaderKeyboardValue(10, "ArrowUp", { step: 2 })).toBe(12);
+  expect(getNextFaderKeyboardValue(10, "ArrowUp", { step: 2 }, { fine: true })).toBe(10.2);
   expect(getNextFaderKeyboardValue(10, "PageDown", { step: 2 })).toBe(0);
   expect(getNextFaderKeyboardValue(10, "End", { max: 24 })).toBe(24);
+});
+
+test("maps fine fader drag movement from the drag start", () => {
+  expect(
+    getFaderValueFromLinearDrag(
+      {
+        trackX: 100,
+        trackY: 20,
+        trackWidth: 40,
+        trackHeight: 200,
+        startValue: 50,
+        startPointX: 120,
+        startPointY: 120,
+        pointX: 120,
+        pointY: 20,
+      },
+      {
+        min: 0,
+        max: 100,
+        step: 1,
+        scale: [
+          { value: 0, percent: 0 },
+          { value: 100, percent: 1 },
+        ],
+      },
+      { fine: true },
+    ),
+  ).toBe(55);
 });
 
 test("creates a complete serializable fader state object", () => {

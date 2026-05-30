@@ -1,15 +1,23 @@
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import { Fader, Knob, Slider } from "@audio-ui/react";
 
 interface ControlDemoProps {
   variant: "knob" | "slider" | "fader";
 }
 
+const labels: Record<ControlDemoProps["variant"], string> = {
+  knob: "Gain",
+  slider: "Pan",
+  fader: "Level",
+};
+
 export function ControlDemo({ variant }: ControlDemoProps) {
   const [value, setValue] = useState(variant === "fader" ? -6 : 0);
 
   return (
     <div className="audio-demo" data-variant={variant}>
+      <span className="demo-label">{labels[variant]}</span>
+
       {variant === "knob" ? (
         <Knob.Root
           className="demo-knob"
@@ -17,7 +25,6 @@ export function ControlDemo({ variant }: ControlDemoProps) {
           min={-60}
           onValueChange={setValue}
           step={0.5}
-          style={{ "--demo-accent": "#f5b84b" } as CSSProperties}
           value={value}
         >
           <Knob.Control aria-label="Gain" className="demo-knob-control">
@@ -34,7 +41,6 @@ export function ControlDemo({ variant }: ControlDemoProps) {
           min={-100}
           onValueChange={setValue}
           step={1}
-          style={{ "--demo-accent": "#42c3a7" } as CSSProperties}
           value={value}
         >
           <Slider.Track className="demo-slider-track">
@@ -46,12 +52,7 @@ export function ControlDemo({ variant }: ControlDemoProps) {
       ) : null}
 
       {variant === "fader" ? (
-        <Fader.Root
-          className="demo-fader"
-          onValueChange={setValue}
-          style={{ "--demo-accent": "#6aa9ff" } as CSSProperties}
-          value={value}
-        >
+        <Fader.Root className="demo-fader" onValueChange={setValue} value={value}>
           <div className="demo-fader-strip">
             <Fader.Scale className="demo-fader-scale" />
             <Fader.Track className="demo-fader-track">

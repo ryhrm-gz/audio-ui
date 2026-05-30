@@ -1,4 +1,4 @@
-import { getFaderValueFromPoint } from "@audio-ui/core";
+import { getFaderValueFromLinearDrag, getFaderValueFromPoint } from "@audio-ui/core";
 import { forwardRef, useCallback, useRef, type CSSProperties, type PointerEvent } from "react";
 import { useComposedRefs } from "../shared/refs.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
@@ -8,6 +8,13 @@ import type { FaderTrackProps } from "./types.ts";
 interface ActiveDrag {
   pointerId: number;
   currentValue: number;
+  startValue: number;
+  startPointX: number;
+  startPointY: number;
+  fine: boolean;
+  fineStartValue?: number;
+  fineStartPointX?: number;
+  fineStartPointY?: number;
 }
 
 export const Track = forwardRef<HTMLDivElement, FaderTrackProps>(function Track(props, ref) {
@@ -46,6 +53,60 @@ export const Track = forwardRef<HTMLDivElement, FaderTrackProps>(function Track(
     [context.state],
   );
 
+  const getValueFromDrag = useCallback(
+    (event: PointerEvent<HTMLDivElement>, activeDrag: ActiveDrag) => {
+      const fine = context.fineControl && event.shiftKey;
+
+      if (!fine) {
+        return {
+          value: getValueFromPointer(event),
+          fine,
+          fineStartValue: undefined,
+          fineStartPointX: undefined,
+          fineStartPointY: undefined,
+        };
+      }
+
+      if (
+        activeDrag.fineStartValue === undefined ||
+        activeDrag.fineStartPointX === undefined ||
+        activeDrag.fineStartPointY === undefined
+      ) {
+        return {
+          value: activeDrag.currentValue,
+          fine,
+          fineStartValue: activeDrag.currentValue,
+          fineStartPointX: event.clientX,
+          fineStartPointY: event.clientY,
+        };
+      }
+
+      const rect = event.currentTarget.getBoundingClientRect();
+      return {
+        value: getFaderValueFromLinearDrag(
+          {
+            trackX: rect.left,
+            trackY: rect.top,
+            trackWidth: rect.width,
+            trackHeight: rect.height,
+            startValue: activeDrag.fineStartValue,
+            startPointX: activeDrag.fineStartPointX,
+            startPointY: activeDrag.fineStartPointY,
+            pointX: event.clientX,
+            pointY: event.clientY,
+          },
+          context.state,
+          { fine },
+        ),
+        fine,
+        fineStartValue: activeDrag.fineStartValue,
+        fineStartPointX: activeDrag.fineStartPointX,
+        fineStartPointY: activeDrag.fineStartPointY,
+      };
+    },
+    [context.fineControl, context.state, getValueFromPointer],
+  );
+
   const releasePointerCapture = (event: PointerEvent<HTMLDivElement>) => {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
@@ -65,15 +126,23 @@ export const Track = forwardRef<HTMLDivElement, FaderTrackProps>(function Track(
 
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
+    const fine = context.fineControl && event.shiftKey;
     const nextValue = allowTrackClick ? getValueFromPointer(event) : context.state.value;
     activeDragRef.current = {
       pointerId: event.pointerId,
       currentValue: nextValue,
+      startValue: nextValue,
+      startPointX: event.clientX,
+      startPointY: event.clientY,
+      fine,
+      fineStartValue: fine ? nextValue : undefined,
+      fineStartPointX: fine ? event.clientX : undefined,
+      fineStartPointY: fine ? event.clientY : undefined,
     };
     context.setDragging(true);
 
     if (allowTrackClick) {
-      context.setValue(nextValue);
+      context.setValue(nextValue, { fine });
     }
   };
 
@@ -93,12 +162,16 @@ export const Track = forwardRef<HTMLDivElement, FaderTrackProps>(function Track(
       return;
     }
 
-    const nextValue = getValueFromPointer(event);
+    const dragValue = getValueFromDrag(event, activeDrag);
     activeDragRef.current = {
       ...activeDrag,
-      currentValue: nextValue,
+      currentValue: dragValue.value,
+      fine: dragValue.fine,
+      fineStartValue: dragValue.fineStartValue,
+      fineStartPointX: dragValue.fineStartPointX,
+      fineStartPointY: dragValue.fineStartPointY,
     };
-    context.setValue(nextValue);
+    context.setValue(dragValue.value, { fine: dragValue.fine });
   };
 
   const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
@@ -108,11 +181,12 @@ export const Track = forwardRef<HTMLDivElement, FaderTrackProps>(function Track(
       return;
     }
 
-    const dragValue = activeDragRef.current?.currentValue ?? context.state.value;
+    const activeDrag = activeDragRef.current;
+    const dragValue = activeDrag?.currentValue ?? context.state.value;
     releasePointerCapture(event);
     context.setDragging(false);
     activeDragRef.current = null;
-    context.commitValue(dragValue);
+    context.commitValue(dragValue, { fine: activeDrag?.fine });
   };
 
   const handlePointerCancel = (event: PointerEvent<HTMLDivElement>) => {

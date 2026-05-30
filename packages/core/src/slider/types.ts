@@ -18,6 +18,16 @@ export interface SliderPoint {
   pointY: number;
 }
 
+export interface SliderLinearDrag extends SliderPoint {
+  startValue: number;
+  startPointX: number;
+  startPointY: number;
+}
+
+export interface SliderDragOptions {
+  fine?: boolean;
+}
+
 export interface SliderState {
   value: number;
   min: number;

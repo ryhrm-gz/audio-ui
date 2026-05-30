@@ -5,13 +5,18 @@ export interface KnobContextValue {
   state: KnobState;
   disabled: boolean;
   readOnly: boolean;
+  fineControl: boolean;
   dragging: boolean;
   valueId: string;
   name?: string;
   required?: boolean;
   setDragging: (dragging: boolean) => void;
-  setValue: (value: number) => void;
-  commitValue: (value: number) => void;
+  setValue: (value: number, options?: KnobValueOptions) => void;
+  commitValue: (value: number, options?: KnobValueOptions) => void;
+}
+
+export interface KnobValueOptions {
+  fine?: boolean;
 }
 
 export const KnobContext = createContext<KnobContextValue | undefined>(undefined);

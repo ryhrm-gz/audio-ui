@@ -17,15 +17,18 @@ export const Thumb = forwardRef<HTMLSpanElement, SliderThumbProps>(function Thum
       return;
     }
 
-    const nextValue = getNextSliderKeyboardValue(context.state.value, event.key, context.state);
+    const fine = context.fineControl && event.shiftKey;
+    const nextValue = getNextSliderKeyboardValue(context.state.value, event.key, context.state, {
+      fine,
+    });
 
     if (nextValue === undefined) {
       return;
     }
 
     event.preventDefault();
-    context.setValue(nextValue);
-    context.commitValue(nextValue);
+    context.setValue(nextValue, { fine });
+    context.commitValue(nextValue, { fine });
   };
 
   const renderState = getRenderState(context.state, {

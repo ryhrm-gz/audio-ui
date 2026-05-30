@@ -5,6 +5,7 @@ export interface SliderContextValue {
   state: SliderState;
   disabled: boolean;
   readOnly: boolean;
+  fineControl: boolean;
   allowTrackClick: boolean;
   dragging: boolean;
   valueId: string;
@@ -12,8 +13,12 @@ export interface SliderContextValue {
   required?: boolean;
   trackRef: RefObject<HTMLDivElement | null>;
   setDragging: (dragging: boolean) => void;
-  setValue: (value: number) => void;
-  commitValue: (value: number) => void;
+  setValue: (value: number, options?: SliderValueOptions) => void;
+  commitValue: (value: number, options?: SliderValueOptions) => void;
+}
+
+export interface SliderValueOptions {
+  fine?: boolean;
 }
 
 export const SliderContext = createContext<SliderContextValue | undefined>(undefined);

@@ -1,9 +1,9 @@
-import { normalizeRangeValue } from "../shared/range.ts";
+import { normalizeRangeValue, type RangeValueOptions } from "../shared/range.ts";
 import { resolveFaderOptions } from "./options.ts";
 import { getFaderPercentFromScale, getFaderValueFromScale } from "./scale.ts";
 import type { FaderOptions, FaderRange } from "./types.ts";
 
-export function normalizeFaderValue(value: number, options: FaderRange = {}) {
+export function normalizeFaderValue(value: number, options: FaderRange & RangeValueOptions = {}) {
   return normalizeRangeValue(value, options);
 }
 
@@ -14,11 +14,14 @@ export function getFaderPercent(value: number, options: FaderOptions = {}) {
   return getFaderPercentFromScale(normalizedValue, resolvedOptions.scale);
 }
 
-export function getFaderValueFromPercent(percent: number, options: FaderOptions = {}) {
+export function getFaderValueFromPercent(
+  percent: number,
+  options: FaderOptions & RangeValueOptions = {},
+) {
   const resolvedOptions = resolveFaderOptions(options);
   const scaledValue = getFaderValueFromScale(percent, resolvedOptions.scale);
 
-  return normalizeFaderValue(scaledValue, resolvedOptions);
+  return normalizeFaderValue(scaledValue, { ...resolvedOptions, valueStep: options.valueStep });
 }
 
 export function getFaderGain(value: number, options: FaderOptions = {}) {

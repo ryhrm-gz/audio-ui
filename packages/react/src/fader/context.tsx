@@ -5,6 +5,7 @@ export interface FaderContextValue {
   state: FaderState;
   disabled: boolean;
   readOnly: boolean;
+  fineControl: boolean;
   allowTrackClick: boolean;
   dragging: boolean;
   valueId: string;
@@ -12,8 +13,12 @@ export interface FaderContextValue {
   required?: boolean;
   trackRef: RefObject<HTMLDivElement | null>;
   setDragging: (dragging: boolean) => void;
-  setValue: (value: number) => void;
-  commitValue: (value: number) => void;
+  setValue: (value: number, options?: FaderValueOptions) => void;
+  commitValue: (value: number, options?: FaderValueOptions) => void;
+}
+
+export interface FaderValueOptions {
+  fine?: boolean;
 }
 
 export const FaderContext = createContext<FaderContextValue | undefined>(undefined);

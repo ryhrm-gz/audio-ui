@@ -17,15 +17,18 @@ export const Thumb = forwardRef<HTMLSpanElement, FaderThumbProps>(function Thumb
       return;
     }
 
-    const nextValue = getNextFaderKeyboardValue(context.state.value, event.key, context.state);
+    const fine = context.fineControl && event.shiftKey;
+    const nextValue = getNextFaderKeyboardValue(context.state.value, event.key, context.state, {
+      fine,
+    });
 
     if (nextValue === undefined) {
       return;
     }
 
     event.preventDefault();
-    context.setValue(nextValue);
-    context.commitValue(nextValue);
+    context.setValue(nextValue, { fine });
+    context.commitValue(nextValue, { fine });
   };
 
   const renderState = getRenderState(context.state, {

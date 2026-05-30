@@ -13,6 +13,7 @@ export interface KnobRootProps
   defaultValue?: number;
   disabled?: boolean;
   readOnly?: boolean;
+  fineControl?: boolean;
   name?: string;
   required?: boolean;
   children?: ReactNode | ((state: RenderState<KnobState>) => ReactNode);

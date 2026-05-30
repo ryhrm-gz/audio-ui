@@ -1,6 +1,11 @@
-import { getNextRangeKeyboardValue } from "../shared/keyboard.ts";
+import { getNextRangeKeyboardValue, type RangeKeyboardOptions } from "../shared/keyboard.ts";
 import type { KnobRange } from "./types.ts";
 
-export function getNextKeyboardValue(value: number, key: string, options: KnobRange = {}) {
-  return getNextRangeKeyboardValue(value, key, options);
+export function getNextKeyboardValue(
+  value: number,
+  key: string,
+  options: KnobRange = {},
+  keyboard: RangeKeyboardOptions = {},
+) {
+  return getNextRangeKeyboardValue(value, key, options, keyboard);
 }

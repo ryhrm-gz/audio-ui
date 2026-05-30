@@ -4,6 +4,10 @@ export interface RangeOptions {
   step?: number;
 }
 
+export interface RangeValueOptions {
+  valueStep?: number;
+}
+
 export interface ResolvedRange {
   min: number;
   max: number;
@@ -15,6 +19,8 @@ export const defaultRangeOptions = {
   max: 100,
   step: 1,
 } satisfies Required<RangeOptions>;
+
+export const fineStepFactor = 0.1;
 
 export function resolveRangeOptions(
   options: RangeOptions = {},
@@ -36,16 +42,17 @@ export function clampValue(value: number, options: RangeOptions = {}) {
   return Math.min(Math.max(value, min), max);
 }
 
-export function snapValueToStep(value: number, options: RangeOptions = {}) {
+export function snapValueToStep(value: number, options: RangeOptions & RangeValueOptions = {}) {
   const { min, max, step } = resolveRangeOptions(options);
-  const steppedValue = Math.round((value - min) / step) * step + min;
-  const precision = getDecimalPrecision(step);
+  const valueStep = resolveValueStep(options.valueStep, step);
+  const steppedValue = Math.round((value - min) / valueStep) * valueStep + min;
+  const precision = getDecimalPrecision(valueStep);
   return clampValue(Number(steppedValue.toFixed(precision)), { min, max, step });
 }
 
-export function normalizeRangeValue(value: number, options: RangeOptions = {}) {
+export function normalizeRangeValue(value: number, options: RangeOptions & RangeValueOptions = {}) {
   const { min, max, step } = resolveRangeOptions(options);
-  return snapValueToStep(value, { min, max, step });
+  return snapValueToStep(value, { min, max, step, valueStep: options.valueStep });
 }
 
 export function getRangePercent(value: number, options: RangeOptions = {}) {
@@ -59,14 +66,39 @@ export function getRangePercent(value: number, options: RangeOptions = {}) {
   return (clampValue(value, { min, max }) - min) / span;
 }
 
-export function getRangeValueFromPercent(percent: number, options: RangeOptions = {}) {
+export function getRangeValueFromPercent(
+  percent: number,
+  options: RangeOptions & RangeValueOptions = {},
+) {
   const { min, max, step } = resolveRangeOptions(options);
   const clampedPercent = Math.min(Math.max(percent, 0), 1);
-  return normalizeRangeValue(min + (max - min) * clampedPercent, { min, max, step });
+  return normalizeRangeValue(min + (max - min) * clampedPercent, {
+    min,
+    max,
+    step,
+    valueStep: options.valueStep,
+  });
 }
 
-function getDecimalPrecision(value: number) {
+export function getFineStep(step: number) {
+  return step * fineStepFactor;
+}
+
+function resolveValueStep(valueStep: number | undefined, fallbackStep: number) {
+  return typeof valueStep === "number" && Number.isFinite(valueStep) && valueStep > 0
+    ? valueStep
+    : fallbackStep;
+}
+
+function getDecimalPrecision(value: number): number {
   const valueText = value.toString();
+  const [coefficient, exponent] = valueText.split("e-");
+
+  if (exponent !== undefined) {
+    const coefficientPrecision = getDecimalPrecision(Number(coefficient));
+    return coefficientPrecision + Number(exponent);
+  }
+
   const decimalIndex = valueText.indexOf(".");
 
   if (decimalIndex === -1) {

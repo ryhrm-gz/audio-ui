@@ -23,6 +23,10 @@ export interface KnobLinearDrag {
   trackSize: number;
 }
 
+export interface KnobDragOptions {
+  fine?: boolean;
+}
+
 export interface KnobState {
   value: number;
   min: number;

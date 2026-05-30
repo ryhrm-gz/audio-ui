@@ -13,6 +13,7 @@ export interface SliderRootProps
   defaultValue?: number;
   disabled?: boolean;
   readOnly?: boolean;
+  fineControl?: boolean;
   allowTrackClick?: boolean;
   name?: string;
   required?: boolean;
