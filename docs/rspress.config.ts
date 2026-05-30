@@ -69,6 +69,10 @@ export default defineConfig({
               text: "LevelMeter",
               link: "/components/level-meter",
             },
+            {
+              text: "Piano",
+              link: "/components/piano",
+            },
           ],
         },
       ],

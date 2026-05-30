@@ -1,0 +1,113 @@
+---
+title: Piano
+description: Compose pressable Piano keyboards that report pressed key state and can drive external audio engines.
+---
+
+import { PianoDemo } from "../_components/PianoDemo.tsx";
+
+# Piano
+
+`Piano` renders a pressable keyboard for MIDI note input, chord pickers, virtual instruments, and step sequencers. It reports pressed key objects and leaves sound generation to your application.
+
+<PianoDemo />
+
+## Anatomy
+
+```tsx
+import { Piano } from "@ryhrm-gz/audio-ui-react";
+
+export function MidiKeyboard() {
+  return (
+    <Piano.Root startKey="C4" keyCount={24} onPressedKeysChange={(keys) => console.log(keys)}>
+      <Piano.Keys />
+    </Piano.Root>
+  );
+}
+```
+
+## Controlled pressed state
+
+```tsx
+const [pressedKeys, setPressedKeys] = useState(["C4"]);
+
+<Piano.Root
+  pressedKeys={pressedKeys}
+  onPressedKeysChange={(keys) => setPressedKeys(keys.map((key) => key.id))}
+>
+  <Piano.Keys />
+</Piano.Root>;
+```
+
+## Individual key events
+
+Use `onPressKey` and `onReleaseKey` to connect the component to a synth, sampler, MIDI output, or any other external engine.
+
+```tsx
+<Piano.Root
+  startKey="C4"
+  keyCount={24}
+  onPressKey={(key) => synth.noteOn(key.midi)}
+  onReleaseKey={(key) => synth.noteOff(key.midi)}
+>
+  <Piano.Keys />
+</Piano.Root>
+```
+
+## Custom keys
+
+`Piano.Keys` can generate all keys in the configured range, or render custom content from each key state.
+
+```tsx
+<Piano.Root startKey="A0" keyCount={88}>
+  <Piano.Keys>
+    {(key) => (
+      <Piano.Key pianoKey={key.id} className={key.color === "black" ? "black-key" : "white-key"}>
+        {key.color === "white" ? key.note : null}
+      </Piano.Key>
+    )}
+  </Piano.Keys>
+</Piano.Root>
+```
+
+## Styling hooks
+
+Each key exposes note metadata, pressed state, and layout variables for placing white and black keys.
+
+```css
+.piano-key {
+  left: calc(var(--piano-key-start-percent) * 100%);
+  width: calc(var(--piano-key-size-percent) * 100%);
+}
+
+.piano-key[data-color="black"] {
+  z-index: 2;
+}
+```
+
+## API reference
+
+### `Piano.Root`
+
+`Piano.Root` renders a `div`, owns pressed-key state, and provides context to the other parts. It accepts standard `div` props except `defaultValue`, `onChange`, and `children`, which are replaced by the piano-specific API.
+
+| Prop                  | Type                                   | Default | Description                                                                                      |
+| --------------------- | -------------------------------------- | ------- | ------------------------------------------------------------------------------------------------ |
+| `pressedKeys`         | `PianoKeyInput[]`                      | -       | Controlled pressed keys. Inputs can be MIDI numbers, note strings like `"C4"`, or note objects.  |
+| `defaultPressedKeys`  | `PianoKeyInput[]`                      | `[]`    | Initial uncontrolled pressed keys.                                                               |
+| `startKey`            | `PianoKeyInput`                        | `60`    | First key in the generated range. MIDI `60` is middle C, exposed as `C4`.                        |
+| `keyCount`            | `number`                               | `12`    | Number of chromatic keys to generate.                                                            |
+| `disabled`            | `boolean`                              | `false` | Prevents pointer and keyboard interaction, and adds disabled state attributes.                   |
+| `readOnly`            | `boolean`                              | `false` | Keeps keys focusable while preventing pressed-state changes, and adds readonly state attributes. |
+| `allowMultiple`       | `boolean`                              | `true`  | Allows more than one key to be pressed at a time.                                                |
+| `children`            | `ReactNode \| (state) => ReactNode`    | -       | Parts to render. Function children receive the piano render state.                               |
+| `onPressedKeysChange` | `(keys: PianoKeyState[]) => void`      | -       | Fires with the currently pressed key objects after a press or release.                           |
+| `onPressKey`          | `(key: PianoKeyState) => void`         | -       | Fires when a key is pressed.                                                                     |
+| `onReleaseKey`        | `(key: PianoKeyState) => void`         | -       | Fires when a key is released.                                                                    |
+| `render`              | `RenderProp<ElementProps, PianoState>` | -       | Replaces the root element while preserving generated props and render state.                     |
+
+### Parts
+
+| Part         | Props and behavior                                                                                                                                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Piano.Keys` | Renders a `div` and accepts standard `div` props except `children`, plus `children` and `render`. Without children it renders one `Piano.Key` for each key in the root range. Function children receive each key state and the root state.                   |
+| `Piano.Key`  | Renders a `button` and accepts standard `button` props except `children` and `value`, plus `pianoKey`, `children`, and `render`. It handles pointer presses, Space/Enter key presses, and release-on-blur, and exposes key metadata through data attributes. |

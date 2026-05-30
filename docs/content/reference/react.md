@@ -8,7 +8,7 @@ description: Reference for Audio UI React exports, compound component namespaces
 Import compound component namespaces from `@ryhrm-gz/audio-ui-react`:
 
 ```tsx
-import { Fader, Knob, LevelMeter, Slider } from "@ryhrm-gz/audio-ui-react";
+import { Fader, Knob, LevelMeter, Piano, Slider } from "@ryhrm-gz/audio-ui-react";
 ```
 
 Named part exports are also available for tree-shaking or local naming:
@@ -19,7 +19,7 @@ import { KnobRoot, KnobControl, KnobThumb, KnobValue } from "@ryhrm-gz/audio-ui-
 
 ## Common root behavior
 
-Every root component supports controlled and uncontrolled value modes:
+Knob, Fader, and Slider roots support controlled and uncontrolled numeric value modes:
 
 | Prop                   | Description                                                  |
 | ---------------------- | ------------------------------------------------------------ |
@@ -31,6 +31,22 @@ Every root component supports controlled and uncontrolled value modes:
 | `name` / `required`    | Passed to the hidden input part for native forms             |
 | `onValueChange`        | Fires when the value changes                                 |
 | `onValueCommit`        | Fires when an interaction commits                            |
+
+## Piano root behavior
+
+`Piano` renders a pressable keyboard without producing audio. `Piano.Root` accepts
+`startKey` and `keyCount` to define the generated range, `pressedKeys` or
+`defaultPressedKeys` for controlled or uncontrolled pressed state, and
+`onPressedKeysChange` to receive the currently pressed key objects.
+
+```tsx
+<Piano.Root startKey="C4" keyCount={24} onPressedKeysChange={(keys) => console.log(keys)}>
+  <Piano.Keys />
+</Piano.Root>
+```
+
+Use `onPressKey` and `onReleaseKey` when individual press and release events are more
+convenient than the full pressed-key list.
 
 ## Render props
 
@@ -75,3 +91,7 @@ Parts accept a `render` prop for replacing the default element while preserving 
 | `--level-meter-mark-percent`          | `LevelMeter.Scale` marks                                      | Position for each scale mark           |
 | `--level-meter-segment-start-percent` | `LevelMeter.Segments` segments                                | Lower edge of a level band             |
 | `--level-meter-segment-size-percent`  | `LevelMeter.Segments` segments                                | Height of a level band                 |
+| `--piano-key-count`                   | `Piano.Root`, `Piano.Keys`                                    | Number of rendered piano keys          |
+| `--piano-white-key-count`             | `Piano.Root`, `Piano.Keys`                                    | Number of white keys in the range      |
+| `--piano-key-start-percent`           | `Piano.Key`                                                   | Key start position from `0` to `1`     |
+| `--piano-key-size-percent`            | `Piano.Key`                                                   | Key size from `0` to `1`               |

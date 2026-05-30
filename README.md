@@ -61,3 +61,27 @@ fader law.
 
 The React package is headless: it ships behavior, accessibility attributes, data attributes,
 and CSS variables such as `--knob-angle` and `--fader-percent`, but no visual styling.
+
+## Piano
+
+```tsx
+import { Piano } from "@ryhrm-gz/audio-ui-react";
+
+export function MidiKeyboard() {
+  return (
+    <Piano.Root
+      startKey="C4"
+      keyCount={24}
+      onPressedKeysChange={(keys) => {
+        console.log(keys.map((key) => key.midi));
+      }}
+    >
+      <Piano.Keys />
+    </Piano.Root>
+  );
+}
+```
+
+Piano renders key press behavior without producing audio. Use `pressedKeys` for controlled
+state, `defaultPressedKeys` for uncontrolled state, and `onPressedKeysChange` to receive
+the currently pressed key objects.

@@ -12,6 +12,7 @@ import {
   createFaderState,
   createKnobState,
   createLevelMeterState,
+  createPianoState,
   createSliderState,
 } from "@ryhrm-gz/audio-ui-core";
 ```
@@ -24,6 +25,7 @@ import {
 | `createSliderState(value, options)`     | Clamps and quantizes a value, then derives value, origin, and range-fill percents |
 | `createFaderState(value, options)`      | Applies the fader scale law and derives value, percent, unity, and scale marks    |
 | `createLevelMeterState(value, options)` | Clamps meter dB values, then derives per-channel fill, peak, and clipping state   |
+| `createPianoState(keys, options)`       | Resolves a piano key range and marks the currently pressed keys                   |
 
 ## Value utilities
 
