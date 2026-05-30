@@ -1,3 +1,4 @@
+import type { MouseEvent, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vite-plus/test";
 import { Fader } from "./index.ts";
@@ -37,6 +38,79 @@ describe("Fader", () => {
     expect(markup).toContain('type="hidden"');
     expect(markup).toContain('name="channel-gain"');
     expect(markup).toContain('value="-6"');
+  });
+
+  test("resets to the default value on track double click", () => {
+    const changes: number[] = [];
+    const commits: number[] = [];
+    let handleDoubleClick: ((event: MouseEvent<HTMLDivElement>) => void) | undefined;
+
+    renderToStaticMarkup(
+      <Fader.Root
+        value={6}
+        defaultValue={-6}
+        max={12}
+        min={-60}
+        onValueChange={(nextValue) => changes.push(nextValue)}
+        onValueCommit={(nextValue) => commits.push(nextValue)}
+      >
+        <Fader.Track
+          render={(props) => {
+            handleDoubleClick = props.onDoubleClick as typeof handleDoubleClick;
+            return <div>{props.children as ReactNode}</div>;
+          }}
+        >
+          <Fader.Thumb
+            render={(props) => {
+              expect(props.onDoubleClick).toBeUndefined();
+              return <span />;
+            }}
+          />
+        </Fader.Track>
+      </Fader.Root>,
+    );
+
+    const event = createMouseEvent<HTMLDivElement>();
+    handleDoubleClick?.(event);
+
+    expect(changes).toEqual([-6]);
+    expect(commits).toEqual([-6]);
+    expect(event.defaultPrevented).toBe(true);
+  });
+
+  test("can disable track double click reset", () => {
+    const changes: number[] = [];
+    const commits: number[] = [];
+    let handleDoubleClick: ((event: MouseEvent<HTMLDivElement>) => void) | undefined;
+
+    renderToStaticMarkup(
+      <Fader.Root
+        value={6}
+        defaultValue={-6}
+        max={12}
+        min={-60}
+        resetOnDoubleClick={false}
+        onValueChange={(nextValue) => changes.push(nextValue)}
+        onValueCommit={(nextValue) => commits.push(nextValue)}
+      >
+        <Fader.Track
+          render={(props) => {
+            handleDoubleClick = props.onDoubleClick as typeof handleDoubleClick;
+            return <div>{props.children as ReactNode}</div>;
+          }}
+        >
+          <Fader.Range />
+          <Fader.Thumb />
+        </Fader.Track>
+      </Fader.Root>,
+    );
+
+    const event = createMouseEvent<HTMLDivElement>();
+    handleDoubleClick?.(event);
+
+    expect(changes).toEqual([]);
+    expect(commits).toEqual([]);
+    expect(event.defaultPrevented).toBe(false);
   });
 
   test("passes render state to children", () => {
@@ -118,3 +192,16 @@ describe("Fader", () => {
     );
   });
 });
+
+function createMouseEvent<T>(): MouseEvent<T> {
+  let defaultPrevented = false;
+
+  return {
+    get defaultPrevented() {
+      return defaultPrevented;
+    },
+    preventDefault: () => {
+      defaultPrevented = true;
+    },
+  } as unknown as MouseEvent<T>;
+}

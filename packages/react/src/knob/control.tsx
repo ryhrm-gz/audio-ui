@@ -5,6 +5,7 @@ import {
   useRef,
   type CSSProperties,
   type KeyboardEvent,
+  type MouseEvent,
   type PointerEvent,
 } from "react";
 import { useKnobContext } from "./context.tsx";
@@ -30,6 +31,7 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
     onPointerMove,
     onPointerUp,
     onPointerCancel,
+    onDoubleClick,
     onKeyDown,
     style,
     ...elementProps
@@ -154,6 +156,17 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
     activeDragRef.current = null;
   };
 
+  const handleDoubleClick = (event: MouseEvent<HTMLDivElement>) => {
+    onDoubleClick?.(event);
+
+    if (event.defaultPrevented || disabled || readOnly || !context.resetOnDoubleClick) {
+      return;
+    }
+
+    event.preventDefault();
+    context.resetValue();
+  };
+
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     onKeyDown?.(event);
 
@@ -203,6 +216,7 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
     onPointerMove: handlePointerMove,
     onPointerUp: handlePointerUp,
     onPointerCancel: handlePointerCancel,
+    onDoubleClick: handleDoubleClick,
     onKeyDown: handleKeyDown,
   });
 

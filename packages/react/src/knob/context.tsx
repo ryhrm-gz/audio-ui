@@ -6,6 +6,7 @@ export interface KnobContextValue {
   disabled: boolean;
   readOnly: boolean;
   fineControl: boolean;
+  resetOnDoubleClick: boolean;
   dragging: boolean;
   valueId: string;
   name?: string;
@@ -13,6 +14,7 @@ export interface KnobContextValue {
   setDragging: (dragging: boolean) => void;
   setValue: (value: number, options?: KnobValueOptions) => void;
   commitValue: (value: number, options?: KnobValueOptions) => void;
+  resetValue: () => void;
 }
 
 export interface KnobValueOptions {

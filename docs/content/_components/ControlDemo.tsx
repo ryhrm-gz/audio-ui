@@ -12,7 +12,8 @@ const labels: Record<ControlDemoProps["variant"], string> = {
 };
 
 export function ControlDemo({ variant }: ControlDemoProps) {
-  const [value, setValue] = useState(variant === "fader" ? -6 : 0);
+  const defaultValue = variant === "slider" ? 0 : -6;
+  const [value, setValue] = useState(defaultValue);
 
   return (
     <div className="audio-demo" data-variant={variant}>
@@ -21,6 +22,7 @@ export function ControlDemo({ variant }: ControlDemoProps) {
       {variant === "knob" ? (
         <Knob.Root
           className="demo-knob"
+          defaultValue={defaultValue}
           max={12}
           min={-60}
           onValueChange={setValue}
@@ -37,6 +39,7 @@ export function ControlDemo({ variant }: ControlDemoProps) {
       {variant === "slider" ? (
         <Slider.Root
           className="demo-slider"
+          defaultValue={defaultValue}
           max={100}
           min={-100}
           onValueChange={setValue}
@@ -53,7 +56,12 @@ export function ControlDemo({ variant }: ControlDemoProps) {
       ) : null}
 
       {variant === "fader" ? (
-        <Fader.Root className="demo-fader" onValueChange={setValue} value={value}>
+        <Fader.Root
+          className="demo-fader"
+          defaultValue={defaultValue}
+          onValueChange={setValue}
+          value={value}
+        >
           <div className="demo-fader-strip">
             <Fader.Scale className="demo-fader-scale" />
             <Fader.Track className="demo-fader-track">

@@ -25,6 +25,7 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
     disabled = false,
     readOnly = false,
     fineControl = true,
+    resetOnDoubleClick = true,
     allowTrackClick = false,
     name,
     required,
@@ -37,6 +38,7 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
   } = props;
   const isControlled = value !== undefined;
   const initialValue = defaultValue ?? min ?? 0;
+  const resetValueTarget = defaultValue ?? min ?? 0;
   const [internalValue, setInternalValue] = useState(initialValue);
   const [valueStep, setValueStep] = useState<number | undefined>(undefined);
   const [dragging, setDragging] = useState(false);
@@ -88,12 +90,18 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
     [getStateForValue, onValueCommit],
   );
 
+  const resetValue = useCallback(() => {
+    setValue(resetValueTarget);
+    commitValue(resetValueTarget);
+  }, [commitValue, resetValueTarget, setValue]);
+
   const contextValue = useMemo<SliderContextValue>(
     () => ({
       state,
       disabled,
       readOnly,
       fineControl,
+      resetOnDoubleClick,
       allowTrackClick,
       dragging,
       valueId,
@@ -103,12 +111,14 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
       setDragging,
       setValue,
       commitValue,
+      resetValue,
     }),
     [
       state,
       disabled,
       readOnly,
       fineControl,
+      resetOnDoubleClick,
       allowTrackClick,
       dragging,
       valueId,
@@ -118,6 +128,7 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
       setDragging,
       setValue,
       commitValue,
+      resetValue,
     ],
   );
   const renderState = getRenderState(state, { disabled, readOnly, dragging });

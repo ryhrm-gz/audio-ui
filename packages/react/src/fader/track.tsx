@@ -1,5 +1,12 @@
 import { getFaderValueFromLinearDrag, getFaderValueFromPoint } from "@audio-ui/core";
-import { forwardRef, useCallback, useRef, type CSSProperties, type PointerEvent } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useRef,
+  type CSSProperties,
+  type MouseEvent,
+  type PointerEvent,
+} from "react";
 import { useComposedRefs } from "../shared/refs.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { useFaderContext } from "./context.tsx";
@@ -24,6 +31,7 @@ export const Track = forwardRef<HTMLDivElement, FaderTrackProps>(function Track(
     onPointerMove,
     onPointerUp,
     onPointerCancel,
+    onDoubleClick,
     style,
     ...elementProps
   } = props;
@@ -201,6 +209,17 @@ export const Track = forwardRef<HTMLDivElement, FaderTrackProps>(function Track(
     activeDragRef.current = null;
   };
 
+  const handleDoubleClick = (event: MouseEvent<HTMLDivElement>) => {
+    onDoubleClick?.(event);
+
+    if (event.defaultPrevented || disabled || readOnly || !context.resetOnDoubleClick) {
+      return;
+    }
+
+    event.preventDefault();
+    context.resetValue();
+  };
+
   const renderState = getRenderState(context.state, {
     disabled,
     readOnly,
@@ -227,6 +246,7 @@ export const Track = forwardRef<HTMLDivElement, FaderTrackProps>(function Track(
     onPointerMove: handlePointerMove,
     onPointerUp: handlePointerUp,
     onPointerCancel: handlePointerCancel,
+    onDoubleClick: handleDoubleClick,
   });
 
   return renderElement("div", render, trackProps, renderState);

@@ -14,6 +14,7 @@ export interface SliderRootProps
   disabled?: boolean;
   readOnly?: boolean;
   fineControl?: boolean;
+  resetOnDoubleClick?: boolean;
   allowTrackClick?: boolean;
   name?: string;
   required?: boolean;

@@ -6,6 +6,7 @@ export interface SliderContextValue {
   disabled: boolean;
   readOnly: boolean;
   fineControl: boolean;
+  resetOnDoubleClick: boolean;
   allowTrackClick: boolean;
   dragging: boolean;
   valueId: string;
@@ -15,6 +16,7 @@ export interface SliderContextValue {
   setDragging: (dragging: boolean) => void;
   setValue: (value: number, options?: SliderValueOptions) => void;
   commitValue: (value: number, options?: SliderValueOptions) => void;
+  resetValue: () => void;
 }
 
 export interface SliderValueOptions {

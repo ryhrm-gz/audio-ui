@@ -6,6 +6,7 @@ export interface FaderContextValue {
   disabled: boolean;
   readOnly: boolean;
   fineControl: boolean;
+  resetOnDoubleClick: boolean;
   allowTrackClick: boolean;
   dragging: boolean;
   valueId: string;
@@ -15,6 +16,7 @@ export interface FaderContextValue {
   setDragging: (dragging: boolean) => void;
   setValue: (value: number, options?: FaderValueOptions) => void;
   commitValue: (value: number, options?: FaderValueOptions) => void;
+  resetValue: () => void;
 }
 
 export interface FaderValueOptions {

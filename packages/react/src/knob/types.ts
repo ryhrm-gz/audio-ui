@@ -14,6 +14,7 @@ export interface KnobRootProps
   disabled?: boolean;
   readOnly?: boolean;
   fineControl?: boolean;
+  resetOnDoubleClick?: boolean;
   name?: string;
   required?: boolean;
   children?: ReactNode | ((state: RenderState<KnobState>) => ReactNode);
