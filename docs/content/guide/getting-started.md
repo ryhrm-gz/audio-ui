@@ -7,19 +7,19 @@ description: Install Audio UI packages and render accessible knob, slider, and f
 
 Audio UI provides two packages:
 
-- `@audio-ui/core` contains framework-agnostic math and state helpers.
-- `@audio-ui/react` contains headless React components built on top of the core package.
+- `@ryhrm-gz/audio-ui-core` contains framework-agnostic math and state helpers.
+- `@ryhrm-gz/audio-ui-react` contains headless React components built on top of the core package.
 
 Install the React package in your app:
 
 ```sh
-pnpm add @audio-ui/react
+pnpm add @ryhrm-gz/audio-ui-react
 ```
 
 Use the compound component API to assemble the DOM structure you want. Audio UI owns behavior, ARIA attributes, data attributes, CSS variables, and hidden form inputs; your app owns the visual styling.
 
 ```tsx
-import { Knob } from "@audio-ui/react";
+import { Knob } from "@ryhrm-gz/audio-ui-react";
 
 export function GainKnob() {
   return (
@@ -59,7 +59,7 @@ All controls support uncontrolled state with `defaultValue` and controlled state
 
 ```tsx
 import { useState } from "react";
-import { Slider } from "@audio-ui/react";
+import { Slider } from "@ryhrm-gz/audio-ui-react";
 
 export function PanSlider() {
   const [pan, setPan] = useState(0);

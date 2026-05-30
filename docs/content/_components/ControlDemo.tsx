@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Fader, Knob, Slider } from "@audio-ui/react";
+import { Fader, Knob, Slider } from "@ryhrm-gz/audio-ui-react";
 
 interface ControlDemoProps {
   variant: "knob" | "slider" | "fader";

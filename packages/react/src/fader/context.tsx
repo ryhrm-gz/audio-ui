@@ -1,4 +1,4 @@
-import type { FaderState } from "@audio-ui/core";
+import type { FaderState } from "@ryhrm-gz/audio-ui-core";
 import { createContext, useContext, type RefObject } from "react";
 
 export interface FaderContextValue {

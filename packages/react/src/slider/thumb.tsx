@@ -1,4 +1,4 @@
-import { getNextSliderKeyboardValue } from "@audio-ui/core";
+import { getNextSliderKeyboardValue } from "@ryhrm-gz/audio-ui-core";
 import { forwardRef, type CSSProperties, type KeyboardEvent } from "react";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { useSliderContext } from "./context.tsx";

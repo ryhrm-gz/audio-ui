@@ -1,4 +1,8 @@
-import type { SliderOptions, SliderRange as SliderRangeOptions, SliderState } from "@audio-ui/core";
+import type {
+  SliderOptions,
+  SliderRange as SliderRangeOptions,
+  SliderState,
+} from "@ryhrm-gz/audio-ui-core";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import type { ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
 

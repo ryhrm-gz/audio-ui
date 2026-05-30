@@ -1,4 +1,4 @@
-import { createKnobState, getFineStep, type KnobState } from "@audio-ui/core";
+import { createKnobState, getFineStep, type KnobState } from "@ryhrm-gz/audio-ui-core";
 import { forwardRef, useCallback, useId, useMemo, useState } from "react";
 import { KnobContext, type KnobContextValue, type KnobValueOptions } from "./context.tsx";
 import { getRenderState, mergeProps, renderElement } from "./render.tsx";

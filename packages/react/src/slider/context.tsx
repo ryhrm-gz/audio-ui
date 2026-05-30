@@ -1,4 +1,4 @@
-import type { SliderState } from "@audio-ui/core";
+import type { SliderState } from "@ryhrm-gz/audio-ui-core";
 import { createContext, useContext, type RefObject } from "react";
 
 export interface SliderContextValue {

@@ -5,16 +5,16 @@ description: Reference for Audio UI React exports, compound component namespaces
 
 # React API
 
-Import compound component namespaces from `@audio-ui/react`:
+Import compound component namespaces from `@ryhrm-gz/audio-ui-react`:
 
 ```tsx
-import { Fader, Knob, Slider } from "@audio-ui/react";
+import { Fader, Knob, Slider } from "@ryhrm-gz/audio-ui-react";
 ```
 
 Named part exports are also available for tree-shaking or local naming:
 
 ```tsx
-import { KnobRoot, KnobControl, KnobThumb, KnobValue } from "@audio-ui/react";
+import { KnobRoot, KnobControl, KnobThumb, KnobValue } from "@ryhrm-gz/audio-ui-react";
 ```
 
 ## Common root behavior
@@ -34,7 +34,7 @@ Every root component supports controlled and uncontrolled value modes:
 
 ## Render props
 
-Roots accept function children. The render state includes the normalized state from `@audio-ui/core` plus interaction flags.
+Roots accept function children. The render state includes the normalized state from `@ryhrm-gz/audio-ui-core` plus interaction flags.
 
 ```tsx
 <Knob.Root defaultValue={0}>

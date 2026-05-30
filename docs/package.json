@@ -10,7 +10,7 @@
     "preview": "rspress preview"
   },
   "dependencies": {
-    "@audio-ui/react": "workspace:*"
+    "@ryhrm-gz/audio-ui-react": "workspace:*"
   },
   "devDependencies": {
     "@rspress/core": "^2.0.13"

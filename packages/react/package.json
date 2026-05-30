@@ -1,5 +1,5 @@
 {
-  "name": "@audio-ui/react",
+  "name": "@ryhrm-gz/audio-ui-react",
   "version": "0.0.0",
   "description": "React bindings for headless audio control primitives.",
   "license": "MIT",
@@ -19,7 +19,7 @@
     "dev": "vp pack --watch"
   },
   "dependencies": {
-    "@audio-ui/core": "workspace:*"
+    "@ryhrm-gz/audio-ui-core": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0"

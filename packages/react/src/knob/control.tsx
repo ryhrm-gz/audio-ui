@@ -1,4 +1,4 @@
-import { getKnobValueFromLinearDrag, getNextKeyboardValue } from "@audio-ui/core";
+import { getKnobValueFromLinearDrag, getNextKeyboardValue } from "@ryhrm-gz/audio-ui-core";
 import {
   forwardRef,
   useCallback,

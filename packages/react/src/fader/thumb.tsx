@@ -1,4 +1,4 @@
-import { getNextFaderKeyboardValue } from "@audio-ui/core";
+import { getNextFaderKeyboardValue } from "@ryhrm-gz/audio-ui-core";
 import { forwardRef, type CSSProperties, type KeyboardEvent } from "react";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { useFaderContext } from "./context.tsx";

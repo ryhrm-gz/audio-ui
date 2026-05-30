@@ -1,4 +1,4 @@
-import { createFaderState, getFineStep, type FaderState } from "@audio-ui/core";
+import { createFaderState, getFineStep, type FaderState } from "@ryhrm-gz/audio-ui-core";
 import { forwardRef, useCallback, useId, useMemo, useRef, useState } from "react";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { FaderContext, type FaderContextValue, type FaderValueOptions } from "./context.tsx";

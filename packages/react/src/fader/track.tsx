@@ -1,4 +1,4 @@
-import { getFaderValueFromLinearDrag, getFaderValueFromPoint } from "@audio-ui/core";
+import { getFaderValueFromLinearDrag, getFaderValueFromPoint } from "@ryhrm-gz/audio-ui-core";
 import {
   forwardRef,
   useCallback,

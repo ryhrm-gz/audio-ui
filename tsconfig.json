@@ -6,8 +6,8 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "paths": {
-      "@audio-ui/core": ["./packages/core/src/index.ts"],
-      "@audio-ui/react": ["./packages/react/src/index.ts"]
+      "@ryhrm-gz/audio-ui-core": ["./packages/core/src/index.ts"],
+      "@ryhrm-gz/audio-ui-react": ["./packages/react/src/index.ts"]
     },
     "jsx": "react-jsx",
     "resolveJsonModule": true,

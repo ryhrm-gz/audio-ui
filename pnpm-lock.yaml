@@ -48,7 +48,7 @@ importers:
 
   docs:
     dependencies:
-      '@audio-ui/react':
+      '@ryhrm-gz/audio-ui-react':
         specifier: workspace:*
         version: link:../packages/react
     devDependencies:
@@ -60,7 +60,7 @@ importers:
 
   packages/react:
     dependencies:
-      '@audio-ui/core':
+      '@ryhrm-gz/audio-ui-core':
         specifier: workspace:*
         version: link:../core
       react:

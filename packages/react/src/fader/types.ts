@@ -3,7 +3,7 @@ import type {
   FaderRange as FaderRangeOptions,
   FaderScalePoint,
   FaderState,
-} from "@audio-ui/core";
+} from "@ryhrm-gz/audio-ui-core";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import type { ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
 

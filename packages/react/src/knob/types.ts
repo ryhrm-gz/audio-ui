@@ -1,4 +1,4 @@
-import type { KnobAngleRange, KnobRange, KnobState } from "@audio-ui/core";
+import type { KnobAngleRange, KnobRange, KnobState } from "@ryhrm-gz/audio-ui-core";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import type { ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
 

@@ -1,4 +1,4 @@
-import type { KnobState } from "@audio-ui/core";
+import type { KnobState } from "@ryhrm-gz/audio-ui-core";
 import { createContext, useContext } from "react";
 
 export interface KnobContextValue {

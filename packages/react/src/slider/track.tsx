@@ -1,4 +1,4 @@
-import { getSliderValueFromLinearDrag, getSliderValueFromPoint } from "@audio-ui/core";
+import { getSliderValueFromLinearDrag, getSliderValueFromPoint } from "@ryhrm-gz/audio-ui-core";
 import {
   forwardRef,
   useCallback,

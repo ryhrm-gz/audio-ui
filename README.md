@@ -4,8 +4,8 @@ Headless primitives for audio interfaces.
 
 ## Packages
 
-- `@audio-ui/core`: framework-agnostic math and state helpers.
-- `@audio-ui/react`: React components built on the core package.
+- `@ryhrm-gz/audio-ui-core`: framework-agnostic math and state helpers.
+- `@ryhrm-gz/audio-ui-react`: React components built on the core package.
 
 ## Documentation
 
@@ -16,7 +16,7 @@ packages first.
 ## Knob
 
 ```tsx
-import { Knob } from "@audio-ui/react";
+import { Knob } from "@ryhrm-gz/audio-ui-react";
 
 export function GainKnob() {
   return (
@@ -36,7 +36,7 @@ Pointer interaction uses vertical up/down dragging.
 ## Fader
 
 ```tsx
-import { Fader } from "@audio-ui/react";
+import { Fader } from "@ryhrm-gz/audio-ui-react";
 
 export function ChannelFader() {
   return (

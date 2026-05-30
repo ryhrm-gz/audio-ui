@@ -1,4 +1,4 @@
-import { createSliderState, getFineStep, type SliderState } from "@audio-ui/core";
+import { createSliderState, getFineStep, type SliderState } from "@ryhrm-gz/audio-ui-core";
 import {
   forwardRef,
   useCallback,
