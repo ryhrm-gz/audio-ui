@@ -17,6 +17,16 @@ export {
 } from "./knob/index.ts";
 export { Knob } from "./knob/index.ts";
 export {
+  Bar as LevelMeterBar,
+  Peak as LevelMeterPeak,
+  Root as LevelMeterRoot,
+  Scale as LevelMeterScale,
+  Segments as LevelMeterSegments,
+  Track as LevelMeterTrack,
+  Value as LevelMeterValue,
+} from "./level-meter/index.ts";
+export { LevelMeter } from "./level-meter/index.ts";
+export {
   HiddenInput as SliderHiddenInput,
   Range as SliderRange,
   Root as SliderRoot,
@@ -41,6 +51,15 @@ export type {
   KnobThumbProps,
   KnobValueProps,
 } from "./knob/index.ts";
+export type {
+  LevelMeterBarProps,
+  LevelMeterPeakProps,
+  LevelMeterRootProps,
+  LevelMeterScaleProps,
+  LevelMeterSegmentsProps,
+  LevelMeterTrackProps,
+  LevelMeterValueProps,
+} from "./level-meter/index.ts";
 export type {
   SliderHiddenInputProps,
   SliderRangeProps,

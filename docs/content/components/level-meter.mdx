@@ -1,0 +1,103 @@
+---
+title: LevelMeter
+description: Create DAW-style level meters for visualizing live signal levels, peaks, clipping, and dB scale marks.
+---
+
+import { LevelMeterDemo } from "../_components/LevelMeterDemo.tsx";
+
+# LevelMeter
+
+`LevelMeter` is a read-only dB meter for console and channel-strip interfaces. It accepts one or more dBFS values, exposes per-channel fill and peak CSS variables, and marks clipping at the configured threshold.
+
+<LevelMeterDemo />
+
+## Anatomy
+
+```tsx
+import { LevelMeter } from "@ryhrm-gz/audio-ui-react";
+
+export function StereoMeter({ left, right, leftPeak, rightPeak }) {
+  return (
+    <LevelMeter.Root
+      aria-label="Input level"
+      channels={2}
+      value={[left, right]}
+      peak={[leftPeak, rightPeak]}
+    >
+      <LevelMeter.Scale />
+      <LevelMeter.Track>
+        <LevelMeter.Segments />
+        <LevelMeter.Bar channel={0}>
+          <LevelMeter.Segments channel={0} />
+        </LevelMeter.Bar>
+        <LevelMeter.Peak channel={0} />
+        <LevelMeter.Bar channel={1}>
+          <LevelMeter.Segments channel={1} />
+        </LevelMeter.Bar>
+        <LevelMeter.Peak channel={1} />
+      </LevelMeter.Track>
+      <LevelMeter.Value format={(value) => `${value.toFixed(1)} dB`} />
+    </LevelMeter.Root>
+  );
+}
+```
+
+## Web Audio values
+
+Use `getLevelMeterDbFromAmplitude` when an analyzer gives you linear amplitude values.
+
+```ts
+import { getLevelMeterDbFromAmplitude } from "@ryhrm-gz/audio-ui-core";
+
+const db = getLevelMeterDbFromAmplitude(rmsAmplitude);
+```
+
+## Styling hooks
+
+Level meter parts expose per-channel CSS variables for vertical fills and peak markers.
+
+```css
+.meter-segments [data-segment="warning"] {
+  background: color-mix(in srgb, orange 30%, transparent);
+}
+
+.meter-segments [data-part="segment"] {
+  bottom: calc(var(--level-meter-segment-start-percent) * 100%);
+  height: calc(var(--level-meter-segment-size-percent) * 100%);
+}
+
+.meter-peak {
+  bottom: calc(var(--level-meter-peak-percent) * 100%);
+}
+```
+
+## API reference
+
+### `LevelMeter.Root`
+
+`LevelMeter.Root` renders a `div` with `role="meter"` and provides read-only meter state to the other parts.
+
+| Prop       | Type                                | Default | Description                                                                        |
+| ---------- | ----------------------------------- | ------- | ---------------------------------------------------------------------------------- |
+| `value`    | `number \| readonly number[]`       | `min`   | Current dB value or per-channel dB values.                                         |
+| `peak`     | `number \| readonly number[]`       | `value` | Peak marker value or per-channel peak values.                                      |
+| `min`      | `number`                            | `-60`   | Lower dB bound for the meter.                                                      |
+| `max`      | `number`                            | `6`     | Upper dB bound for the meter.                                                      |
+| `clip`     | `number`                            | `0`     | Threshold that adds `data-clipped` to clipped channels and the root.               |
+| `channels` | `number`                            | `1`     | Number of channel states to expose. Missing values are filled with `min`.          |
+| `scale`    | `readonly LevelMeterScalePoint[]`   | dBFS    | Scale marks. Each point is `{ value, percent, label? }`.                           |
+| `segments` | `readonly LevelMeterSegment[]`      | dBFS    | Level bands for styling meter ranges. Each segment is `{ from, to, id?, label? }`. |
+| `disabled` | `boolean`                           | `false` | Adds disabled state attributes for inactive or unavailable meters.                 |
+| `children` | `ReactNode \| (state) => ReactNode` | -       | Parts to render. Function children receive the full level meter state.             |
+| `render`   | `RenderProp<ElementProps, State>`   | -       | Replaces the root element while preserving generated props and render state.       |
+
+### Parts
+
+| Part                  | Props and behavior                                                                                                                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `LevelMeter.Track`    | Renders a `div` for the visual meter area. It exposes `--level-meter-max-value`, `--level-meter-max-percent`, and `--level-meter-channel-count`.                                                              |
+| `LevelMeter.Bar`      | Renders a channel fill `span`. Pass `channel` to choose the channel index. It exposes `--level-meter-value` and `--level-meter-percent`.                                                                      |
+| `LevelMeter.Peak`     | Renders a peak marker `span`. Pass `channel` to choose the channel index. It exposes `--level-meter-peak-value` and `--level-meter-peak-percent`.                                                             |
+| `LevelMeter.Segments` | Renders the resolved level bands. Without `channel`, segments cover the full meter; with `channel`, segments are clipped into that channel fill. Each segment exposes start, end, and size percent variables. |
+| `LevelMeter.Scale`    | Renders scale marks from the resolved meter scale. Function children receive `(mark, state)` for custom labels. Each mark exposes `--level-meter-mark-percent`.                                               |
+| `LevelMeter.Value`    | Renders a formatted dB value. Without `channel`, it displays the loudest channel; with `channel`, it displays that channel. Use `format(value, state)` to customize the output.                               |

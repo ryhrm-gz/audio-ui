@@ -65,6 +65,10 @@ export default defineConfig({
               text: "Fader",
               link: "/components/fader",
             },
+            {
+              text: "LevelMeter",
+              link: "/components/level-meter",
+            },
           ],
         },
       ],
