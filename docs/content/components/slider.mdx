@@ -1,0 +1,66 @@
+---
+title: Slider
+description: Compose horizontal or vertical Slider controls with track, range, thumb, value, and hidden input parts.
+---
+
+import { ControlDemo } from "../_components/ControlDemo.tsx";
+
+# Slider
+
+`Slider` is a linear control for normalized parameters, pan, wet/dry balance, and other values that map cleanly to a percentage. It supports horizontal and vertical orientation.
+
+<ControlDemo variant="slider" />
+
+## Anatomy
+
+```tsx
+import { Slider } from "@audio-ui/react";
+
+export function PanSlider() {
+  return (
+    <Slider.Root defaultValue={0} min={-100} max={100} step={1} name="pan">
+      <Slider.Track>
+        <Slider.Range />
+        <Slider.Thumb aria-label="Pan" />
+      </Slider.Track>
+      <Slider.Value format={(value) => `${value}%`} />
+      <Slider.HiddenInput />
+    </Slider.Root>
+  );
+}
+```
+
+## Vertical orientation
+
+```tsx
+<Slider.Root orientation="vertical" defaultValue={50} min={0} max={100}>
+  <Slider.Track>
+    <Slider.Range />
+    <Slider.Thumb aria-label="Send level" />
+  </Slider.Track>
+</Slider.Root>
+```
+
+## Styling hooks
+
+The root exposes `data-orientation`, `data-inverted`, and `--slider-percent`.
+
+```css
+.slider-range {
+  width: calc(var(--slider-percent) * 100%);
+}
+
+[data-orientation="vertical"] .slider-range {
+  height: calc(var(--slider-percent) * 100%);
+}
+```
+
+## Props
+
+| Part           | Key props                                                                                                                                                                 |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Slider.Root`  | `value`, `defaultValue`, `min`, `max`, `step`, `orientation`, `inverted`, `allowTrackClick`, `disabled`, `readOnly`, `name`, `required`, `onValueChange`, `onValueCommit` |
+| `Slider.Track` | Receives pointer and keyboard interaction for the control                                                                                                                 |
+| `Slider.Range` | Visual fill tied to `--slider-percent`                                                                                                                                    |
+| `Slider.Thumb` | Focusable thumb with generated ARIA value metadata                                                                                                                        |
+| `Slider.Value` | `format` for display formatting                                                                                                                                           |

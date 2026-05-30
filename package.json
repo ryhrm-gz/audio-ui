@@ -17,7 +17,9 @@
   "scripts": {
     "build": "vp run --filter ./packages/* build",
     "dev": "vp run --filter ./packages/* dev",
-    "playground": "vp dev",
+    "docs": "vp run --filter ./docs dev",
+    "docs:build": "vp run --filter ./docs build",
+    "docs:preview": "vp run --filter ./docs preview",
     "test": "vp test",
     "check": "vp check",
     "prepare": "vp config"

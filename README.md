@@ -7,11 +7,11 @@ Headless primitives for audio interfaces.
 - `@audio-ui/core`: framework-agnostic math and state helpers.
 - `@audio-ui/react`: React components built on the core package.
 
-## Component Lab
+## Documentation
 
-Run `vp run playground` to open a local development page for inspecting components while
-they are being built. The lab imports package source directly, so changes in `packages/*/src`
-are reflected without building the packages first.
+Run `vp run docs` to start the Rspress documentation site. The docs import package
+source directly, so changes in `packages/*/src` are reflected without building the
+packages first.
 
 ## Knob
 

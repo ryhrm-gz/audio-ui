@@ -1,0 +1,53 @@
+---
+title: Knob
+description: Build rotary audio controls with Knob parts, CSS angle variables, and controlled or uncontrolled state.
+---
+
+import { ControlDemo } from "../_components/ControlDemo.tsx";
+
+# Knob
+
+`Knob` is a rotary control for gain, pan, filter cutoff, send amount, and similar audio parameters. It uses vertical pointer dragging and keyboard interaction while exposing `--knob-angle` for styling.
+
+<ControlDemo variant="knob" />
+
+## Anatomy
+
+```tsx
+import { Knob } from "@audio-ui/react";
+
+export function GainKnob() {
+  return (
+    <Knob.Root defaultValue={-6} min={-60} max={12} step={0.5} name="gain">
+      <Knob.Control aria-label="Gain">
+        <Knob.Thumb />
+      </Knob.Control>
+      <Knob.Value format={(value) => `${value} dB`} />
+      <Knob.HiddenInput />
+    </Knob.Root>
+  );
+}
+```
+
+## Styling hooks
+
+Use `--knob-angle` to rotate the visual thumb and state attributes to branch on interaction state.
+
+```css
+.knob-thumb {
+  transform: rotate(var(--knob-angle));
+}
+
+[data-audio-ui="knob"][data-disabled] {
+  opacity: 0.5;
+}
+```
+
+## Props
+
+| Part               | Key props                                                                                                                                           |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Knob.Root`        | `value`, `defaultValue`, `min`, `max`, `step`, `minAngle`, `maxAngle`, `disabled`, `readOnly`, `name`, `required`, `onValueChange`, `onValueCommit` |
+| `Knob.Control`     | Standard `div` props plus the generated slider semantics                                                                                            |
+| `Knob.Value`       | `format` for display formatting                                                                                                                     |
+| `Knob.HiddenInput` | Participates in native form submission through the root `name`                                                                                      |

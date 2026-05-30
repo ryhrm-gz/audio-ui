@@ -1,0 +1,79 @@
+---
+title: Fader
+description: Create console-style dB faders with scale markings, non-linear value mapping, and hidden form inputs.
+---
+
+import { ControlDemo } from "../_components/ControlDemo.tsx";
+
+# Fader
+
+`Fader` is a vertical dB control for console-style channel strips. It defaults to `-60..+12 dB`, `0.1 dB` steps, a `0 dB` unity point, and a non-linear scale with more usable resolution around common mix positions.
+
+<ControlDemo variant="fader" />
+
+## Anatomy
+
+```tsx
+import { Fader } from "@audio-ui/react";
+
+export function ChannelFader() {
+  return (
+    <Fader.Root defaultValue={-6} name="channel-gain">
+      <Fader.Scale />
+      <Fader.Track>
+        <Fader.Range />
+        <Fader.Thumb aria-label="Channel gain" />
+      </Fader.Track>
+      <Fader.Value format={(value) => `${value.toFixed(1)} dB`} />
+      <Fader.HiddenInput />
+    </Fader.Root>
+  );
+}
+```
+
+## Scale marks
+
+`Fader.Scale` renders the fader law marks from the core state. You can pass a custom `scale` array to `Fader.Root` when a product needs a different response curve.
+
+```tsx
+<Fader.Root
+  defaultValue={0}
+  min={-80}
+  max={10}
+  unity={0}
+  scale={[
+    { value: -80, percent: 0, label: "-inf" },
+    { value: -40, percent: 0.2, label: "-40" },
+    { value: -10, percent: 0.55, label: "-10" },
+    { value: 0, percent: 0.75, label: "0" },
+    { value: 10, percent: 1, label: "+10" },
+  ]}
+>
+  {/* fader parts */}
+</Fader.Root>
+```
+
+## Styling hooks
+
+Fader parts expose `--fader-percent`, `--fader-unity-percent`, and `--fader-mark-percent`.
+
+```css
+.fader-thumb {
+  top: calc((1 - var(--fader-percent)) * 100%);
+}
+
+.fader-scale [data-part="scale-mark"] {
+  top: calc((1 - var(--fader-mark-percent)) * 100%);
+}
+```
+
+## Props
+
+| Part          | Key props                                                                                                                                                                    |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Fader.Root`  | `value`, `defaultValue`, `min`, `max`, `step`, `unity`, `scale`, `inverted`, `allowTrackClick`, `disabled`, `readOnly`, `name`, `required`, `onValueChange`, `onValueCommit` |
+| `Fader.Scale` | Renders labels from the current fader scale                                                                                                                                  |
+| `Fader.Track` | Receives pointer and keyboard interaction for the control                                                                                                                    |
+| `Fader.Range` | Visual fill tied to `--fader-percent`                                                                                                                                        |
+| `Fader.Thumb` | Focusable thumb with generated ARIA value metadata                                                                                                                           |
+| `Fader.Value` | `format` for display formatting                                                                                                                                              |
