@@ -194,8 +194,7 @@ html.rp-dark .rp-home-hero .rp-button--alt,
 }
 
 .demo-audio-player {
-  width: min(100%, 16rem);
-  height: 2rem;
+  display: none;
 }
 
 .demo-level-meter {

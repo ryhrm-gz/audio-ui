@@ -116,8 +116,8 @@ export function LevelMeterDemo() {
 
         <audio
           ref={audioElementRef}
+          aria-hidden="true"
           className="demo-audio-player"
-          controls
           loop
           preload="auto"
           src={demoAudioSrc}
