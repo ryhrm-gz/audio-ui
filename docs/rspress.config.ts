@@ -32,10 +32,6 @@ export default defineConfig({
         text: "Components",
         link: "/components/knob",
       },
-      {
-        text: "Reference",
-        link: "/reference/react",
-      },
     ],
     sidebar: {
       "/guide/": [
@@ -96,21 +92,6 @@ export default defineConfig({
             {
               text: "StepSequencer",
               link: "/components/step-sequencer",
-            },
-          ],
-        },
-      ],
-      "/reference/": [
-        {
-          text: "Reference",
-          items: [
-            {
-              text: "React API",
-              link: "/reference/react",
-            },
-            {
-              text: "Core API",
-              link: "/reference/core",
             },
           ],
         },
