@@ -1,0 +1,67 @@
+.demo-piano {
+  width: min(100%, 34rem);
+}
+
+.demo-piano-keys {
+  position: relative;
+  width: 100%;
+  height: 10rem;
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background: var(--demo-soft);
+  touch-action: none;
+}
+
+.demo-piano-key {
+  position: absolute;
+  left: calc(var(--piano-key-start-percent) * 100%);
+  width: calc(var(--piano-key-size-percent) * 100%);
+  border: 1px solid var(--demo-line);
+  color: var(--demo-muted);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  user-select: none;
+}
+
+.demo-piano-key[data-color="white"] {
+  z-index: 1;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  padding-bottom: 0.65rem;
+  border-top: 0;
+  border-bottom: 0;
+  background: #fafafa;
+  color: #525252;
+}
+
+.demo-piano-key[data-color="black"] {
+  z-index: 2;
+  top: 0;
+  height: 62%;
+  border-color: #000000;
+  border-radius: 0 0 5px 5px;
+  background: #171717;
+  color: #ffffff;
+}
+
+.demo-piano-key[data-pressed] {
+  background: #38bdf8;
+  color: #082f49;
+}
+
+html.rp-dark .demo-piano-key[data-color="black"],
+.dark .demo-piano-key[data-color="black"] {
+  border-color: #525252;
+  background: #050505;
+}
+
+html.rp-dark .demo-piano-key[data-color="white"],
+.dark .demo-piano-key[data-color="white"] {
+  background: #e5e5e5;
+  color: #404040;
+}

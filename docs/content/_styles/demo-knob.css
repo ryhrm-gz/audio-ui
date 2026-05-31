@@ -1,0 +1,40 @@
+.demo-knob-control {
+  position: relative;
+  width: 8.5rem;
+  aspect-ratio: 1;
+  border: 1px solid var(--demo-line);
+  border-radius: 50%;
+  outline: none;
+  background: var(--demo-soft);
+  box-shadow:
+    inset 0 0 0 0.75rem var(--demo-bg),
+    inset 0 0 0 0.85rem var(--demo-line);
+  touch-action: none;
+}
+
+.demo-knob-control::before {
+  position: absolute;
+  inset: 1.4rem;
+  border: 1px solid var(--demo-line);
+  border-radius: inherit;
+  content: "";
+}
+
+.demo-knob-thumb {
+  position: absolute;
+  inset: 0.95rem;
+  border-radius: 50%;
+  transform: rotate(var(--knob-angle));
+}
+
+.demo-knob-thumb::before {
+  position: absolute;
+  top: 0.4rem;
+  left: 50%;
+  width: 0.18rem;
+  height: 2.45rem;
+  border-radius: 999px;
+  background: var(--demo-fill);
+  content: "";
+  transform: translateX(-50%);
+}

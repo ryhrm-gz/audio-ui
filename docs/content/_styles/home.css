@@ -1,0 +1,85 @@
+.rp-home-background {
+  filter: none;
+}
+
+.rp-home-hero {
+  max-width: 68rem;
+  margin: 4rem auto 3rem;
+}
+
+.rp-home-hero__container {
+  gap: 24px;
+}
+
+.rp-home-hero__title,
+.rp-home-hero__subtitle {
+  letter-spacing: 0;
+}
+
+.rp-home-hero__title-brand {
+  width: auto;
+  background: none;
+  color: var(--rp-c-text-0);
+  -webkit-text-fill-color: currentColor;
+}
+
+.rp-home-hero__tagline {
+  max-width: 42rem;
+  color: var(--rp-c-text-1);
+  line-height: 1.7;
+}
+
+.rp-home-hero .rp-button--brand {
+  border: 1px solid var(--rp-c-text-0);
+  border-radius: 999px;
+  background: var(--rp-c-text-0);
+  color: var(--rp-c-bg);
+  box-shadow: none;
+}
+
+html.rp-dark .rp-home-hero .rp-button--brand,
+.dark .rp-home-hero .rp-button--brand {
+  background: var(--rp-c-text-0);
+  color: #111111;
+}
+
+.rp-home-hero .rp-button--alt {
+  border: 1px solid var(--rp-c-divider);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--rp-c-text-0);
+  box-shadow: none;
+}
+
+html.rp-dark .rp-home-hero .rp-button--alt,
+.dark .rp-home-hero .rp-button--alt {
+  border-color: var(--rp-c-divider);
+  background: transparent;
+  color: var(--rp-c-text-0);
+}
+
+.rp-home-feature {
+  max-width: 68rem;
+  gap: 12px;
+}
+
+.rp-home-feature .rp-home-feature__card {
+  border-color: var(--rp-c-divider);
+  border-radius: 8px;
+  background: var(--rp-home-feature-bg);
+  box-shadow: none;
+}
+
+.rp-home-feature .rp-home-feature__card:hover {
+  border-color: var(--rp-c-text-0);
+  color: var(--rp-c-text-0);
+}
+
+.rp-home-feature__icon {
+  display: none;
+}
+
+.rp-home-feature__detail {
+  color: var(--rp-c-text-2);
+  font-weight: 400;
+}

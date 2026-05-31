@@ -1,0 +1,45 @@
+:root {
+  --rp-c-brand: #171717;
+  --rp-c-brand-dark: #000000;
+  --rp-c-brand-darker: #000000;
+  --rp-c-brand-light: #404040;
+  --rp-c-brand-lighter: #d4d4d4;
+  --rp-c-brand-tint: rgb(23 23 23 / 8%);
+  --rp-radius: 8px;
+  --rp-radius-large: 8px;
+  --rp-radius-small: 6px;
+  --rp-home-hero-title-bg: #171717;
+  --rp-home-background-bg: #fafafa;
+  --rp-home-feature-bg: #ffffff;
+  --demo-bg: #ffffff;
+  --demo-ink: #111111;
+  --demo-muted: #737373;
+  --demo-line: #d4d4d4;
+  --demo-soft: #f5f5f5;
+  --demo-track: #e5e5e5;
+  --demo-fill: #171717;
+  --demo-accent: #0f766e;
+  --demo-focus: #737373;
+}
+
+html.rp-dark,
+.dark {
+  --rp-c-brand: #f5f5f5;
+  --rp-c-brand-dark: #ffffff;
+  --rp-c-brand-darker: #ffffff;
+  --rp-c-brand-light: #d4d4d4;
+  --rp-c-brand-lighter: #525252;
+  --rp-c-brand-tint: rgb(245 245 245 / 10%);
+  --rp-home-hero-title-bg: #f5f5f5;
+  --rp-home-background-bg: #111111;
+  --rp-home-feature-bg: #171717;
+  --demo-bg: #171717;
+  --demo-ink: #f5f5f5;
+  --demo-muted: #a3a3a3;
+  --demo-line: #404040;
+  --demo-soft: #262626;
+  --demo-track: #333333;
+  --demo-fill: #f5f5f5;
+  --demo-accent: #2dd4bf;
+  --demo-focus: #a3a3a3;
+}
