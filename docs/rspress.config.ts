@@ -77,6 +77,10 @@ export default defineConfig({
               text: "Piano",
               link: "/components/piano",
             },
+            {
+              text: "StepSequencer",
+              link: "/components/step-sequencer",
+            },
           ],
         },
       ],

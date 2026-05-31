@@ -153,7 +153,8 @@ html.rp-dark .rp-home-hero .rp-button--alt,
 .demo-slider,
 .demo-fader,
 .demo-xypad,
-.demo-piano {
+.demo-piano,
+.demo-step-sequencer {
   display: grid;
   justify-items: center;
   gap: 1rem;
@@ -361,7 +362,8 @@ html.rp-dark .rp-home-hero .rp-button--alt,
 .demo-slider-thumb:focus-visible,
 .demo-fader-thumb:focus-visible,
 .demo-xypad-thumb:focus-visible,
-.demo-piano-key:focus-visible {
+.demo-piano-key:focus-visible,
+.demo-step-sequencer-step:focus-visible {
   outline: 2px solid var(--demo-focus);
   outline-offset: 4px;
 }
@@ -617,6 +619,79 @@ html.rp-dark .demo-fader-thumb,
   color: #082f49;
 }
 
+.demo-step-sequencer {
+  position: relative;
+  width: min(100%, 36rem);
+}
+
+.demo-step-sequencer-tracks {
+  display: grid;
+  width: 100%;
+  gap: 0.55rem;
+}
+
+.demo-step-sequencer-track {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.demo-step-sequencer-label {
+  overflow: hidden;
+  color: var(--demo-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.demo-step-sequencer-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--step-sequencer-step-count), minmax(0, 1fr));
+  gap: 0.3rem;
+}
+
+.demo-step-sequencer-step {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--demo-line);
+  border-radius: 5px;
+  background: var(--demo-soft);
+  color: transparent;
+  cursor: pointer;
+}
+
+.demo-step-sequencer-step:nth-child(4n + 1) {
+  box-shadow: inset 0 0 0 1px var(--demo-muted);
+}
+
+.demo-step-sequencer-step[data-active] {
+  border-color: #0f766e;
+  background: #14b8a6;
+}
+
+.demo-step-sequencer-step[data-playhead] {
+  box-shadow:
+    inset 0 0 0 2px var(--demo-ink),
+    0 0 0 1px var(--demo-bg);
+}
+
+.demo-step-sequencer-playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(4.75rem + var(--step-sequencer-playhead-percent) * (100% - 4.75rem));
+  display: block;
+  width: 2px;
+  background: var(--demo-ink);
+  opacity: 0.55;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
 html.rp-dark .demo-piano-key[data-color="black"],
 .dark .demo-piano-key[data-color="black"] {
   border-color: #525252;
@@ -664,5 +739,18 @@ html.rp-dark .demo-piano-key[data-color="white"],
 
   .demo-piano-key[data-color="white"] {
     color: transparent;
+  }
+
+  .demo-step-sequencer-track {
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .demo-step-sequencer-steps {
+    gap: 0.2rem;
+  }
+
+  .demo-step-sequencer-playhead {
+    left: calc(3.75rem + var(--step-sequencer-playhead-percent) * (100% - 3.75rem));
   }
 }

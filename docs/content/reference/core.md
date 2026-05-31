@@ -14,20 +14,22 @@ import {
   createLevelMeterState,
   createPianoState,
   createSliderState,
+  createStepSequencerState,
   createXYPadState,
 } from "@ryhrm-gz/audio-ui-core";
 ```
 
 ## State helpers
 
-| Helper                                  | Purpose                                                                           |
-| --------------------------------------- | --------------------------------------------------------------------------------- |
-| `createKnobState(value, options)`       | Clamps and quantizes a value, then derives percent and rotary angle               |
-| `createSliderState(value, options)`     | Clamps and quantizes a value, then derives value, origin, and range-fill percents |
-| `createXYPadState(value, options)`      | Clamps and quantizes X/Y values, then derives independent axis percents           |
-| `createFaderState(value, options)`      | Applies the fader scale law and derives value, percent, unity, and scale marks    |
-| `createLevelMeterState(value, options)` | Clamps meter dB values, then derives per-channel fill, peak, and clipping state   |
-| `createPianoState(keys, options)`       | Resolves a piano key range and marks the currently pressed keys                   |
+| Helper                                     | Purpose                                                                           |
+| ------------------------------------------ | --------------------------------------------------------------------------------- |
+| `createKnobState(value, options)`          | Clamps and quantizes a value, then derives percent and rotary angle               |
+| `createSliderState(value, options)`        | Clamps and quantizes a value, then derives value, origin, and range-fill percents |
+| `createXYPadState(value, options)`         | Clamps and quantizes X/Y values, then derives independent axis percents           |
+| `createFaderState(value, options)`         | Applies the fader scale law and derives value, percent, unity, and scale marks    |
+| `createLevelMeterState(value, options)`    | Clamps meter dB values, then derives per-channel fill, peak, and clipping state   |
+| `createPianoState(keys, options)`          | Resolves a piano key range and marks the currently pressed keys                   |
+| `createStepSequencerState(value, options)` | Normalizes a boolean step grid and derives tracks, steps, playhead, and positions |
 
 ## Value utilities
 
@@ -71,6 +73,17 @@ const nextValue = getNextSliderKeyboardValue(0, "ArrowRight", {
   step: 1,
 });
 const nextPadValue = getNextXYPadKeyboardValue({ x: 50, y: 50 }, "ArrowUp");
+```
+
+Step sequencers use a focus-target helper because each step is a button in a grid:
+
+```ts
+import { resolveStepSequencerKeyboardTarget } from "@ryhrm-gz/audio-ui-core";
+
+const target = resolveStepSequencerKeyboardTarget({ trackIndex: 0, stepIndex: 3 }, "ArrowDown", {
+  trackCount: 4,
+  stepCount: 16,
+});
 ```
 
 ## Fader scale

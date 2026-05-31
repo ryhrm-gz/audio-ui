@@ -38,6 +38,16 @@ export {
 } from "./slider/index.ts";
 export { Slider } from "./slider/index.ts";
 export {
+  HiddenInput as StepSequencerHiddenInput,
+  Playhead as StepSequencerPlayhead,
+  Root as StepSequencerRoot,
+  Step as StepSequencerStep,
+  Steps as StepSequencerSteps,
+  Track as StepSequencerTrack,
+  Tracks as StepSequencerTracks,
+} from "./step-sequencer/index.ts";
+export { StepSequencer } from "./step-sequencer/index.ts";
+export {
   Area as XYPadArea,
   HiddenInput as XYPadHiddenInput,
   Root as XYPadRoot,
@@ -79,6 +89,15 @@ export type {
   SliderTrackProps,
   SliderValueProps,
 } from "./slider/index.ts";
+export type {
+  StepSequencerHiddenInputProps,
+  StepSequencerPlayheadProps,
+  StepSequencerRootProps,
+  StepSequencerStepProps,
+  StepSequencerStepsProps,
+  StepSequencerTrackProps,
+  StepSequencerTracksProps,
+} from "./step-sequencer/index.ts";
 export type {
   XYPadAreaProps,
   XYPadHiddenInputProps,
