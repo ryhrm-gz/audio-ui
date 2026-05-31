@@ -8,13 +8,22 @@ description: Reference for Audio UI React exports, compound component namespaces
 Import compound component namespaces from `@ryhrm-gz/audio-ui-react`:
 
 ```tsx
-import { Fader, Knob, LevelMeter, Piano, Slider, XYPad } from "@ryhrm-gz/audio-ui-react";
+import {
+  Fader,
+  Knob,
+  LevelMeter,
+  Piano,
+  Slider,
+  ToggleButton,
+  ToggleGroup,
+  XYPad,
+} from "@ryhrm-gz/audio-ui-react";
 ```
 
 Named part exports are also available for tree-shaking or local naming:
 
 ```tsx
-import { KnobRoot, KnobControl, KnobThumb, KnobValue } from "@ryhrm-gz/audio-ui-react";
+import { KnobRoot, ToggleGroupItem, ToggleGroupRoot } from "@ryhrm-gz/audio-ui-react";
 ```
 
 ## Common root behavior
@@ -47,6 +56,18 @@ Knob, Fader, and Slider roots support controlled and uncontrolled numeric value 
 
 Use `onPressKey` and `onReleaseKey` when individual press and release events are more
 convenient than the full pressed-key list.
+
+## Toggle behavior
+
+`ToggleButton` renders a single `button` with `aria-pressed` for mute, solo, bypass, and momentary preview controls. `ToggleGroup` groups `ToggleGroup.Item` buttons for single-select mode choices or multiple selected states.
+
+```tsx
+<ToggleGroup.Root type="multiple" defaultValue={["mute"]} name="track-state">
+  <ToggleGroup.Item value="mute">Mute</ToggleGroup.Item>
+  <ToggleGroup.Item value="solo">Solo</ToggleGroup.Item>
+  <ToggleGroup.HiddenInput />
+</ToggleGroup.Root>
+```
 
 ## Render props
 

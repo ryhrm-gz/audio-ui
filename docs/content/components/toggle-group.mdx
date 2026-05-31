@@ -1,0 +1,127 @@
+---
+title: ToggleGroup
+description: Compose single-select and multi-select toggle button groups with keyboard navigation and form inputs.
+---
+
+import { ToggleGroupDemo } from "../_components/ToggleGroupDemo.tsx";
+
+# ToggleGroup
+
+`ToggleGroup` groups related pressed buttons for mode selection, exclusive states, and multi-select audio states such as mute, solo, arm, and monitor.
+
+<ToggleGroupDemo />
+
+## Single selection
+
+```tsx
+import { ToggleGroup } from "@ryhrm-gz/audio-ui-react";
+
+export function FilterMode() {
+  return (
+    <ToggleGroup.Root type="single" defaultValue="lowpass" name="filter-mode">
+      <ToggleGroup.Item value="lowpass">LP</ToggleGroup.Item>
+      <ToggleGroup.Item value="bandpass">BP</ToggleGroup.Item>
+      <ToggleGroup.Item value="highpass">HP</ToggleGroup.Item>
+      <ToggleGroup.HiddenInput />
+    </ToggleGroup.Root>
+  );
+}
+```
+
+## Controlled single selection
+
+```tsx
+const [mode, setMode] = useState("lowpass");
+
+<ToggleGroup.Root type="single" value={mode} onValueChange={(value) => setMode(value as string)}>
+  <ToggleGroup.Item value="lowpass">LP</ToggleGroup.Item>
+  <ToggleGroup.Item value="bandpass">BP</ToggleGroup.Item>
+  <ToggleGroup.Item value="highpass">HP</ToggleGroup.Item>
+</ToggleGroup.Root>;
+```
+
+## Multiple selection
+
+```tsx
+const [states, setStates] = useState(["mute", "solo"]);
+
+<ToggleGroup.Root
+  type="multiple"
+  value={states}
+  onValueChange={(value) => setStates(value as string[])}
+  name="track-state"
+>
+  <ToggleGroup.Item value="mute">Mute</ToggleGroup.Item>
+  <ToggleGroup.Item value="solo">Solo</ToggleGroup.Item>
+  <ToggleGroup.Item value="arm">Arm</ToggleGroup.Item>
+  <ToggleGroup.HiddenInput />
+</ToggleGroup.Root>;
+```
+
+## Empty single groups
+
+By default, clicking the selected item in a single group leaves it selected. Set `allowEmpty` when a selected item should be removable.
+
+```tsx
+<ToggleGroup.Root type="single" allowEmpty defaultValue="sync">
+  <ToggleGroup.Item value="sync">Sync</ToggleGroup.Item>
+  <ToggleGroup.Item value="free">Free</ToggleGroup.Item>
+</ToggleGroup.Root>
+```
+
+## Keyboard navigation
+
+Horizontal groups respond to ArrowLeft and ArrowRight. Vertical groups respond to ArrowUp and ArrowDown. Home and End move to the first and last enabled item.
+
+```tsx
+<ToggleGroup.Root type="single" orientation="vertical" defaultValue="triangle">
+  <ToggleGroup.Item value="sine">Sine</ToggleGroup.Item>
+  <ToggleGroup.Item value="triangle">Triangle</ToggleGroup.Item>
+  <ToggleGroup.Item value="saw">Saw</ToggleGroup.Item>
+</ToggleGroup.Root>
+```
+
+## Styling hooks
+
+`ToggleGroup.Root` exposes `data-audio-ui="toggle-group"`, `data-part="root"`, `data-type`, `data-orientation`, and `data-disabled`. Items expose `data-part="item"`, `data-value`, `data-orientation`, `data-state="on" | "off"`, `data-pressed`, and `data-disabled`.
+
+```css
+.toggle-group {
+  display: inline-flex;
+}
+
+.toggle-group-item[data-state="on"] {
+  color: var(--accent);
+}
+
+.toggle-group[data-orientation="vertical"] {
+  flex-direction: column;
+}
+```
+
+## API reference
+
+### `ToggleGroup.Root`
+
+`ToggleGroup.Root` renders a `div`, owns group value state, and provides context to item and hidden input parts. It accepts standard div props except `defaultValue`, `onChange`, and `children`, which are replaced by the group-specific API.
+
+| Prop            | Type                                  | Default        | Description                                                              |
+| --------------- | ------------------------------------- | -------------- | ------------------------------------------------------------------------ |
+| `type`          | `"single" \| "multiple"`              | `"single"`     | Controls whether one item or many items can be pressed.                  |
+| `value`         | `string \| string[]`                  | -              | Controlled value. Pass with `onValueChange`.                             |
+| `defaultValue`  | `string \| string[]`                  | -              | Initial uncontrolled value.                                              |
+| `allowEmpty`    | `boolean`                             | `false`        | Allows selected single-group items to be cleared by clicking them again. |
+| `orientation`   | `"horizontal" \| "vertical"`          | `"horizontal"` | Controls keyboard arrow mapping and `data-orientation`.                  |
+| `disabled`      | `boolean`                             | `false`        | Disables every item and adds disabled state metadata.                    |
+| `name`          | `string`                              | -              | Default form field name consumed by `ToggleGroup.HiddenInput`.           |
+| `required`      | `boolean`                             | -              | Default required flag consumed by `ToggleGroup.HiddenInput`.             |
+| `children`      | `ReactNode \| (state) => ReactNode`   | -              | Parts to render. Function children receive the group render state.       |
+| `onValueChange` | `(value: string \| string[]) => void` | -              | Fires with the next single string or multiple string array.              |
+| `render`        | `RenderProp<ElementProps, State>`     | -              | Replaces the root element while preserving generated props and state.    |
+
+### Parts
+
+| Part                      | Props and behavior                                                                                                                                                                                                               |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ToggleGroup.Item`        | Renders a `button` and accepts standard button props except `children` and `value`, plus a required string `value`, `children`, and `render`. It exposes `aria-pressed` and handles click plus arrow/Home/End focus navigation.  |
+| `ToggleGroup.HiddenInput` | Renders one hidden input for single groups and one hidden input per selected value for multiple groups. It accepts input props except `children`, `type`, and `value`; `name`, `required`, and `disabled` default to root props. |

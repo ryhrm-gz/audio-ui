@@ -14,20 +14,24 @@ import {
   createLevelMeterState,
   createPianoState,
   createSliderState,
+  createToggleButtonState,
+  createToggleGroupState,
   createXYPadState,
 } from "@ryhrm-gz/audio-ui-core";
 ```
 
 ## State helpers
 
-| Helper                                  | Purpose                                                                           |
-| --------------------------------------- | --------------------------------------------------------------------------------- |
-| `createKnobState(value, options)`       | Clamps and quantizes a value, then derives percent and rotary angle               |
-| `createSliderState(value, options)`     | Clamps and quantizes a value, then derives value, origin, and range-fill percents |
-| `createXYPadState(value, options)`      | Clamps and quantizes X/Y values, then derives independent axis percents           |
-| `createFaderState(value, options)`      | Applies the fader scale law and derives value, percent, unity, and scale marks    |
-| `createLevelMeterState(value, options)` | Clamps meter dB values, then derives per-channel fill, peak, and clipping state   |
-| `createPianoState(keys, options)`       | Resolves a piano key range and marks the currently pressed keys                   |
+| Helper                                    | Purpose                                                                           |
+| ----------------------------------------- | --------------------------------------------------------------------------------- |
+| `createKnobState(value, options)`         | Clamps and quantizes a value, then derives percent and rotary angle               |
+| `createSliderState(value, options)`       | Clamps and quantizes a value, then derives value, origin, and range-fill percents |
+| `createXYPadState(value, options)`        | Clamps and quantizes X/Y values, then derives independent axis percents           |
+| `createFaderState(value, options)`        | Applies the fader scale law and derives value, percent, unity, and scale marks    |
+| `createLevelMeterState(value, options)`   | Clamps meter dB values, then derives per-channel fill, peak, and clipping state   |
+| `createPianoState(keys, options)`         | Resolves a piano key range and marks the currently pressed keys                   |
+| `createToggleButtonState(value, options)` | Creates serializable pressed state for toggle or momentary buttons                |
+| `createToggleGroupState(value, options)`  | Normalizes single or multiple group values and derives selected values            |
 
 ## Value utilities
 
@@ -71,6 +75,14 @@ const nextValue = getNextSliderKeyboardValue(0, "ArrowRight", {
   step: 1,
 });
 const nextPadValue = getNextXYPadKeyboardValue({ x: 50, y: 50 }, "ArrowUp");
+```
+
+Toggle group keyboard helpers calculate focus movement while skipping disabled items.
+
+```ts
+import { getNextToggleGroupFocusedIndex } from "@ryhrm-gz/audio-ui-core";
+
+const nextIndex = getNextToggleGroupFocusedIndex(0, "ArrowRight", [{}, { disabled: true }, {}]);
 ```
 
 ## Fader scale
