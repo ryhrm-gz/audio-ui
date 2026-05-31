@@ -8,7 +8,7 @@ description: Reference for Audio UI React exports, compound component namespaces
 Import compound component namespaces from `@ryhrm-gz/audio-ui-react`:
 
 ```tsx
-import { Fader, Knob, LevelMeter, Piano, Slider } from "@ryhrm-gz/audio-ui-react";
+import { Fader, Knob, LevelMeter, Piano, Slider, XYPad } from "@ryhrm-gz/audio-ui-react";
 ```
 
 Named part exports are also available for tree-shaking or local naming:
@@ -19,7 +19,7 @@ import { KnobRoot, KnobControl, KnobThumb, KnobValue } from "@ryhrm-gz/audio-ui-
 
 ## Common root behavior
 
-Knob, Fader, and Slider roots support controlled and uncontrolled numeric value modes:
+Knob, Fader, and Slider roots support controlled and uncontrolled numeric value modes. XYPad uses the same pattern with `{ x, y }` object values:
 
 | Prop                   | Description                                                  |
 | ---------------------- | ------------------------------------------------------------ |
@@ -83,6 +83,10 @@ Parts accept a `render` prop for replacing the default element while preserving 
 | `--slider-range-start-percent`        | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Lower visual fill edge from `0` to `1` |
 | `--slider-range-end-percent`          | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Upper visual fill edge from `0` to `1` |
 | `--slider-range-size-percent`         | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Visual fill size from the origin       |
+| `--xypad-x`                           | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                     | Current X-axis value                   |
+| `--xypad-y`                           | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                     | Current Y-axis value                   |
+| `--xypad-x-percent`                   | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                     | Normalized X position from `0` to `1`  |
+| `--xypad-y-percent`                   | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                     | Normalized Y position from `0` to `1`  |
 | `--fader-percent`                     | `Fader.Track`, `Fader.Range`, `Fader.Thumb`                   | Fader-law position from `0` to `1`     |
 | `--fader-unity-percent`               | `Fader.Track`                                                 | Position of the unity mark             |
 | `--fader-mark-percent`                | `Fader.Scale` marks                                           | Position for each scale mark           |

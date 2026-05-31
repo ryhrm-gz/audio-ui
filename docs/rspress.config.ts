@@ -62,6 +62,10 @@ export default defineConfig({
               link: "/components/slider",
             },
             {
+              text: "XYPad",
+              link: "/components/xypad",
+            },
+            {
               text: "Fader",
               link: "/components/fader",
             },

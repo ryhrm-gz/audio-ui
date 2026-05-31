@@ -1,0 +1,90 @@
+---
+title: XYPad
+description: Compose two-dimensional XYPad controls with pointer drag, keyboard movement, value display, and hidden form input parts.
+---
+
+import { XYPadDemo } from "../_components/XYPadDemo.tsx";
+
+# XYPad
+
+`XYPad` is a two-dimensional control for paired parameters such as filter cutoff and resonance, delay time and feedback, or spatial X/Y positions. It exposes independent X and Y ranges while keeping value math in the framework-agnostic core package.
+
+<XYPadDemo />
+
+## Anatomy
+
+```tsx
+import { XYPad } from "@ryhrm-gz/audio-ui-react";
+
+export function FilterPad() {
+  return (
+    <XYPad.Root
+      defaultValue={{ x: 20, y: 70 }}
+      minX={0}
+      maxX={100}
+      minY={0}
+      maxY={100}
+      stepX={1}
+      stepY={1}
+      name="filter-position"
+    >
+      <XYPad.Area>
+        <XYPad.Thumb aria-label="Filter position" />
+      </XYPad.Area>
+      <XYPad.Value format={(value) => `${value.x}, ${value.y}`} />
+      <XYPad.HiddenInput />
+    </XYPad.Root>
+  );
+}
+```
+
+## Keyboard interaction
+
+Arrow Left and Arrow Right move the X axis. Arrow Down and Arrow Up move the Y axis. Page Down and Page Up move Y by a larger step, and Shift reduces the step size for fine control. Home moves both axes to their minimum values; End moves both axes to their maximum values so the behavior stays deterministic for a two-axis control.
+
+## Styling hooks
+
+The root and interactive parts expose X/Y value and percent variables. Percent values are normalized from `0` to `1`; Y percent grows upward so the minimum value sits at the bottom of a typical pad.
+
+```css
+.xypad-thumb {
+  left: calc(var(--xypad-x-percent) * 100%);
+  top: calc((1 - var(--xypad-y-percent)) * 100%);
+  transform: translate(-50%, -50%);
+}
+```
+
+## API reference
+
+### `XYPad.Root`
+
+`XYPad.Root` renders a `div`, owns XYPad state, and provides context to the other parts. It accepts standard `div` props except `defaultValue`, `onChange`, and `children`, which are replaced by the XYPad-specific API.
+
+| Prop                 | Type                                   | Default                | Description                                                                                                       |
+| -------------------- | -------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `value`              | `{ x: number; y: number }`             | -                      | Controlled value. Pass with `onValueChange` when external state owns the XYPad value.                             |
+| `defaultValue`       | `{ x: number; y: number }`             | `{ x: minX, y: minY }` | Initial uncontrolled value. Also becomes the double-click reset target.                                           |
+| `minX` / `maxX`      | `number`                               | `0` / `100`            | X-axis value bounds. If min is greater than max, the core range resolver normalizes the order.                    |
+| `stepX`              | `number`                               | `1`                    | X-axis increment for pointer and keyboard changes. Non-positive or invalid steps fall back to the default.        |
+| `minY` / `maxY`      | `number`                               | `0` / `100`            | Y-axis value bounds. If min is greater than max, the core range resolver normalizes the order.                    |
+| `stepY`              | `number`                               | `1`                    | Y-axis increment for pointer and keyboard changes. Non-positive or invalid steps fall back to the default.        |
+| `disabled`           | `boolean`                              | `false`                | Prevents pointer and keyboard interaction, removes the thumb from tab order, and adds disabled state attributes.  |
+| `readOnly`           | `boolean`                              | `false`                | Keeps the thumb focusable while preventing value changes, and adds readonly state attributes.                     |
+| `fineControl`        | `boolean`                              | `true`                 | Enables reduced step size while Shift is held during drag or keyboard interaction.                                |
+| `resetOnDoubleClick` | `boolean`                              | `true`                 | Allows a double click on the area to reset to `defaultValue`, or to the minimum axes when no default is supplied. |
+| `allowTrackClick`    | `boolean`                              | `true`                 | When true, pointer down anywhere in the area jumps to the pointer position before dragging.                       |
+| `name`               | `string`                               | -                      | Default form field name consumed by `XYPad.HiddenInput`.                                                          |
+| `required`           | `boolean`                              | -                      | Default required flag consumed by `XYPad.HiddenInput`.                                                            |
+| `children`           | `ReactNode \| (state) => ReactNode`    | -                      | Parts to render. Function children receive the render state, including value state plus interaction flags.        |
+| `onValueChange`      | `(value: XYPadValue) => void`          | -                      | Fires when interaction produces a new clamped and snapped value.                                                  |
+| `onValueCommit`      | `(value: XYPadValue) => void`          | -                      | Fires when an interaction commits, such as pointer up, keyboard step, or reset.                                   |
+| `render`             | `RenderProp<ElementProps, XYPadState>` | -                      | Replaces the root element while preserving generated props and render state.                                      |
+
+### Parts
+
+| Part                | Props and behavior                                                                                                                                                                                                                 |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `XYPad.Area`        | Renders a `div` and accepts standard `div` props plus `render`. It owns pointer drag handling, track click handling, and double-click reset. It exposes `data-part="area"`, dragging state, and XYPad CSS variables.               |
+| `XYPad.Thumb`       | Renders a focusable `span` with `role="slider"` and generated ARIA value metadata. It accepts standard `span` props except `defaultValue` and `onChange`, plus `render`. Arrow keys, Page Up/Down, Home, and End are handled.      |
+| `XYPad.Value`       | Renders a `span` connected to the thumb by `aria-describedby`. It accepts standard `span` props except `children`, plus `children`, `format`, and `render`. `format(value, state)` customizes display text when no children exist. |
+| `XYPad.HiddenInput` | Renders `<input type="hidden">` for native form submission. The value is a JSON string such as `{"x":20,"y":70}`. `name`, `required`, and `disabled` default to the matching root props and can be overridden directly.            |

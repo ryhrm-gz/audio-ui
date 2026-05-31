@@ -37,6 +37,14 @@ export {
   Value as SliderValue,
 } from "./slider/index.ts";
 export { Slider } from "./slider/index.ts";
+export {
+  Area as XYPadArea,
+  HiddenInput as XYPadHiddenInput,
+  Root as XYPadRoot,
+  Thumb as XYPadThumb,
+  Value as XYPadValue,
+} from "./xypad/index.ts";
+export { XYPad } from "./xypad/index.ts";
 export type {
   FaderHiddenInputProps,
   FaderRangeProps,
@@ -71,3 +79,10 @@ export type {
   SliderTrackProps,
   SliderValueProps,
 } from "./slider/index.ts";
+export type {
+  XYPadAreaProps,
+  XYPadHiddenInputProps,
+  XYPadRootProps,
+  XYPadThumbProps,
+  XYPadValueProps,
+} from "./xypad/index.ts";
