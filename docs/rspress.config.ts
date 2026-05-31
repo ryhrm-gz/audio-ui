@@ -70,6 +70,10 @@ export default defineConfig({
               link: "/components/xypad",
             },
             {
+              text: "EnvelopeEditor",
+              link: "/components/envelope-editor",
+            },
+            {
               text: "Fader",
               link: "/components/fader",
             },

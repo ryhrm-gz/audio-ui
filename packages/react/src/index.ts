@@ -1,4 +1,15 @@
 export {
+  Graph as EnvelopeEditorGraph,
+  HiddenInput as EnvelopeEditorHiddenInput,
+  Point as EnvelopeEditorPoint,
+  Points as EnvelopeEditorPoints,
+  Root as EnvelopeEditorRoot,
+  Segment as EnvelopeEditorSegment,
+  Segments as EnvelopeEditorSegments,
+  Value as EnvelopeEditorValue,
+} from "./envelope-editor/index.ts";
+export { EnvelopeEditor } from "./envelope-editor/index.ts";
+export {
   HiddenInput as FaderHiddenInput,
   Range as FaderRange,
   Root as FaderRoot,
@@ -75,6 +86,17 @@ export {
   Value as XYPadValue,
 } from "./xypad/index.ts";
 export { XYPad } from "./xypad/index.ts";
+export type {
+  EnvelopeEditorGraphProps,
+  EnvelopeEditorHiddenInputProps,
+  EnvelopeEditorPointProps,
+  EnvelopeEditorPointsProps,
+  EnvelopeEditorRootProps,
+  EnvelopeEditorSegmentProps,
+  EnvelopeEditorSegmentsProps,
+  EnvelopeEditorValue as EnvelopeEditorValueType,
+  EnvelopeEditorValueProps,
+} from "./envelope-editor/index.ts";
 export type {
   FaderHiddenInputProps,
   FaderRangeProps,

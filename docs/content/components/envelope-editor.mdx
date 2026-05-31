@@ -1,0 +1,152 @@
+---
+title: EnvelopeEditor
+description: Build ADSR envelope editors with headless points, segments, ARIA sliders, CSS variables, and form serialization.
+---
+
+import { EnvelopeEditorDemo } from "../_components/EnvelopeEditorDemo.tsx";
+
+# EnvelopeEditor
+
+`EnvelopeEditor` is a headless ADSR editor for synth, sampler, modulation, and automation-style interfaces. It models envelope values and interaction state without generating audio or owning a fixed rendering strategy.
+
+<EnvelopeEditorDemo />
+
+## Anatomy
+
+```tsx
+import { EnvelopeEditor } from "@ryhrm-gz/audio-ui-react";
+
+export function AmpEnvelope() {
+  return (
+    <EnvelopeEditor.Root
+      defaultValue={{ attack: 0.02, decay: 0.18, sustain: 0.65, release: 0.4 }}
+      minTime={0}
+      maxTime={2}
+      stepTime={0.01}
+      stepLevel={0.01}
+      name="amp-envelope"
+    >
+      <EnvelopeEditor.Graph>
+        <EnvelopeEditor.Segments />
+        <EnvelopeEditor.Points />
+      </EnvelopeEditor.Graph>
+      <EnvelopeEditor.Value />
+      <EnvelopeEditor.HiddenInput />
+    </EnvelopeEditor.Root>
+  );
+}
+```
+
+## Controlled value
+
+```tsx
+const [envelope, setEnvelope] = useState({
+  attack: 0.01,
+  decay: 0.24,
+  sustain: 0.72,
+  release: 0.35,
+});
+
+<EnvelopeEditor.Root value={envelope} onValueChange={setEnvelope} maxTime={2}>
+  <EnvelopeEditor.Graph>
+    <EnvelopeEditor.Segments />
+    <EnvelopeEditor.Points />
+  </EnvelopeEditor.Graph>
+</EnvelopeEditor.Root>;
+```
+
+## Custom rendering
+
+`Segments` and `Points` accept function children when a renderer needs to own the visual elements while still using normalized positions from core state.
+
+```tsx
+<EnvelopeEditor.Graph>
+  <EnvelopeEditor.Segments>
+    {(segment) => (
+      <line
+        data-phase={segment.phase}
+        x1={`${segment.start.x * 100}%`}
+        y1={`${(1 - segment.start.y) * 100}%`}
+        x2={`${segment.end.x * 100}%`}
+        y2={`${(1 - segment.end.y) * 100}%`}
+      />
+    )}
+  </EnvelopeEditor.Segments>
+  <EnvelopeEditor.Points>
+    {(point) => (
+      <EnvelopeEditor.Point key={point.id} point={point.id} aria-label={`${point.phase} point`} />
+    )}
+  </EnvelopeEditor.Points>
+</EnvelopeEditor.Graph>
+```
+
+## Styling hooks
+
+The default point and segment parts expose normalized positions through CSS variables.
+
+```css
+.envelope-point {
+  left: calc(var(--envelope-point-x) * 100%);
+  top: calc((1 - var(--envelope-point-y)) * 100%);
+}
+
+.envelope-segment {
+  --segment-dx: calc(var(--envelope-segment-end-x) - var(--envelope-segment-start-x));
+  --segment-dy: calc(var(--envelope-segment-end-y) - var(--envelope-segment-start-y));
+}
+```
+
+## API reference
+
+### `EnvelopeEditor.Root`
+
+`EnvelopeEditor.Root` renders a `div`, owns ADSR state, and provides context to the other parts.
+
+| Prop            | Type                                | Default      | Description                                                                                   |
+| --------------- | ----------------------------------- | ------------ | --------------------------------------------------------------------------------------------- |
+| `value`         | `EnvelopeEditorValue`               | -            | Controlled ADSR value. Pass with `onValueChange` when external state owns the envelope.       |
+| `defaultValue`  | `EnvelopeEditorValue`               | ADSR default | Initial uncontrolled ADSR value.                                                              |
+| `minTime`       | `number`                            | `0`          | Lower bound for attack, decay, and release times.                                             |
+| `maxTime`       | `number`                            | `1`          | Upper bound for attack, decay, and release times.                                             |
+| `minLevel`      | `number`                            | `0`          | Lower bound for sustain level.                                                                |
+| `maxLevel`      | `number`                            | `1`          | Upper bound for sustain level.                                                                |
+| `stepTime`      | `number`                            | `0.01`       | Time increment for pointer and keyboard changes.                                              |
+| `stepLevel`     | `number`                            | `0.01`       | Sustain-level increment for pointer and keyboard changes.                                     |
+| `mode`          | `"adsr"`                            | `"adsr"`     | Current envelope mode. The initial implementation supports ADSR and leaves room for variants. |
+| `disabled`      | `boolean`                           | `false`      | Prevents pointer and keyboard interaction and adds disabled state attributes.                 |
+| `readOnly`      | `boolean`                           | `false`      | Keeps points focusable while preventing value changes.                                        |
+| `fineControl`   | `boolean`                           | `true`       | Enables reduced step size while Shift is held during drag or keyboard interaction.            |
+| `name`          | `string`                            | -            | Default form field name consumed by `EnvelopeEditor.HiddenInput`.                             |
+| `required`      | `boolean`                           | -            | Default required flag consumed by `EnvelopeEditor.HiddenInput`.                               |
+| `children`      | `ReactNode \| (state) => ReactNode` | -            | Parts to render. Function children receive the render state.                                  |
+| `onValueChange` | `(value) => void`                   | -            | Fires when interaction produces a new normalized ADSR value.                                  |
+| `onValueCommit` | `(value) => void`                   | -            | Fires when an interaction commits, such as pointer up or keyboard step.                       |
+| `render`        | `RenderProp`                        | -            | Replaces the root element while preserving generated props and render state.                  |
+
+### Parts
+
+| Part                         | Props and behavior                                                                                                                                                       |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `EnvelopeEditor.Graph`       | Renders a `div` editing area and exposes envelope CSS variables. Point dragging reads this element's size so rendering can be responsive.                                |
+| `EnvelopeEditor.Segments`    | Renders one ADSR segment per phase by default. Function children receive each segment object for custom rendering.                                                       |
+| `EnvelopeEditor.Segment`     | Renders a single `span` segment for a `phase` and exposes start/end position variables plus `data-phase`.                                                                |
+| `EnvelopeEditor.Points`      | Renders editable ADSR points by default. Function children receive each point object for custom rendering.                                                               |
+| `EnvelopeEditor.Point`       | Renders a focusable `span` with `role="slider"`, generated ARIA value metadata, keyboard handling, pointer dragging, `data-point`, and point position variables.         |
+| `EnvelopeEditor.Value`       | Renders a `span` connected to points by `aria-describedby`. `format(value, state)` customizes display text when explicit children are not supplied.                      |
+| `EnvelopeEditor.HiddenInput` | Renders `<input type="hidden">` with the normalized ADSR value serialized as JSON. `name`, `required`, and `disabled` default to the matching root props when available. |
+
+### CSS variables
+
+| Variable                     | Component       | Description                               |
+| ---------------------------- | --------------- | ----------------------------------------- |
+| `--envelope-attack`          | `Root`, `Graph` | Normalized attack time                    |
+| `--envelope-decay`           | `Root`, `Graph` | Normalized decay time                     |
+| `--envelope-sustain`         | `Root`, `Graph` | Normalized sustain level                  |
+| `--envelope-release`         | `Root`, `Graph` | Normalized release time                   |
+| `--envelope-total-duration`  | `Root`, `Graph` | Sum of attack, decay, and release         |
+| `--envelope-point-x`         | `Point`         | Editable point X position from `0` to `1` |
+| `--envelope-point-y`         | `Point`         | Editable point Y position from `0` to `1` |
+| `--envelope-segment-start-x` | `Segment`       | Segment start X position from `0` to `1`  |
+| `--envelope-segment-start-y` | `Segment`       | Segment start Y position from `0` to `1`  |
+| `--envelope-segment-end-x`   | `Segment`       | Segment end X position from `0` to `1`    |
+| `--envelope-segment-end-y`   | `Segment`       | Segment end Y position from `0` to `1`    |

@@ -9,6 +9,7 @@ Import compound component namespaces from `@ryhrm-gz/audio-ui-react`:
 
 ```tsx
 import {
+  EnvelopeEditor,
   Fader,
   Knob,
   LevelMeter,
@@ -119,38 +120,50 @@ Parts accept a `render` prop for replacing the default element while preserving 
 
 ## CSS variables
 
-| Variable                              | Component                                                                         | Description                                  |
+<<<<<<< HEAD
+| Variable | Component | Description |
 | ------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------- |
-| `--knob-angle`                        | `Knob.Thumb`                                                                      | Current rotary angle                         |
-| `--slider-percent`                    | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb`                     | Normalized value from `0` to `1`             |
-| `--slider-origin-percent`             | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb`                     | Range origin position from `0` to `1`        |
-| `--slider-range-start-percent`        | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb`                     | Lower visual fill edge from `0` to `1`       |
-| `--slider-range-end-percent`          | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb`                     | Upper visual fill edge from `0` to `1`       |
-| `--slider-range-size-percent`         | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb`                     | Visual fill size from the origin             |
-| `--range-slider-start-percent`        | `RangeSlider.Root`, `RangeSlider.Track`, `RangeSlider.Range`, `RangeSlider.Thumb` | Lower selected edge from `0` to `1`          |
-| `--range-slider-end-percent`          | `RangeSlider.Root`, `RangeSlider.Track`, `RangeSlider.Range`, `RangeSlider.Thumb` | Upper selected edge from `0` to `1`          |
-| `--range-slider-size-percent`         | `RangeSlider.Root`, `RangeSlider.Track`, `RangeSlider.Range`, `RangeSlider.Thumb` | Selected range size from `0` to `1`          |
-| `--range-slider-thumb-percent`        | `RangeSlider.Thumb`                                                               | Thumb position from `0` to `1`               |
-| `--range-slider-thumb-index`          | `RangeSlider.Thumb`                                                               | Thumb index, `0` for lower and `1` for upper |
-| `--xypad-x`                           | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                                         | Current X-axis value                         |
-| `--xypad-y`                           | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                                         | Current Y-axis value                         |
-| `--xypad-x-percent`                   | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                                         | Normalized X position from `0` to `1`        |
-| `--xypad-y-percent`                   | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                                         | Normalized Y position from `0` to `1`        |
-| `--fader-percent`                     | `Fader.Track`, `Fader.Range`, `Fader.Thumb`                                       | Fader-law position from `0` to `1`           |
-| `--fader-unity-percent`               | `Fader.Track`                                                                     | Position of the unity mark                   |
-| `--fader-mark-percent`                | `Fader.Scale` marks                                                               | Position for each scale mark                 |
-| `--level-meter-percent`               | `LevelMeter.Bar`                                                                  | Channel level from `0` to `1`                |
-| `--level-meter-peak-percent`          | `LevelMeter.Peak`                                                                 | Channel peak from `0` to `1`                 |
-| `--level-meter-mark-percent`          | `LevelMeter.Scale` marks                                                          | Position for each scale mark                 |
-| `--level-meter-segment-start-percent` | `LevelMeter.Segments` segments                                                    | Lower edge of a level band                   |
-| `--level-meter-segment-size-percent`  | `LevelMeter.Segments` segments                                                    | Height of a level band                       |
-| `--piano-key-count`                   | `Piano.Root`, `Piano.Keys`                                                        | Number of rendered piano keys                |
-| `--piano-white-key-count`             | `Piano.Root`, `Piano.Keys`                                                        | Number of white keys in the range            |
-| `--piano-key-start-percent`           | `Piano.Key`                                                                       | Key start position from `0` to `1`           |
-| `--piano-key-size-percent`            | `Piano.Key`                                                                       | Key size from `0` to `1`                     |
-| `--step-sequencer-track-count`        | `StepSequencer` parts                                                             | Number of rendered tracks                    |
-| `--step-sequencer-step-count`         | `StepSequencer` parts                                                             | Number of rendered steps per track           |
-| `--step-sequencer-track-index`        | `StepSequencer.Track`, `Steps`, `Step`                                            | Zero-based track index                       |
-| `--step-sequencer-step-index`         | `StepSequencer.Step`                                                              | Zero-based step index                        |
-| `--step-sequencer-step-percent`       | `StepSequencer.Step`                                                              | Step position from `0` to `1`                |
-| `--step-sequencer-playhead-percent`   | `StepSequencer.Root`, `Step`, `Playhead`                                          | Playhead position from `0` to `1`            |
+| `--knob-angle` | `Knob.Thumb` | Current rotary angle |
+| `--slider-percent` | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Normalized value from `0` to `1` |
+| `--slider-origin-percent` | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Range origin position from `0` to `1` |
+| `--slider-range-start-percent` | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Lower visual fill edge from `0` to `1` |
+| `--slider-range-end-percent` | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Upper visual fill edge from `0` to `1` |
+| `--slider-range-size-percent` | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Visual fill size from the origin |
+| `--range-slider-start-percent` | `RangeSlider.Root`, `RangeSlider.Track`, `RangeSlider.Range`, `RangeSlider.Thumb` | Lower selected edge from `0` to `1` |
+| `--range-slider-end-percent` | `RangeSlider.Root`, `RangeSlider.Track`, `RangeSlider.Range`, `RangeSlider.Thumb` | Upper selected edge from `0` to `1` |
+| `--range-slider-size-percent` | `RangeSlider.Root`, `RangeSlider.Track`, `RangeSlider.Range`, `RangeSlider.Thumb` | Selected range size from `0` to `1` |
+| `--range-slider-thumb-percent` | `RangeSlider.Thumb` | Thumb position from `0` to `1` |
+| `--range-slider-thumb-index` | `RangeSlider.Thumb` | Thumb index, `0` for lower and `1` for upper |
+| `--xypad-x` | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb` | Current X-axis value |
+| `--xypad-y` | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb` | Current Y-axis value |
+| `--xypad-x-percent` | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb` | Normalized X position from `0` to `1` |
+| `--xypad-y-percent` | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb` | Normalized Y position from `0` to `1` |
+| `--envelope-attack` | `EnvelopeEditor.Root`, `EnvelopeEditor.Graph` | Normalized attack time |
+| `--envelope-decay` | `EnvelopeEditor.Root`, `EnvelopeEditor.Graph` | Normalized decay time |
+| `--envelope-sustain` | `EnvelopeEditor.Root`, `EnvelopeEditor.Graph` | Normalized sustain level |
+| `--envelope-release` | `EnvelopeEditor.Root`, `EnvelopeEditor.Graph` | Normalized release time |
+| `--envelope-total-duration` | `EnvelopeEditor.Root`, `EnvelopeEditor.Graph` | Attack, decay, and release duration |
+| `--envelope-point-x` | `EnvelopeEditor.Point` | Point X position from `0` to `1` |
+| `--envelope-point-y` | `EnvelopeEditor.Point` | Point Y position from `0` to `1` |
+| `--envelope-segment-start-x` | `EnvelopeEditor.Segment` | Segment start X from `0` to `1` |
+| `--envelope-segment-start-y` | `EnvelopeEditor.Segment` | Segment start Y from `0` to `1` |
+| `--envelope-segment-end-x` | `EnvelopeEditor.Segment` | Segment end X from `0` to `1` |
+| `--envelope-segment-end-y` | `EnvelopeEditor.Segment` | Segment end Y from `0` to `1` |
+| `--fader-percent` | `Fader.Track`, `Fader.Range`, `Fader.Thumb` | Fader-law position from `0` to `1` |
+| `--fader-unity-percent` | `Fader.Track` | Position of the unity mark |
+| `--fader-mark-percent` | `Fader.Scale` marks | Position for each scale mark |
+| `--level-meter-percent` | `LevelMeter.Bar` | Channel level from `0` to `1` |
+| `--level-meter-peak-percent` | `LevelMeter.Peak` | Channel peak from `0` to `1` |
+| `--level-meter-mark-percent` | `LevelMeter.Scale` marks | Position for each scale mark |
+| `--level-meter-segment-start-percent` | `LevelMeter.Segments` segments | Lower edge of a level band |
+| `--level-meter-segment-size-percent` | `LevelMeter.Segments` segments | Height of a level band |
+| `--piano-key-count` | `Piano.Root`, `Piano.Keys` | Number of rendered piano keys |
+| `--piano-white-key-count` | `Piano.Root`, `Piano.Keys` | Number of white keys in the range |
+| `--piano-key-start-percent` | `Piano.Key` | Key start position from `0` to `1` |
+| `--piano-key-size-percent` | `Piano.Key` | Key size from `0` to `1` |
+| `--step-sequencer-track-count` | `StepSequencer` parts | Number of rendered tracks |
+| `--step-sequencer-step-count` | `StepSequencer` parts | Number of rendered steps per track |
+| `--step-sequencer-track-index` | `StepSequencer.Track`, `Steps`, `Step` | Zero-based track index |
+| `--step-sequencer-step-index` | `StepSequencer.Step` | Zero-based step index |
+| `--step-sequencer-step-percent` | `StepSequencer.Step` | Step position from `0` to `1` |
+| `--step-sequencer-playhead-percent` | `StepSequencer.Root`, `Step`, `Playhead` | Playhead position from `0` to `1` |
