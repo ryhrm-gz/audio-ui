@@ -4,7 +4,7 @@ import {
   getNextToggleGroupFocusedIndex,
   getNextToggleGroupValue,
   isToggleGroupItemPressed,
-} from "./index.ts";
+} from "../index.ts";
 
 test("creates single toggle group state", () => {
   expect(createToggleGroupState("lowpass", { type: "single" })).toEqual({

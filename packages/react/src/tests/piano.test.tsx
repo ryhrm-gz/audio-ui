@@ -1,7 +1,7 @@
 import type { KeyboardEvent, PointerEvent, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vite-plus/test";
-import { Piano } from "./index.ts";
+import { Piano } from "../index.ts";
 
 describe("Piano", () => {
   test("renders the root and generated key parts", () => {

@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vite-plus/test";
-import { LevelMeter } from "./index.ts";
+import { LevelMeter } from "../index.ts";
 
 describe("LevelMeter", () => {
   test("renders the root, scale, track, bars, peaks, and value parts", () => {

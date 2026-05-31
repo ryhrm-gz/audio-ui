@@ -1,7 +1,7 @@
 import type { MouseEvent, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vite-plus/test";
-import { Slider } from "./index.ts";
+import { Slider } from "../index.ts";
 
 describe("Slider", () => {
   test("renders the root, track, range, thumb, value, and hidden input parts", () => {

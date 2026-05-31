@@ -1,7 +1,7 @@
 import type { KeyboardEvent, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vite-plus/test";
-import { ToggleGroup, ToggleGroupItem, ToggleGroupRoot } from "./index.ts";
+import { ToggleGroup, ToggleGroupItem, ToggleGroupRoot } from "../index.ts";
 
 describe("ToggleGroup", () => {
   test("renders single group state, items, and hidden input", () => {

@@ -1,7 +1,7 @@
 import type { MouseEvent } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vite-plus/test";
-import { Knob } from "./index.ts";
+import { Knob } from "../index.ts";
 
 describe("Knob", () => {
   test("renders the root, control, value, and hidden input parts", () => {

@@ -7,7 +7,7 @@ import {
   getXYPadValueFromPercent,
   getXYPadValueFromPoint,
   normalizeXYPadValue,
-} from "./index.ts";
+} from "../index.ts";
 
 test("normalizes XYPad values to the configured ranges and steps", () => {
   expect(

@@ -9,7 +9,7 @@ import {
   RangeSliderThumb,
   RangeSliderTrack,
   RangeSliderValue,
-} from "./index.ts";
+} from "../index.ts";
 
 describe("RangeSlider", () => {
   test("renders root, track, range, thumbs, value, and hidden input parts", () => {

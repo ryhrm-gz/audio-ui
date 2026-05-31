@@ -32,7 +32,7 @@ import {
   normalizeKnobValue,
   normalizeRangeSliderValue,
   normalizeSliderValue,
-} from "./index.ts";
+} from "../index.ts";
 
 test("normalizes values to the configured range and step", () => {
   expect(normalizeKnobValue(12.26, { min: 0, max: 20, step: 0.5 })).toBe(12.5);

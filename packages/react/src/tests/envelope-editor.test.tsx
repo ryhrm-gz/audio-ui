@@ -11,7 +11,7 @@ import {
   EnvelopeEditorSegment,
   EnvelopeEditorSegments,
   EnvelopeEditorValue,
-} from "./index.ts";
+} from "../index.ts";
 
 describe("EnvelopeEditor", () => {
   test("renders root, graph, segments, points, value, and hidden input parts", () => {

@@ -6,7 +6,7 @@ import {
   getEnvelopeEditorValueFromPointPosition,
   getNextEnvelopeEditorKeyboardValue,
   normalizeEnvelopeEditorValue,
-} from "./index.ts";
+} from "../index.ts";
 
 test("normalizes ADSR values to configured time and level ranges", () => {
   expect(

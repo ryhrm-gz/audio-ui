@@ -1,7 +1,7 @@
 import type { KeyboardEvent, PointerEvent, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vite-plus/test";
-import { ToggleButton, ToggleButtonRoot } from "./index.ts";
+import { ToggleButton, ToggleButtonRoot } from "../index.ts";
 
 describe("ToggleButton", () => {
   test("renders pressed state, styling hooks, and hidden input", () => {

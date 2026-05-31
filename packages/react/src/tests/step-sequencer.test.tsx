@@ -1,7 +1,7 @@
 import type { KeyboardEvent, MouseEvent, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vite-plus/test";
-import { StepSequencer } from "./index.ts";
+import { StepSequencer } from "../index.ts";
 
 describe("StepSequencer", () => {
   test("renders the root, generated tracks, steps, playhead, and hidden input", () => {

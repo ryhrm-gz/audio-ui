@@ -6,7 +6,7 @@ import {
   resolveStepSequencerKeyboardTarget,
   setStepSequencerStepActive,
   toggleStepSequencerStep,
-} from "./index.ts";
+} from "../index.ts";
 
 describe("StepSequencer", () => {
   test("normalizes a boolean grid to the configured dimensions", () => {

@@ -1,7 +1,7 @@
 import type { MouseEvent, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vite-plus/test";
-import { XYPad, XYPadArea, XYPadHiddenInput, XYPadRoot, XYPadThumb, XYPadValue } from "./index.ts";
+import { XYPad, XYPadArea, XYPadHiddenInput, XYPadRoot, XYPadThumb, XYPadValue } from "../index.ts";
 
 describe("XYPad", () => {
   test("renders the root, area, thumb, value, and hidden input parts", () => {

@@ -1,7 +1,7 @@
 import type { MouseEvent, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vite-plus/test";
-import { Fader } from "./index.ts";
+import { Fader } from "../index.ts";
 
 describe("Fader", () => {
   test("renders the root, track, range, thumb, value, and hidden input parts", () => {

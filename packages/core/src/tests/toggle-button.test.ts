@@ -1,5 +1,5 @@
 import { expect, test } from "vite-plus/test";
-import { createToggleButtonState, getNextToggleButtonPressed } from "./index.ts";
+import { createToggleButtonState, getNextToggleButtonPressed } from "../index.ts";
 
 test("creates toggle button state", () => {
   expect(createToggleButtonState(true)).toEqual({
