@@ -23,6 +23,16 @@ export interface RangeSliderPoint {
   pointY: number;
 }
 
+export interface RangeSliderLinearDrag extends RangeSliderPoint {
+  startValue: number;
+  startPointX: number;
+  startPointY: number;
+}
+
+export interface RangeSliderDragOptions {
+  fine?: boolean;
+}
+
 export interface RangeSliderThumbState {
   index: RangeSliderThumbIndex;
   value: number;

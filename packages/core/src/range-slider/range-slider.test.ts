@@ -3,6 +3,7 @@ import {
   createRangeSliderState,
   getNextRangeSliderKeyboardValue,
   getRangeSliderPercent,
+  getRangeSliderValueFromLinearDrag,
   getRangeSliderValueFromPoint,
   normalizeRangeSliderValue,
 } from "../index.ts";
@@ -107,6 +108,46 @@ test("maps range slider pointer positions by orientation and inversion", () => {
       { inverted: true },
     ),
   ).toEqual([75, 80]);
+});
+
+test("maps range slider linear drag with fine control", () => {
+  const drag = {
+    trackX: 100,
+    trackY: 20,
+    trackWidth: 200,
+    trackHeight: 20,
+    startValue: 50,
+    startPointX: 200,
+    startPointY: 30,
+    pointX: 150,
+    pointY: 30,
+  };
+
+  // Normal drag: 50% track moved left -> 25% value
+  expect(getRangeSliderValueFromLinearDrag(drag, [10, 80], 0)).toEqual([25, 80]);
+
+  // Fine drag: 50% track moved left at 0.1 factor -> 47.5% value
+  expect(getRangeSliderValueFromLinearDrag(drag, [10, 80], 0, {}, { fine: true })).toEqual([
+    47.5, 80,
+  ]);
+
+  // Vertical orientation
+  const verticalDrag = {
+    trackX: 100,
+    trackY: 20,
+    trackWidth: 20,
+    trackHeight: 200,
+    startValue: 50,
+    startPointX: 110,
+    startPointY: 120,
+    pointX: 110,
+    pointY: 70,
+  };
+
+  // Normal drag: 50% track moved up -> 75% value
+  expect(
+    getRangeSliderValueFromLinearDrag(verticalDrag, [10, 80], 1, { orientation: "vertical" }),
+  ).toEqual([10, 75]);
 });
 
 test("handles range slider keyboard movement without crossing thumbs", () => {

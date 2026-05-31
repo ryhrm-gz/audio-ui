@@ -1,5 +1,6 @@
 import {
   getClosestRangeSliderThumbIndexFromPoint,
+  getRangeSliderValueFromLinearDrag,
   getRangeSliderValueFromPoint,
   type RangeSliderThumbIndex,
   type RangeSliderValue,
@@ -15,7 +16,13 @@ interface ActiveDrag {
   pointerId: number;
   activeThumb: RangeSliderThumbIndex;
   currentValue: RangeSliderValue;
+  startValue: number;
+  startPointX: number;
+  startPointY: number;
   fine: boolean;
+  fineStartValue?: number;
+  fineStartPointX?: number;
+  fineStartPointY?: number;
 }
 
 export const Track = forwardRef<HTMLDivElement, RangeSliderTrackProps>(function Track(props, ref) {
@@ -59,6 +66,62 @@ export const Track = forwardRef<HTMLDivElement, RangeSliderTrackProps>(function 
     [context.state],
   );
 
+  const getValueFromDrag = useCallback(
+    (event: PointerEvent<HTMLDivElement>, activeDrag: ActiveDrag) => {
+      const fine = context.fineControl && event.shiftKey;
+
+      if (!fine) {
+        return {
+          value: getValueFromPointer(event, activeDrag.activeThumb),
+          fine,
+          fineStartValue: undefined,
+          fineStartPointX: undefined,
+          fineStartPointY: undefined,
+        };
+      }
+
+      if (
+        activeDrag.fineStartValue === undefined ||
+        activeDrag.fineStartPointX === undefined ||
+        activeDrag.fineStartPointY === undefined
+      ) {
+        return {
+          value: activeDrag.currentValue,
+          fine,
+          fineStartValue: activeDrag.currentValue[activeDrag.activeThumb],
+          fineStartPointX: event.clientX,
+          fineStartPointY: event.clientY,
+        };
+      }
+
+      const rect = event.currentTarget.getBoundingClientRect();
+      return {
+        value: getRangeSliderValueFromLinearDrag(
+          {
+            trackX: rect.left,
+            trackY: rect.top,
+            trackWidth: rect.width,
+            trackHeight: rect.height,
+            pointX: event.clientX,
+            pointY: event.clientY,
+            startValue: activeDrag.fineStartValue,
+            startPointX: activeDrag.fineStartPointX,
+            startPointY: activeDrag.fineStartPointY,
+          },
+          context.state.value,
+          activeDrag.activeThumb,
+          context.state,
+          { fine },
+        ),
+        fine,
+        fineStartValue: activeDrag.fineStartValue,
+        fineStartPointX: activeDrag.fineStartPointX,
+        fineStartPointY: activeDrag.fineStartPointY,
+      };
+    },
+    [context.fineControl, context.state, getValueFromPointer],
+  );
+
   const releasePointerCapture = (event: PointerEvent<HTMLDivElement>) => {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
@@ -83,7 +146,13 @@ export const Track = forwardRef<HTMLDivElement, RangeSliderTrackProps>(function 
       pointerId: event.pointerId,
       activeThumb,
       currentValue: nextValue,
+      startValue: nextValue[activeThumb],
+      startPointX: event.clientX,
+      startPointY: event.clientY,
       fine,
+      fineStartValue: fine ? nextValue[activeThumb] : undefined,
+      fineStartPointX: fine ? event.clientX : undefined,
+      fineStartPointY: fine ? event.clientY : undefined,
     };
     context.setActiveThumb(activeThumb);
     context.setValue(nextValue, { activeThumb, fine });
@@ -104,14 +173,19 @@ export const Track = forwardRef<HTMLDivElement, RangeSliderTrackProps>(function 
       return;
     }
 
-    const fine = context.fineControl && event.shiftKey;
-    const nextValue = getValueFromPointer(event, activeDrag.activeThumb);
+    const dragValue = getValueFromDrag(event, activeDrag);
     activeDragRef.current = {
       ...activeDrag,
-      currentValue: nextValue,
-      fine,
+      currentValue: dragValue.value,
+      fine: dragValue.fine,
+      fineStartValue: dragValue.fineStartValue,
+      fineStartPointX: dragValue.fineStartPointX,
+      fineStartPointY: dragValue.fineStartPointY,
     };
-    context.setValue(nextValue, { activeThumb: activeDrag.activeThumb, fine });
+    context.setValue(dragValue.value, {
+      activeThumb: activeDrag.activeThumb,
+      fine: dragValue.fine,
+    });
   };
 
   const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
