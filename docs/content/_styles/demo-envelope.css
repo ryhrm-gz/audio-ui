@@ -5,7 +5,6 @@
 .demo-envelope-graph {
   position: relative;
   container-type: size;
-  overflow: hidden;
   width: 100%;
   aspect-ratio: 2.4;
   border: 1px solid var(--demo-line);
