@@ -8,18 +8,32 @@ description: Reference for Audio UI React exports, compound component namespaces
 Import compound component namespaces from `@ryhrm-gz/audio-ui-react`:
 
 ```tsx
-import { Fader, Knob, LevelMeter, Piano, Slider, XYPad } from "@ryhrm-gz/audio-ui-react";
+import {
+  Fader,
+  Knob,
+  LevelMeter,
+  Piano,
+  RangeSlider,
+  Slider,
+  XYPad,
+} from "@ryhrm-gz/audio-ui-react";
 ```
 
 Named part exports are also available for tree-shaking or local naming:
 
 ```tsx
-import { KnobRoot, KnobControl, KnobThumb, KnobValue } from "@ryhrm-gz/audio-ui-react";
+import {
+  KnobRoot,
+  KnobControl,
+  KnobThumb,
+  KnobValue,
+  RangeSliderRoot,
+} from "@ryhrm-gz/audio-ui-react";
 ```
 
 ## Common root behavior
 
-Knob, Fader, and Slider roots support controlled and uncontrolled numeric value modes. XYPad uses the same pattern with `{ x, y }` object values:
+Knob, Fader, and Slider roots support controlled and uncontrolled numeric value modes. RangeSlider uses `[lower, upper]` tuple values, and XYPad uses `{ x, y }` object values:
 
 | Prop                   | Description                                                  |
 | ---------------------- | ------------------------------------------------------------ |
@@ -75,27 +89,32 @@ Parts accept a `render` prop for replacing the default element while preserving 
 
 ## CSS variables
 
-| Variable                              | Component                                                     | Description                            |
-| ------------------------------------- | ------------------------------------------------------------- | -------------------------------------- |
-| `--knob-angle`                        | `Knob.Thumb`                                                  | Current rotary angle                   |
-| `--slider-percent`                    | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Normalized value from `0` to `1`       |
-| `--slider-origin-percent`             | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Range origin position from `0` to `1`  |
-| `--slider-range-start-percent`        | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Lower visual fill edge from `0` to `1` |
-| `--slider-range-end-percent`          | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Upper visual fill edge from `0` to `1` |
-| `--slider-range-size-percent`         | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb` | Visual fill size from the origin       |
-| `--xypad-x`                           | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                     | Current X-axis value                   |
-| `--xypad-y`                           | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                     | Current Y-axis value                   |
-| `--xypad-x-percent`                   | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                     | Normalized X position from `0` to `1`  |
-| `--xypad-y-percent`                   | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                     | Normalized Y position from `0` to `1`  |
-| `--fader-percent`                     | `Fader.Track`, `Fader.Range`, `Fader.Thumb`                   | Fader-law position from `0` to `1`     |
-| `--fader-unity-percent`               | `Fader.Track`                                                 | Position of the unity mark             |
-| `--fader-mark-percent`                | `Fader.Scale` marks                                           | Position for each scale mark           |
-| `--level-meter-percent`               | `LevelMeter.Bar`                                              | Channel level from `0` to `1`          |
-| `--level-meter-peak-percent`          | `LevelMeter.Peak`                                             | Channel peak from `0` to `1`           |
-| `--level-meter-mark-percent`          | `LevelMeter.Scale` marks                                      | Position for each scale mark           |
-| `--level-meter-segment-start-percent` | `LevelMeter.Segments` segments                                | Lower edge of a level band             |
-| `--level-meter-segment-size-percent`  | `LevelMeter.Segments` segments                                | Height of a level band                 |
-| `--piano-key-count`                   | `Piano.Root`, `Piano.Keys`                                    | Number of rendered piano keys          |
-| `--piano-white-key-count`             | `Piano.Root`, `Piano.Keys`                                    | Number of white keys in the range      |
-| `--piano-key-start-percent`           | `Piano.Key`                                                   | Key start position from `0` to `1`     |
-| `--piano-key-size-percent`            | `Piano.Key`                                                   | Key size from `0` to `1`               |
+| Variable                              | Component                                                                         | Description                                  |
+| ------------------------------------- | --------------------------------------------------------------------------------- | -------------------------------------------- |
+| `--knob-angle`                        | `Knob.Thumb`                                                                      | Current rotary angle                         |
+| `--slider-percent`                    | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb`                     | Normalized value from `0` to `1`             |
+| `--slider-origin-percent`             | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb`                     | Range origin position from `0` to `1`        |
+| `--slider-range-start-percent`        | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb`                     | Lower visual fill edge from `0` to `1`       |
+| `--slider-range-end-percent`          | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb`                     | Upper visual fill edge from `0` to `1`       |
+| `--slider-range-size-percent`         | `Slider.Root`, `Slider.Track`, `Slider.Range`, `Slider.Thumb`                     | Visual fill size from the origin             |
+| `--range-slider-start-percent`        | `RangeSlider.Root`, `RangeSlider.Track`, `RangeSlider.Range`, `RangeSlider.Thumb` | Lower selected edge from `0` to `1`          |
+| `--range-slider-end-percent`          | `RangeSlider.Root`, `RangeSlider.Track`, `RangeSlider.Range`, `RangeSlider.Thumb` | Upper selected edge from `0` to `1`          |
+| `--range-slider-size-percent`         | `RangeSlider.Root`, `RangeSlider.Track`, `RangeSlider.Range`, `RangeSlider.Thumb` | Selected range size from `0` to `1`          |
+| `--range-slider-thumb-percent`        | `RangeSlider.Thumb`                                                               | Thumb position from `0` to `1`               |
+| `--range-slider-thumb-index`          | `RangeSlider.Thumb`                                                               | Thumb index, `0` for lower and `1` for upper |
+| `--xypad-x`                           | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                                         | Current X-axis value                         |
+| `--xypad-y`                           | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                                         | Current Y-axis value                         |
+| `--xypad-x-percent`                   | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                                         | Normalized X position from `0` to `1`        |
+| `--xypad-y-percent`                   | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                                         | Normalized Y position from `0` to `1`        |
+| `--fader-percent`                     | `Fader.Track`, `Fader.Range`, `Fader.Thumb`                                       | Fader-law position from `0` to `1`           |
+| `--fader-unity-percent`               | `Fader.Track`                                                                     | Position of the unity mark                   |
+| `--fader-mark-percent`                | `Fader.Scale` marks                                                               | Position for each scale mark                 |
+| `--level-meter-percent`               | `LevelMeter.Bar`                                                                  | Channel level from `0` to `1`                |
+| `--level-meter-peak-percent`          | `LevelMeter.Peak`                                                                 | Channel peak from `0` to `1`                 |
+| `--level-meter-mark-percent`          | `LevelMeter.Scale` marks                                                          | Position for each scale mark                 |
+| `--level-meter-segment-start-percent` | `LevelMeter.Segments` segments                                                    | Lower edge of a level band                   |
+| `--level-meter-segment-size-percent`  | `LevelMeter.Segments` segments                                                    | Height of a level band                       |
+| `--piano-key-count`                   | `Piano.Root`, `Piano.Keys`                                                        | Number of rendered piano keys                |
+| `--piano-white-key-count`             | `Piano.Root`, `Piano.Keys`                                                        | Number of white keys in the range            |
+| `--piano-key-start-percent`           | `Piano.Key`                                                                       | Key start position from `0` to `1`           |
+| `--piano-key-size-percent`            | `Piano.Key`                                                                       | Key size from `0` to `1`                     |

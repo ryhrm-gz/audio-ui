@@ -13,6 +13,7 @@ import {
   createKnobState,
   createLevelMeterState,
   createPianoState,
+  createRangeSliderState,
   createSliderState,
   createXYPadState,
 } from "@ryhrm-gz/audio-ui-core";
@@ -20,14 +21,15 @@ import {
 
 ## State helpers
 
-| Helper                                  | Purpose                                                                           |
-| --------------------------------------- | --------------------------------------------------------------------------------- |
-| `createKnobState(value, options)`       | Clamps and quantizes a value, then derives percent and rotary angle               |
-| `createSliderState(value, options)`     | Clamps and quantizes a value, then derives value, origin, and range-fill percents |
-| `createXYPadState(value, options)`      | Clamps and quantizes X/Y values, then derives independent axis percents           |
-| `createFaderState(value, options)`      | Applies the fader scale law and derives value, percent, unity, and scale marks    |
-| `createLevelMeterState(value, options)` | Clamps meter dB values, then derives per-channel fill, peak, and clipping state   |
-| `createPianoState(keys, options)`       | Resolves a piano key range and marks the currently pressed keys                   |
+| Helper                                   | Purpose                                                                           |
+| ---------------------------------------- | --------------------------------------------------------------------------------- |
+| `createKnobState(value, options)`        | Clamps and quantizes a value, then derives percent and rotary angle               |
+| `createSliderState(value, options)`      | Clamps and quantizes a value, then derives value, origin, and range-fill percents |
+| `createRangeSliderState(value, options)` | Normalizes `[lower, upper]`, enforces thumb distance, and derives range percents  |
+| `createXYPadState(value, options)`       | Clamps and quantizes X/Y values, then derives independent axis percents           |
+| `createFaderState(value, options)`       | Applies the fader scale law and derives value, percent, unity, and scale marks    |
+| `createLevelMeterState(value, options)`  | Clamps meter dB values, then derives per-channel fill, peak, and clipping state   |
+| `createPianoState(keys, options)`        | Resolves a piano key range and marks the currently pressed keys                   |
 
 ## Value utilities
 
@@ -36,12 +38,14 @@ Use component-specific value helpers when building a custom renderer:
 ```ts
 import {
   getKnobPercent,
+  getRangeSliderPercent,
   getSliderPercent,
   getXYPadPercent,
   normalizeFaderValue,
 } from "@ryhrm-gz/audio-ui-core";
 
 const knobPercent = getKnobPercent(-6, { min: -60, max: 12, step: 0.5 });
+const rangePercent = getRangeSliderPercent([20, 80], { min: 0, max: 100, step: 1 });
 const sliderPercent = getSliderPercent(25, { min: 0, max: 100, step: 1 });
 const xyPercent = getXYPadPercent({ x: 25, y: 75 });
 const faderValue = normalizeFaderValue(-6.04, { min: -60, max: 12, step: 0.1 });
@@ -63,12 +67,22 @@ const state = createLevelMeterState([meterValue, -12], { channels: 2 });
 Core keyboard helpers convert key presses into next values. React parts use the same helpers for arrow keys, page steps, home, and end behavior.
 
 ```ts
-import { getNextSliderKeyboardValue, getNextXYPadKeyboardValue } from "@ryhrm-gz/audio-ui-core";
+import {
+  getNextRangeSliderKeyboardValue,
+  getNextSliderKeyboardValue,
+  getNextXYPadKeyboardValue,
+} from "@ryhrm-gz/audio-ui-core";
 
 const nextValue = getNextSliderKeyboardValue(0, "ArrowRight", {
   min: -100,
   max: 100,
   step: 1,
+});
+const nextRange = getNextRangeSliderKeyboardValue([20, 80], 0, "ArrowRight", {
+  min: 0,
+  max: 100,
+  step: 1,
+  minStepsBetweenThumbs: 2,
 });
 const nextPadValue = getNextXYPadKeyboardValue({ x: 50, y: 50 }, "ArrowUp");
 ```

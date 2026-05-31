@@ -151,6 +151,7 @@ html.rp-dark .rp-home-hero .rp-button--alt,
 
 .demo-knob,
 .demo-slider,
+.demo-range-slider,
 .demo-fader,
 .demo-xypad,
 .demo-piano {
@@ -389,6 +390,10 @@ html.rp-dark .rp-home-hero .rp-button--alt,
   width: min(100%, 28rem);
 }
 
+.demo-range-slider {
+  width: min(100%, 30rem);
+}
+
 .demo-slider-track {
   position: relative;
   width: 100%;
@@ -411,6 +416,37 @@ html.rp-dark .rp-home-hero .rp-button--alt,
   position: absolute;
   top: 50%;
   left: calc(var(--slider-percent) * 100%);
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 2px solid var(--demo-bg);
+  border-radius: 50%;
+  background: var(--demo-fill);
+  box-shadow: 0 0 0 1px var(--demo-line);
+  transform: translate(-50%, -50%);
+}
+
+.demo-range-slider-track {
+  position: relative;
+  width: 100%;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: var(--demo-track);
+  touch-action: none;
+}
+
+.demo-range-slider-range {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--range-slider-start-percent) * 100%);
+  width: calc(var(--range-slider-size-percent) * 100%);
+  border-radius: inherit;
+  background: var(--demo-fill);
+}
+
+.demo-range-slider-thumb {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--range-slider-thumb-percent) * 100%);
   width: 1.35rem;
   height: 1.35rem;
   border: 2px solid var(--demo-bg);

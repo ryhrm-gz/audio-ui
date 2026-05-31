@@ -1,0 +1,134 @@
+---
+title: RangeSlider
+description: Build accessible two-thumb range controls with min/max values, constrained thumbs, form submission, and styling hooks.
+---
+
+import { RangeSliderDemo } from "../_components/RangeSliderDemo.tsx";
+
+# RangeSlider
+
+`RangeSlider` is a two-thumb linear control for selecting a bounded range, such as filter bands, loop regions, frequency windows, or value limits. Core helpers normalize `[min, max]` values in ascending order and keep thumbs from crossing.
+
+<RangeSliderDemo />
+
+## Anatomy
+
+```tsx
+import { RangeSlider } from "@ryhrm-gz/audio-ui-react";
+
+export function FrequencyRange() {
+  return (
+    <RangeSlider.Root
+      defaultValue={[120, 8000]}
+      min={20}
+      max={12000}
+      step={10}
+      minStepsBetweenThumbs={12}
+      name="filterBand"
+    >
+      <RangeSlider.Track>
+        <RangeSlider.Range />
+        <RangeSlider.Thumb index={0} aria-label="Minimum frequency" />
+        <RangeSlider.Thumb index={1} aria-label="Maximum frequency" />
+      </RangeSlider.Track>
+      <RangeSlider.Value />
+      <RangeSlider.HiddenInput />
+    </RangeSlider.Root>
+  );
+}
+```
+
+## Controlled values
+
+Pass `value` with `onValueChange` when external state owns the selected range. Values are always normalized as `[lower, upper]`.
+
+```tsx
+const [value, setValue] = useState<[number, number]>([20, 80]);
+
+<RangeSlider.Root value={value} onValueChange={setValue} min={0} max={100} step={1}>
+  <RangeSlider.Track>
+    <RangeSlider.Range />
+    <RangeSlider.Thumb index={0} aria-label="Minimum" />
+    <RangeSlider.Thumb index={1} aria-label="Maximum" />
+  </RangeSlider.Track>
+</RangeSlider.Root>;
+```
+
+## Thumb distance
+
+Use `minStepsBetweenThumbs` to keep the thumbs at least a number of steps apart. `minDistance` is also available when a value-unit distance is more convenient.
+
+```tsx
+<RangeSlider.Root defaultValue={[20, 80]} step={5} minStepsBetweenThumbs={2}>
+  <RangeSlider.Track>
+    <RangeSlider.Range />
+    <RangeSlider.Thumb index={0} aria-label="Minimum" />
+    <RangeSlider.Thumb index={1} aria-label="Maximum" />
+  </RangeSlider.Track>
+</RangeSlider.Root>
+```
+
+## Vertical orientation
+
+```tsx
+<RangeSlider.Root orientation="vertical" defaultValue={[20, 80]} min={0} max={100}>
+  <RangeSlider.Track>
+    <RangeSlider.Range />
+    <RangeSlider.Thumb index={0} aria-label="Minimum level" />
+    <RangeSlider.Thumb index={1} aria-label="Maximum level" />
+  </RangeSlider.Track>
+</RangeSlider.Root>
+```
+
+## Styling hooks
+
+The root and visual parts expose `data-orientation`, `data-inverted`, and range CSS variables.
+
+```css
+.range {
+  left: calc(var(--range-slider-start-percent) * 100%);
+  width: calc(var(--range-slider-size-percent) * 100%);
+}
+
+.thumb {
+  left: calc(var(--range-slider-thumb-percent) * 100%);
+}
+```
+
+## API reference
+
+### `RangeSlider.Root`
+
+`RangeSlider.Root` renders a `div`, owns range state, and provides context to the other parts. It accepts standard `div` props except `defaultValue`, `onChange`, and `children`, which are replaced by the range-slider API.
+
+| Prop                    | Type                                         | Default        | Description                                                                                        |
+| ----------------------- | -------------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------- |
+| `value`                 | `[number, number]`                           | -              | Controlled range value. Pass with `onValueChange` when external state owns the selected range.     |
+| `defaultValue`          | `[number, number]`                           | `[min, max]`   | Initial uncontrolled value. Also becomes the double-click reset target.                            |
+| `min`                   | `number`                                     | `0`            | Lower value bound. Values are clamped into the resolved range.                                     |
+| `max`                   | `number`                                     | `100`          | Upper value bound. If `min` is greater than `max`, the core range resolver normalizes the order.   |
+| `step`                  | `number`                                     | `1`            | Value increment for pointer and keyboard changes.                                                  |
+| `minStepsBetweenThumbs` | `number`                                     | `0`            | Minimum number of `step` intervals between the two thumbs.                                         |
+| `minDistance`           | `number`                                     | `0`            | Minimum value-unit distance between thumbs. Ignored when `minStepsBetweenThumbs` is supplied.      |
+| `orientation`           | `"horizontal" \| "vertical"`                 | `"horizontal"` | Controls pointer mapping, `aria-orientation`, and `data-orientation`.                              |
+| `inverted`              | `boolean`                                    | `false`        | Reverses the value-to-position mapping and adds `data-inverted`.                                   |
+| `disabled`              | `boolean`                                    | `false`        | Prevents pointer and keyboard interaction, removes thumbs from tab order, and adds disabled state. |
+| `readOnly`              | `boolean`                                    | `false`        | Keeps thumbs focusable while preventing value changes, and adds readonly state attributes.         |
+| `fineControl`           | `boolean`                                    | `true`         | Enables reduced keyboard step size while Shift is held.                                            |
+| `resetOnDoubleClick`    | `boolean`                                    | `true`         | Allows a double click on the track to reset to `defaultValue`, or `[min, max]` when no default.    |
+| `name`                  | `string`                                     | -              | Default form field name consumed by `RangeSlider.HiddenInput`.                                     |
+| `required`              | `boolean`                                    | -              | Default required flag consumed by `RangeSlider.HiddenInput`.                                       |
+| `children`              | `ReactNode \| (state) => ReactNode`          | -              | Parts to render. Function children receive value state plus interaction flags.                     |
+| `onValueChange`         | `(value: [number, number]) => void`          | -              | Fires when interaction produces a new clamped and snapped range.                                   |
+| `onValueCommit`         | `(value: [number, number]) => void`          | -              | Fires when an interaction commits, such as pointer up, keyboard step, or reset.                    |
+| `render`                | `RenderProp<ElementProps, RangeSliderState>` | -              | Replaces the root element while preserving generated props and render state.                       |
+
+### Parts
+
+| Part                      | Props and behavior                                                                                                                                                                                                                 |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RangeSlider.Track`       | Renders a `div` and accepts standard `div` props plus `render`. It owns pointer drag, track click, nearest-thumb selection, and double-click reset.                                                                                |
+| `RangeSlider.Range`       | Renders an `aria-hidden` `span` and accepts standard `span` props plus `render`. Use it for the visual selected range; it exposes `--range-slider-start-percent`, `--range-slider-end-percent`, and `--range-slider-size-percent`. |
+| `RangeSlider.Thumb`       | Renders a focusable `span` with `role="slider"`. Pass `index={0}` for the lower thumb and `index={1}` for the upper thumb. Arrow keys, Page Up/Down, Home, and End are handled.                                                    |
+| `RangeSlider.Value`       | Renders a `span` connected to the thumbs by `aria-describedby`. Without `index`, it displays `lower - upper`; with `index={0}` or `index={1}`, it displays one thumb value.                                                        |
+| `RangeSlider.HiddenInput` | Renders `<input type="hidden">` for native form submission. The value is a JSON string such as `[20,80]`; `name`, `required`, and `disabled` default to root props.                                                                |

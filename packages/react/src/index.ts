@@ -29,6 +29,15 @@ export { LevelMeter } from "./level-meter/index.ts";
 export { Key as PianoKey, Keys as PianoKeys, Root as PianoRoot } from "./piano/index.ts";
 export { Piano } from "./piano/index.ts";
 export {
+  HiddenInput as RangeSliderHiddenInput,
+  Range as RangeSliderRange,
+  Root as RangeSliderRoot,
+  Thumb as RangeSliderThumb,
+  Track as RangeSliderTrack,
+  Value as RangeSliderValue,
+} from "./range-slider/index.ts";
+export { RangeSlider } from "./range-slider/index.ts";
+export {
   HiddenInput as SliderHiddenInput,
   Range as SliderRange,
   Root as SliderRoot,
@@ -71,6 +80,14 @@ export type {
   LevelMeterValueProps,
 } from "./level-meter/index.ts";
 export type { PianoKeyProps, PianoKeysProps, PianoRootProps } from "./piano/index.ts";
+export type {
+  RangeSliderHiddenInputProps,
+  RangeSliderRangeProps,
+  RangeSliderRootProps,
+  RangeSliderThumbProps,
+  RangeSliderTrackProps,
+  RangeSliderValueProps,
+} from "./range-slider/index.ts";
 export type {
   SliderHiddenInputProps,
   SliderRangeProps,
