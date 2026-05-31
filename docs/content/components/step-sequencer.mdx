@@ -1,0 +1,143 @@
+---
+title: StepSequencer
+description: Build headless drum-machine and gate-sequencer grids with boolean step state, keyboard navigation, and form serialization.
+---
+
+import { StepSequencerDemo } from "../_components/StepSequencerDemo.tsx";
+
+# StepSequencer
+
+`StepSequencer` renders a headless boolean step grid for drum machines, gate sequencers, trigger lanes, and DAW-style pattern editors. It owns UI state, accessibility, keyboard navigation, styling hooks, and form serialization without providing audio playback, clocking, or MIDI output.
+
+<StepSequencerDemo />
+
+## Anatomy
+
+```tsx
+import { StepSequencer } from "@ryhrm-gz/audio-ui-react";
+
+export function DrumPattern() {
+  return (
+    <StepSequencer.Root
+      defaultValue={[
+        [true, false, false, true],
+        [false, false, true, false],
+      ]}
+      stepCount={16}
+      trackCount={4}
+      playhead={3}
+      name="pattern"
+    >
+      <StepSequencer.Tracks />
+      <StepSequencer.Playhead />
+      <StepSequencer.HiddenInput />
+    </StepSequencer.Root>
+  );
+}
+```
+
+## Controlled pattern
+
+`value` is a `boolean[][]`, where the first index is the track and the second index is the step. The value is normalized to `trackCount` and `stepCount`, so missing cells become inactive.
+
+```tsx
+const [pattern, setPattern] = useState([
+  [true, false, false, true],
+  [false, true, false, false],
+]);
+
+<StepSequencer.Root value={pattern} onValueChange={setPattern} trackCount={2} stepCount={4}>
+  <StepSequencer.Tracks />
+</StepSequencer.Root>;
+```
+
+## Custom tracks and steps
+
+Use `StepSequencer.Steps` to render all steps for a track, or pass function children to customize each generated step.
+
+```tsx
+<StepSequencer.Root defaultValue={pattern} trackCount={4} stepCount={16}>
+  <StepSequencer.Tracks>
+    {(track) => (
+      <StepSequencer.Track track={track.trackIndex}>
+        <span>{track.trackIndex + 1}</span>
+        <StepSequencer.Steps track={track.trackIndex}>
+          {(step) => (
+            <StepSequencer.Step track={step.trackIndex} step={step.stepIndex}>
+              {step.stepIndex + 1}
+            </StepSequencer.Step>
+          )}
+        </StepSequencer.Steps>
+      </StepSequencer.Track>
+    )}
+  </StepSequencer.Tracks>
+</StepSequencer.Root>
+```
+
+## Keyboard interaction
+
+Each step renders a button with `aria-pressed`. Space and Enter toggle the focused step, ArrowLeft and ArrowRight move between steps, ArrowUp and ArrowDown move between tracks, and Home and End move to the first or last step in the current track.
+
+## Styling hooks
+
+```css
+.sequencer-steps {
+  display: grid;
+  grid-template-columns: repeat(var(--step-sequencer-step-count), 1fr);
+}
+
+.sequencer-step[data-active] {
+  background: currentColor;
+}
+
+.sequencer-playhead {
+  left: calc(var(--step-sequencer-playhead-percent) * 100%);
+}
+```
+
+## API reference
+
+### `StepSequencer.Root`
+
+`StepSequencer.Root` renders a `div`, owns the normalized boolean grid, and provides context to the other parts. It accepts standard `div` props except `defaultValue`, `onChange`, and `children`, which are replaced by the sequencer-specific API.
+
+| Prop            | Type                                | Default              | Description                                                                       |
+| --------------- | ----------------------------------- | -------------------- | --------------------------------------------------------------------------------- |
+| `value`         | `boolean[][]`                       | -                    | Controlled pattern.                                                               |
+| `defaultValue`  | `boolean[][]`                       | `[]`                 | Initial uncontrolled pattern.                                                     |
+| `trackCount`    | `number`                            | value length or `1`  | Number of tracks to render.                                                       |
+| `stepCount`     | `number`                            | value length or `16` | Number of steps per track.                                                        |
+| `disabledSteps` | `boolean[][]`                       | `[]`                 | Per-step disabled grid. Disabled cells render disabled buttons and do not toggle. |
+| `playhead`      | `number`                            | -                    | Current step index for read-only visual state.                                    |
+| `loopStart`     | `number`                            | `0`                  | First step in the loop range.                                                     |
+| `loopEnd`       | `number`                            | `stepCount - 1`      | Last step in the loop range.                                                      |
+| `orientation`   | `"horizontal" \| "vertical"`        | `"horizontal"`       | Layout hint exposed through state and data attributes.                            |
+| `disabled`      | `boolean`                           | `false`              | Prevents step interaction and marks parts with disabled state.                    |
+| `readOnly`      | `boolean`                           | `false`              | Keeps enabled steps focusable while preventing pattern changes.                   |
+| `name`          | `string`                            | -                    | Passed to `StepSequencer.HiddenInput` for native forms.                           |
+| `required`      | `boolean`                           | -                    | Passed to `StepSequencer.HiddenInput`.                                            |
+| `children`      | `ReactNode \| (state) => ReactNode` | -                    | Parts to render. Function children receive the root render state.                 |
+| `onValueChange` | `(value: boolean[][]) => void`      | -                    | Fires with the normalized pattern when a step changes.                            |
+| `render`        | `RenderProp<ElementProps, State>`   | -                    | Replaces the root element while preserving generated props and render state.      |
+
+### Parts
+
+| Part                        | Props and behavior                                                                                                                                                                               |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `StepSequencer.Tracks`      | Renders a `div`. Without children it renders one `StepSequencer.Track` for each track. Function children receive each track state and the root state.                                            |
+| `StepSequencer.Track`       | Renders a `div` for one track. Requires `track` and exposes `data-track-index`. Without children it renders `StepSequencer.Steps`.                                                               |
+| `StepSequencer.Steps`       | Renders a `div` for all steps in a track. Requires `track`. Without children it renders every `StepSequencer.Step`; function children receive each step, track, and root state.                  |
+| `StepSequencer.Step`        | Renders a `button`. Requires `track` and `step`, handles pointer and keyboard toggles, handles arrow-key focus movement, and exposes active, disabled, readonly, index, and playhead attributes. |
+| `StepSequencer.Playhead`    | Renders a read-only `span` marker and exposes `--step-sequencer-playhead-percent`.                                                                                                               |
+| `StepSequencer.HiddenInput` | Renders a hidden input whose value is the JSON-serialized normalized boolean grid.                                                                                                               |
+
+### CSS variables
+
+| Variable                            | Component                                              | Description                                      |
+| ----------------------------------- | ------------------------------------------------------ | ------------------------------------------------ |
+| `--step-sequencer-track-count`      | `Root`, `Tracks`, `Track`, `Steps`, `Step`, `Playhead` | Number of rendered tracks.                       |
+| `--step-sequencer-step-count`       | `Root`, `Tracks`, `Track`, `Steps`, `Step`, `Playhead` | Number of steps per track.                       |
+| `--step-sequencer-track-index`      | `Track`, `Steps`, `Step`                               | Zero-based track index.                          |
+| `--step-sequencer-step-index`       | `Step`                                                 | Zero-based step index.                           |
+| `--step-sequencer-step-percent`     | `Step`                                                 | Step position from `0` to `1`.                   |
+| `--step-sequencer-playhead-percent` | `Root`, `Step`, `Playhead`                             | Playhead position from `0` to `1`, when present. |

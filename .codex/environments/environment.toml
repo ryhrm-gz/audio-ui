@@ -11,6 +11,6 @@ pnpm i
 '''
 
 [[actions]]
-name = "Start dev server"
+name = "Start docs dev server"
 icon = "tool"
-command = "pnpm dev"
+command = "vpr docs"

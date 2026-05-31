@@ -15,6 +15,7 @@ import {
   createPianoState,
   createRangeSliderState,
   createSliderState,
+  createStepSequencerState,
   createToggleButtonState,
   createToggleGroupState,
   createXYPadState,
@@ -23,17 +24,18 @@ import {
 
 ## State helpers
 
-| Helper                                    | Purpose                                                                           |
-| ----------------------------------------- | --------------------------------------------------------------------------------- |
-| `createKnobState(value, options)`         | Clamps and quantizes a value, then derives percent and rotary angle               |
-| `createSliderState(value, options)`       | Clamps and quantizes a value, then derives value, origin, and range-fill percents |
-| `createRangeSliderState(value, options)`  | Normalizes `[lower, upper]`, enforces thumb distance, and derives range percents  |
-| `createXYPadState(value, options)`        | Clamps and quantizes X/Y values, then derives independent axis percents           |
-| `createFaderState(value, options)`        | Applies the fader scale law and derives value, percent, unity, and scale marks    |
-| `createLevelMeterState(value, options)`   | Clamps meter dB values, then derives per-channel fill, peak, and clipping state   |
-| `createPianoState(keys, options)`         | Resolves a piano key range and marks the currently pressed keys                   |
-| `createToggleButtonState(value, options)` | Creates serializable pressed state for toggle or momentary buttons                |
-| `createToggleGroupState(value, options)`  | Normalizes single or multiple group values and derives selected values            |
+| Helper                                     | Purpose                                                                           |
+| ------------------------------------------ | --------------------------------------------------------------------------------- |
+| `createKnobState(value, options)`          | Clamps and quantizes a value, then derives percent and rotary angle               |
+| `createSliderState(value, options)`        | Clamps and quantizes a value, then derives value, origin, and range-fill percents |
+| `createRangeSliderState(value, options)`   | Normalizes `[lower, upper]`, enforces thumb distance, and derives range percents  |
+| `createXYPadState(value, options)`         | Clamps and quantizes X/Y values, then derives independent axis percents           |
+| `createFaderState(value, options)`         | Applies the fader scale law and derives value, percent, unity, and scale marks    |
+| `createLevelMeterState(value, options)`    | Clamps meter dB values, then derives per-channel fill, peak, and clipping state   |
+| `createPianoState(keys, options)`          | Resolves a piano key range and marks the currently pressed keys                   |
+| `createStepSequencerState(value, options)` | Normalizes a boolean step grid and derives tracks, steps, playhead, and positions |
+| `createToggleButtonState(value, options)`  | Creates serializable pressed state for toggle or momentary buttons                |
+| `createToggleGroupState(value, options)`   | Normalizes single or multiple group values and derives selected values            |
 
 ## Value utilities
 
@@ -97,6 +99,17 @@ Toggle group keyboard helpers calculate focus movement while skipping disabled i
 import { getNextToggleGroupFocusedIndex } from "@ryhrm-gz/audio-ui-core";
 
 const nextIndex = getNextToggleGroupFocusedIndex(0, "ArrowRight", [{}, { disabled: true }, {}]);
+```
+
+Step sequencers use a focus-target helper because each step is a button in a grid:
+
+```ts
+import { resolveStepSequencerKeyboardTarget } from "@ryhrm-gz/audio-ui-core";
+
+const target = resolveStepSequencerKeyboardTarget({ trackIndex: 0, stepIndex: 3 }, "ArrowDown", {
+  trackCount: 4,
+  stepCount: 16,
+});
 ```
 
 ## Fader scale

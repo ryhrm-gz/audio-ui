@@ -15,6 +15,7 @@ import {
   Piano,
   RangeSlider,
   Slider,
+  StepSequencer,
   ToggleButton,
   ToggleGroup,
   XYPad,
@@ -78,6 +79,19 @@ convenient than the full pressed-key list.
 </ToggleGroup.Root>
 ```
 
+## StepSequencer root behavior
+
+`StepSequencer` renders a boolean track-by-step grid without audio playback or clocking.
+`StepSequencer.Root` accepts `value` or `defaultValue` as `boolean[][]`, normalizes it
+to `trackCount` and `stepCount`, and reports changes through `onValueChange`.
+
+```tsx
+<StepSequencer.Root defaultValue={[[true, false, false, true]]} trackCount={1} stepCount={16}>
+  <StepSequencer.Tracks />
+  <StepSequencer.Playhead />
+</StepSequencer.Root>
+```
+
 ## Render props
 
 Roots accept function children. The render state includes the normalized state from `@ryhrm-gz/audio-ui-core` plus interaction flags.
@@ -134,3 +148,9 @@ Parts accept a `render` prop for replacing the default element while preserving 
 | `--piano-white-key-count`             | `Piano.Root`, `Piano.Keys`                                                        | Number of white keys in the range            |
 | `--piano-key-start-percent`           | `Piano.Key`                                                                       | Key start position from `0` to `1`           |
 | `--piano-key-size-percent`            | `Piano.Key`                                                                       | Key size from `0` to `1`                     |
+| `--step-sequencer-track-count`        | `StepSequencer` parts                                                             | Number of rendered tracks                    |
+| `--step-sequencer-step-count`         | `StepSequencer` parts                                                             | Number of rendered steps per track           |
+| `--step-sequencer-track-index`        | `StepSequencer.Track`, `Steps`, `Step`                                            | Zero-based track index                       |
+| `--step-sequencer-step-index`         | `StepSequencer.Step`                                                              | Zero-based step index                        |
+| `--step-sequencer-step-percent`       | `StepSequencer.Step`                                                              | Step position from `0` to `1`                |
+| `--step-sequencer-playhead-percent`   | `StepSequencer.Root`, `Step`, `Playhead`                                          | Playhead position from `0` to `1`            |

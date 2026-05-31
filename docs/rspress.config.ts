@@ -89,6 +89,10 @@ export default defineConfig({
               text: "ToggleGroup",
               link: "/components/toggle-group",
             },
+            {
+              text: "StepSequencer",
+              link: "/components/step-sequencer",
+            },
           ],
         },
       ],
