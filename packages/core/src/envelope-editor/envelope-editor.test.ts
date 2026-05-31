@@ -96,6 +96,17 @@ test("converts dragged point positions back to ADSR values", () => {
   ).toEqual({ attack: 0.2, decay: 0.4, sustain: 0.5, release: 0.2 });
 });
 
+test("converts dragged point positions with fine control", () => {
+  expect(
+    getEnvelopeEditorValueFromPointPosition(
+      "sustain",
+      { x: 0.5, y: 0.25 },
+      { attack: 0.2, decay: 0.2, sustain: 0.5, release: 0.2 },
+      { maxTime: 1, stepTime: 0.01, stepLevel: 0.01, valueStepTime: 0.001, valueStepLevel: 0.001 },
+    ),
+  ).toEqual({ attack: 0.2, decay: 0.3, sustain: 0.25, release: 0.2 });
+});
+
 test("handles point keyboard movement", () => {
   expect(
     getNextEnvelopeEditorKeyboardValue(
@@ -128,6 +139,38 @@ test("handles point keyboard movement", () => {
       "Escape",
     ),
   ).toBeUndefined();
+});
+
+test("handles point keyboard movement with fine control", () => {
+  expect(
+    getNextEnvelopeEditorKeyboardValue(
+      { attack: 0.1, decay: 0.2, sustain: 0.5, release: 0.3 },
+      "attack",
+      "ArrowRight",
+      { stepTime: 0.05 },
+      { fine: true },
+    ),
+  ).toEqual({
+    attack: expect.closeTo(0.105, 10),
+    decay: expect.closeTo(0.2, 10),
+    sustain: 0.5,
+    release: expect.closeTo(0.3, 10),
+  });
+
+  expect(
+    getNextEnvelopeEditorKeyboardValue(
+      { attack: 0.1, decay: 0.2, sustain: 0.5, release: 0.3 },
+      "sustain",
+      "ArrowUp",
+      { stepLevel: 0.1 },
+      { fine: true },
+    ),
+  ).toEqual({
+    attack: 0.1,
+    decay: 0.2,
+    sustain: expect.closeTo(0.51, 10),
+    release: 0.3,
+  });
 });
 
 test("creates a complete serializable EnvelopeEditor state object", () => {

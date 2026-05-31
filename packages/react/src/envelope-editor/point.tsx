@@ -20,6 +20,12 @@ interface ActiveDrag {
   pointerId: number;
   currentValue: EnvelopeEditorValue;
   fine: boolean;
+  startValue: EnvelopeEditorValue;
+  startPointX: number;
+  startPointY: number;
+  fineStartValue?: EnvelopeEditorValue;
+  fineStartPointX?: number;
+  fineStartPointY?: number;
 }
 
 export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
@@ -46,9 +52,14 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
       return null;
     }
 
-    const getValueFromPointer = (event: PointerEvent<HTMLSpanElement>, fine: boolean) => {
+    const getValueFromPointer = (
+      clientX: number,
+      clientY: number,
+      targetRect: DOMRect,
+      fine: boolean,
+    ) => {
       const graph = context.graphRef.current;
-      const rect = graph?.getBoundingClientRect() ?? event.currentTarget.getBoundingClientRect();
+      const rect = graph?.getBoundingClientRect() ?? targetRect;
 
       return getEnvelopeEditorValueFromPointRect(
         point.id,
@@ -57,8 +68,8 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
           graphY: rect.top,
           graphWidth: rect.width,
           graphHeight: rect.height,
-          pointX: event.clientX,
-          pointY: event.clientY,
+          pointX: clientX,
+          pointY: clientY,
         },
         context.state.value,
         {
@@ -67,6 +78,74 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
           valueStepLevel: fine ? getFineStep(context.state.stepLevel) : undefined,
         },
       );
+    };
+
+    const getValueFromDrag = (event: PointerEvent<HTMLSpanElement>, activeDrag: ActiveDrag) => {
+      const fine = context.fineControl && event.shiftKey;
+
+      if (!fine) {
+        return {
+          value: getValueFromPointer(
+            event.clientX,
+            event.clientY,
+            event.currentTarget.getBoundingClientRect(),
+            false,
+          ),
+          fine: false,
+          fineStartValue: undefined,
+          fineStartPointX: undefined,
+          fineStartPointY: undefined,
+        };
+      }
+
+      if (
+        activeDrag.fineStartValue === undefined ||
+        activeDrag.fineStartPointX === undefined ||
+        activeDrag.fineStartPointY === undefined
+      ) {
+        return {
+          value: activeDrag.currentValue,
+          fine: true,
+          fineStartValue: activeDrag.currentValue,
+          fineStartPointX: event.clientX,
+          fineStartPointY: event.clientY,
+        };
+      }
+
+      const graph = context.graphRef.current;
+      const rect = graph?.getBoundingClientRect() ?? event.currentTarget.getBoundingClientRect();
+      const deltaX = event.clientX - activeDrag.fineStartPointX;
+      const deltaY = event.clientY - activeDrag.fineStartPointY;
+      const scaledDeltaX = deltaX * 0.1;
+      const scaledDeltaY = deltaY * 0.1;
+      const pointX = activeDrag.fineStartPointX + scaledDeltaX;
+      const pointY = activeDrag.fineStartPointY + scaledDeltaY;
+
+      const nextValue = getEnvelopeEditorValueFromPointRect(
+        point.id,
+        {
+          graphX: rect.left,
+          graphY: rect.top,
+          graphWidth: rect.width,
+          graphHeight: rect.height,
+          pointX,
+          pointY,
+        },
+        activeDrag.fineStartValue,
+        {
+          ...context.state,
+          valueStepTime: getFineStep(context.state.stepTime),
+          valueStepLevel: getFineStep(context.state.stepLevel),
+        },
+      );
+
+      return {
+        value: nextValue,
+        fine: true,
+        fineStartValue: activeDrag.fineStartValue,
+        fineStartPointX: activeDrag.fineStartPointX,
+        fineStartPointY: activeDrag.fineStartPointY,
+      };
     };
 
     const handleKeyDown = (event: KeyboardEvent<HTMLSpanElement>) => {
@@ -104,11 +183,22 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
       event.preventDefault();
       event.currentTarget.setPointerCapture(event.pointerId);
       const fine = context.fineControl && event.shiftKey;
-      const nextValue = getValueFromPointer(event, fine);
+      const nextValue = getValueFromPointer(
+        event.clientX,
+        event.clientY,
+        event.currentTarget.getBoundingClientRect(),
+        fine,
+      );
       activeDragRef.current = {
         pointerId: event.pointerId,
         currentValue: nextValue,
         fine,
+        startValue: context.state.value,
+        startPointX: event.clientX,
+        startPointY: event.clientY,
+        fineStartValue: fine ? nextValue : undefined,
+        fineStartPointX: fine ? event.clientX : undefined,
+        fineStartPointY: fine ? event.clientY : undefined,
       };
       context.setDraggingPoint(point.id);
       context.setValue(nextValue, { fine, activePoint: point.id });
@@ -129,14 +219,16 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
         return;
       }
 
-      const fine = context.fineControl && event.shiftKey;
-      const nextValue = getValueFromPointer(event, fine);
+      const dragValue = getValueFromDrag(event, activeDrag);
       activeDragRef.current = {
         ...activeDrag,
-        currentValue: nextValue,
-        fine,
+        currentValue: dragValue.value,
+        fine: dragValue.fine,
+        fineStartValue: dragValue.fineStartValue,
+        fineStartPointX: dragValue.fineStartPointX,
+        fineStartPointY: dragValue.fineStartPointY,
       };
-      context.setValue(nextValue, { fine, activePoint: point.id });
+      context.setValue(dragValue.value, { fine: dragValue.fine, activePoint: point.id });
     };
 
     const handlePointerUp = (event: PointerEvent<HTMLSpanElement>) => {
