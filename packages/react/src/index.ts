@@ -47,6 +47,17 @@ export {
 } from "./slider/index.ts";
 export { Slider } from "./slider/index.ts";
 export {
+  HiddenInput as ToggleButtonHiddenInput,
+  Root as ToggleButtonRoot,
+} from "./toggle-button/index.ts";
+export { ToggleButton } from "./toggle-button/index.ts";
+export {
+  HiddenInput as ToggleGroupHiddenInput,
+  Item as ToggleGroupItem,
+  Root as ToggleGroupRoot,
+} from "./toggle-group/index.ts";
+export { ToggleGroup } from "./toggle-group/index.ts";
+export {
   Area as XYPadArea,
   HiddenInput as XYPadHiddenInput,
   Root as XYPadRoot,
@@ -96,6 +107,12 @@ export type {
   SliderTrackProps,
   SliderValueProps,
 } from "./slider/index.ts";
+export type { ToggleButtonHiddenInputProps, ToggleButtonRootProps } from "./toggle-button/index.ts";
+export type {
+  ToggleGroupHiddenInputProps,
+  ToggleGroupItemProps,
+  ToggleGroupRootProps,
+} from "./toggle-group/index.ts";
 export type {
   XYPadAreaProps,
   XYPadHiddenInputProps,

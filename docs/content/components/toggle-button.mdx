@@ -1,0 +1,97 @@
+---
+title: ToggleButton
+description: Build controlled, uncontrolled, and momentary pressed buttons for mute, solo, bypass, and monitor controls.
+---
+
+import { ToggleButtonDemo } from "../_components/ToggleButtonDemo.tsx";
+
+# ToggleButton
+
+`ToggleButton` renders a single pressable button with `aria-pressed` state. Use it for mute, solo, record arm, monitor, bypass, oscillator enable, sync, loop, and metronome controls.
+
+<ToggleButtonDemo />
+
+## Basic example
+
+```tsx
+import { ToggleButton } from "@ryhrm-gz/audio-ui-react";
+
+export function MuteButton() {
+  return (
+    <ToggleButton.Root name="mute" value="on">
+      Mute
+      <ToggleButton.HiddenInput />
+    </ToggleButton.Root>
+  );
+}
+```
+
+## Controlled state
+
+```tsx
+const [muted, setMuted] = useState(false);
+
+<ToggleButton.Root pressed={muted} onPressedChange={setMuted} name="mute" value="on">
+  Mute
+  <ToggleButton.HiddenInput />
+</ToggleButton.Root>;
+```
+
+## Uncontrolled state
+
+```tsx
+<ToggleButton.Root defaultPressed name="bypass" value="on">
+  Bypass
+  <ToggleButton.HiddenInput />
+</ToggleButton.Root>
+```
+
+## Momentary mode
+
+Use `mode="momentary"` when the button should be pressed only while the pointer, Space key, or Enter key is held down.
+
+```tsx
+<ToggleButton.Root mode="momentary" onPressedChange={(pressed) => preview.setAudible(pressed)}>
+  Preview
+</ToggleButton.Root>
+```
+
+## Styling hooks
+
+`ToggleButton.Root` exposes `data-audio-ui="toggle-button"`, `data-part="root"`, `data-mode`, `data-state="on" | "off"`, `data-pressed`, and `data-disabled`. `ToggleButton.HiddenInput` exposes `data-part="hidden-input"` when it renders.
+
+```css
+.toggle-button[data-state="on"] {
+  background: var(--accent);
+}
+
+.toggle-button[data-disabled] {
+  opacity: 0.5;
+}
+```
+
+## API reference
+
+### `ToggleButton.Root`
+
+`ToggleButton.Root` renders a `button`, owns pressed state, and provides context to `ToggleButton.HiddenInput`. It accepts standard button props except `defaultValue`, `onChange`, `value`, and `children`, which are replaced by the toggle-specific API.
+
+| Prop              | Type                                | Default    | Description                                                                 |
+| ----------------- | ----------------------------------- | ---------- | --------------------------------------------------------------------------- |
+| `pressed`         | `boolean`                           | -          | Controlled pressed state. Pass with `onPressedChange`.                      |
+| `defaultPressed`  | `boolean`                           | `false`    | Initial uncontrolled pressed state.                                         |
+| `mode`            | `"toggle" \| "momentary"`           | `"toggle"` | `toggle` flips on click. `momentary` stays pressed only while held.         |
+| `disabled`        | `boolean`                           | `false`    | Prevents pointer and keyboard interaction and adds disabled state metadata. |
+| `name`            | `string`                            | -          | Default form field name consumed by `ToggleButton.HiddenInput`.             |
+| `value`           | `string`                            | `"on"`     | Default submitted value consumed by `ToggleButton.HiddenInput`.             |
+| `required`        | `boolean`                           | -          | Default required flag consumed by `ToggleButton.HiddenInput`.               |
+| `children`        | `ReactNode \| (state) => ReactNode` | -          | Content to render. Function children receive the render state.              |
+| `onPressedChange` | `(pressed: boolean) => void`        | -          | Fires when an interaction produces a new pressed state.                     |
+| `render`          | `RenderProp<ElementProps, State>`   | -          | Replaces the root element while preserving generated props and state.       |
+
+### Parts
+
+| Part                       | Props and behavior                                                                                                                                                                   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ToggleButton.Root`        | Renders a `button` with `aria-pressed`, generated data attributes, click handling for toggle mode, and pointer/keyboard press-release handling for momentary mode.                   |
+| `ToggleButton.HiddenInput` | Renders `<input type="hidden">` only when pressed. It accepts input props except `children`, `type`, and `value`; `name`, `value`, `required`, and `disabled` default to root props. |

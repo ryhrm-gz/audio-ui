@@ -81,6 +81,14 @@ export default defineConfig({
               text: "Piano",
               link: "/components/piano",
             },
+            {
+              text: "ToggleButton",
+              link: "/components/toggle-button",
+            },
+            {
+              text: "ToggleGroup",
+              link: "/components/toggle-group",
+            },
           ],
         },
       ],
