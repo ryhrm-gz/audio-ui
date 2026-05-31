@@ -8,7 +8,15 @@ description: Reference for Audio UI React exports, compound component namespaces
 Import compound component namespaces from `@ryhrm-gz/audio-ui-react`:
 
 ```tsx
-import { Fader, Knob, LevelMeter, Piano, Slider, XYPad } from "@ryhrm-gz/audio-ui-react";
+import {
+  EnvelopeEditor,
+  Fader,
+  Knob,
+  LevelMeter,
+  Piano,
+  Slider,
+  XYPad,
+} from "@ryhrm-gz/audio-ui-react";
 ```
 
 Named part exports are also available for tree-shaking or local naming:
@@ -87,6 +95,17 @@ Parts accept a `render` prop for replacing the default element while preserving 
 | `--xypad-y`                           | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                     | Current Y-axis value                   |
 | `--xypad-x-percent`                   | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                     | Normalized X position from `0` to `1`  |
 | `--xypad-y-percent`                   | `XYPad.Root`, `XYPad.Area`, `XYPad.Thumb`                     | Normalized Y position from `0` to `1`  |
+| `--envelope-attack`                   | `EnvelopeEditor.Root`, `EnvelopeEditor.Graph`                 | Normalized attack time                 |
+| `--envelope-decay`                    | `EnvelopeEditor.Root`, `EnvelopeEditor.Graph`                 | Normalized decay time                  |
+| `--envelope-sustain`                  | `EnvelopeEditor.Root`, `EnvelopeEditor.Graph`                 | Normalized sustain level               |
+| `--envelope-release`                  | `EnvelopeEditor.Root`, `EnvelopeEditor.Graph`                 | Normalized release time                |
+| `--envelope-total-duration`           | `EnvelopeEditor.Root`, `EnvelopeEditor.Graph`                 | Attack, decay, and release duration    |
+| `--envelope-point-x`                  | `EnvelopeEditor.Point`                                        | Point X position from `0` to `1`       |
+| `--envelope-point-y`                  | `EnvelopeEditor.Point`                                        | Point Y position from `0` to `1`       |
+| `--envelope-segment-start-x`          | `EnvelopeEditor.Segment`                                      | Segment start X from `0` to `1`        |
+| `--envelope-segment-start-y`          | `EnvelopeEditor.Segment`                                      | Segment start Y from `0` to `1`        |
+| `--envelope-segment-end-x`            | `EnvelopeEditor.Segment`                                      | Segment end X from `0` to `1`          |
+| `--envelope-segment-end-y`            | `EnvelopeEditor.Segment`                                      | Segment end Y from `0` to `1`          |
 | `--fader-percent`                     | `Fader.Track`, `Fader.Range`, `Fader.Thumb`                   | Fader-law position from `0` to `1`     |
 | `--fader-unity-percent`               | `Fader.Track`                                                 | Position of the unity mark             |
 | `--fader-mark-percent`                | `Fader.Scale` marks                                           | Position for each scale mark           |
