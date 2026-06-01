@@ -21,6 +21,7 @@ export const defaultLevelMeterOptions = {
   max: 6,
   clip: 0,
   channels: 1,
+  orientation: "vertical",
   scale: defaultLevelMeterScale,
   segments: defaultLevelMeterSegments,
 } satisfies Required<LevelMeterOptions>;
@@ -29,6 +30,7 @@ export function resolveLevelMeterOptions(options: LevelMeterOptions = {}) {
   const [min, max] = resolveRange(options.min, options.max);
   const clip = clamp(resolveFinite(options.clip, defaultLevelMeterOptions.clip), min, max);
   const channels = resolveChannels(options.channels);
+  const orientation = resolveOrientation(options.orientation);
   const scale = resolveLevelMeterScale(options.scale, { min, max });
   const segments = resolveLevelMeterSegments(options.segments, { min, max });
 
@@ -37,6 +39,7 @@ export function resolveLevelMeterOptions(options: LevelMeterOptions = {}) {
     max,
     clip,
     channels,
+    orientation,
     scale,
     segments,
   };
@@ -107,6 +110,10 @@ function resolveChannels(channels: number | undefined): number {
   }
 
   return Math.max(1, Math.round(channels));
+}
+
+function resolveOrientation(orientation: LevelMeterOptions["orientation"]) {
+  return orientation === "horizontal" ? orientation : defaultLevelMeterOptions.orientation;
 }
 
 function resolveFinite(value: number | undefined, fallback: number): number {

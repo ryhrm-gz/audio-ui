@@ -50,6 +50,7 @@ export const Segments = forwardRef<HTMLSpanElement, LevelMeterSegmentsProps>(
       "aria-hidden": true,
       "data-part": "segments",
       "data-channel": channel,
+      "data-orientation": context.state.orientation,
       "data-disabled": context.disabled ? "" : undefined,
     });
 

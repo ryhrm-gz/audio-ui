@@ -12,6 +12,7 @@ export const Root = forwardRef<HTMLDivElement, LevelMeterRootProps>(function Roo
     max,
     clip,
     channels,
+    orientation,
     scale,
     segments,
     disabled = false,
@@ -21,8 +22,18 @@ export const Root = forwardRef<HTMLDivElement, LevelMeterRootProps>(function Roo
     ...elementProps
   } = props;
   const state = useMemo(
-    () => createLevelMeterState(value, { min, max, clip, channels, peak, scale, segments }),
-    [value, min, max, clip, channels, peak, scale, segments],
+    () =>
+      createLevelMeterState(value, {
+        min,
+        max,
+        clip,
+        channels,
+        peak,
+        orientation,
+        scale,
+        segments,
+      }),
+    [value, min, max, clip, channels, peak, orientation, scale, segments],
   );
   const contextValue = useMemo<LevelMeterContextValue>(
     () => ({
@@ -41,7 +52,7 @@ export const Root = forwardRef<HTMLDivElement, LevelMeterRootProps>(function Roo
     "aria-valuenow": state.maxValue,
     "aria-valuetext": `${state.maxValue.toFixed(1)} dB`,
     "data-audio-ui": "level-meter",
-    "data-orientation": "vertical",
+    "data-orientation": state.orientation,
     "data-clipped": state.clipped ? "" : undefined,
     "data-disabled": disabled ? "" : undefined,
     style: {

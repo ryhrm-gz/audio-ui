@@ -17,6 +17,7 @@ export const Peak = forwardRef<HTMLSpanElement, LevelMeterPeakProps>(function Pe
     "aria-hidden": true,
     "data-part": "peak",
     "data-channel": channel,
+    "data-orientation": context.state.orientation,
     "data-clipped": peakState.clipped ? "" : undefined,
     "data-disabled": context.disabled ? "" : undefined,
     style: {

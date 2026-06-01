@@ -1,4 +1,5 @@
 export type LevelMeterValue = number | readonly number[];
+export type LevelMeterOrientation = "horizontal" | "vertical";
 
 export interface LevelMeterScalePoint {
   value: number;
@@ -24,6 +25,7 @@ export interface LevelMeterOptions {
   max?: number;
   clip?: number;
   channels?: number;
+  orientation?: LevelMeterOrientation;
   scale?: readonly LevelMeterScalePoint[];
   segments?: readonly LevelMeterSegment[];
 }
@@ -44,6 +46,7 @@ export interface LevelMeterState {
   peakValue: number[];
   maxValue: number;
   maxPercent: number;
+  orientation: LevelMeterOrientation;
   clipped: boolean;
   scale: LevelMeterScalePoint[];
   segments: LevelMeterSegmentState[];

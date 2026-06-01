@@ -25,6 +25,7 @@ test("creates a complete serializable level meter state object", () => {
     min: -60,
     max: 6,
     clip: 0,
+    orientation: "vertical",
     peakValue: [-6, 4, -60],
     maxValue: 2,
     clipped: true,
@@ -51,6 +52,12 @@ test("creates a complete serializable level meter state object", () => {
     endPercent: expect.any(Number),
     sizePercent: expect.any(Number),
   });
+});
+
+test("supports horizontal level meter orientation", () => {
+  const state = createLevelMeterState(-12, { orientation: "horizontal" });
+
+  expect(state.orientation).toBe("horizontal");
 });
 
 test("resolves custom level meter segments", () => {

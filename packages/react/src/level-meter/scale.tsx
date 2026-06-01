@@ -29,7 +29,7 @@ export const Scale = forwardRef<HTMLSpanElement, LevelMeterScaleProps>(function 
     ref,
     "aria-hidden": true,
     "data-part": "scale",
-    "data-orientation": "vertical",
+    "data-orientation": context.state.orientation,
     "data-disabled": context.disabled ? "" : undefined,
   });
 

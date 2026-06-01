@@ -7,7 +7,7 @@ import { LevelMeterDemo } from "../_components/LevelMeterDemo.tsx";
 
 # LevelMeter
 
-`LevelMeter` is a read-only dB meter for console and channel-strip interfaces. It accepts one or more dBFS values, exposes per-channel fill and peak CSS variables, and marks clipping at the configured threshold.
+`LevelMeter` is a read-only dB meter for console and channel-strip interfaces. It accepts one or more dBFS values, supports vertical and horizontal layouts, exposes per-channel fill and peak CSS variables, and marks clipping at the configured threshold.
 
 <LevelMeterDemo />
 
@@ -54,7 +54,7 @@ const db = getLevelMeterDbFromAmplitude(rmsAmplitude);
 
 ## Styling hooks
 
-Level meter parts expose per-channel CSS variables for vertical fills and peak markers.
+Level meter parts expose per-channel CSS variables for vertical or horizontal fills and peak markers.
 
 ```css
 .meter-segments [data-segment="warning"] {
@@ -69,6 +69,15 @@ Level meter parts expose per-channel CSS variables for vertical fills and peak m
 .meter-peak {
   bottom: calc(var(--level-meter-peak-percent) * 100%);
 }
+
+.meter-track[data-orientation="horizontal"] [data-part="segment"] {
+  left: calc(var(--level-meter-segment-start-percent) * 100%);
+  width: calc(var(--level-meter-segment-size-percent) * 100%);
+}
+
+.meter-bar[data-orientation="horizontal"] {
+  width: calc(var(--level-meter-percent) * 100%);
+}
 ```
 
 ## API reference
@@ -77,19 +86,20 @@ Level meter parts expose per-channel CSS variables for vertical fills and peak m
 
 `LevelMeter.Root` renders a `div` with `role="meter"` and provides read-only meter state to the other parts.
 
-| Prop       | Type                                | Default | Description                                                                        |
-| ---------- | ----------------------------------- | ------- | ---------------------------------------------------------------------------------- |
-| `value`    | `number \| readonly number[]`       | `min`   | Current dB value or per-channel dB values.                                         |
-| `peak`     | `number \| readonly number[]`       | `value` | Peak marker value or per-channel peak values.                                      |
-| `min`      | `number`                            | `-60`   | Lower dB bound for the meter.                                                      |
-| `max`      | `number`                            | `6`     | Upper dB bound for the meter.                                                      |
-| `clip`     | `number`                            | `0`     | Threshold that adds `data-clipped` to clipped channels and the root.               |
-| `channels` | `number`                            | `1`     | Number of channel states to expose. Missing values are filled with `min`.          |
-| `scale`    | `readonly LevelMeterScalePoint[]`   | dBFS    | Scale marks. Each point is `{ value, percent, label? }`.                           |
-| `segments` | `readonly LevelMeterSegment[]`      | dBFS    | Level bands for styling meter ranges. Each segment is `{ from, to, id?, label? }`. |
-| `disabled` | `boolean`                           | `false` | Adds disabled state attributes for inactive or unavailable meters.                 |
-| `children` | `ReactNode \| (state) => ReactNode` | -       | Parts to render. Function children receive the full level meter state.             |
-| `render`   | `RenderProp<ElementProps, State>`   | -       | Replaces the root element while preserving generated props and render state.       |
+| Prop          | Type                                | Default      | Description                                                                        |
+| ------------- | ----------------------------------- | ------------ | ---------------------------------------------------------------------------------- |
+| `value`       | `number \| readonly number[]`       | `min`        | Current dB value or per-channel dB values.                                         |
+| `peak`        | `number \| readonly number[]`       | `value`      | Peak marker value or per-channel peak values.                                      |
+| `min`         | `number`                            | `-60`        | Lower dB bound for the meter.                                                      |
+| `max`         | `number`                            | `6`          | Upper dB bound for the meter.                                                      |
+| `clip`        | `number`                            | `0`          | Threshold that adds `data-clipped` to clipped channels and the root.               |
+| `channels`    | `number`                            | `1`          | Number of channel states to expose. Missing values are filled with `min`.          |
+| `orientation` | `"horizontal" \| "vertical"`        | `"vertical"` | Visual orientation exposed through `data-orientation`.                             |
+| `scale`       | `readonly LevelMeterScalePoint[]`   | dBFS         | Scale marks. Each point is `{ value, percent, label? }`.                           |
+| `segments`    | `readonly LevelMeterSegment[]`      | dBFS         | Level bands for styling meter ranges. Each segment is `{ from, to, id?, label? }`. |
+| `disabled`    | `boolean`                           | `false`      | Adds disabled state attributes for inactive or unavailable meters.                 |
+| `children`    | `ReactNode \| (state) => ReactNode` | -            | Parts to render. Function children receive the full level meter state.             |
+| `render`      | `RenderProp<ElementProps, State>`   | -            | Replaces the root element while preserving generated props and render state.       |
 
 ### Parts
 

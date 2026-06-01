@@ -17,6 +17,7 @@ export const Bar = forwardRef<HTMLSpanElement, LevelMeterBarProps>(function Bar(
     "aria-hidden": true,
     "data-part": "bar",
     "data-channel": channel,
+    "data-orientation": context.state.orientation,
     "data-clipped": channelState.clipped ? "" : undefined,
     "data-disabled": context.disabled ? "" : undefined,
     style: {

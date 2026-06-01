@@ -22,6 +22,7 @@ describe("LevelMeter", () => {
 
     expect(markup).toContain('data-audio-ui="level-meter"');
     expect(markup).toContain('role="meter"');
+    expect(markup).toContain('data-orientation="vertical"');
     expect(markup).toContain('aria-valuemin="-60"');
     expect(markup).toContain('aria-valuemax="6"');
     expect(markup).toContain('aria-valuenow="-3"');
@@ -73,6 +74,23 @@ describe("LevelMeter", () => {
 
     expect(markup).toContain("floor");
     expect(markup).toContain("clip");
+  });
+
+  test("supports horizontal orientation", () => {
+    const markup = renderToStaticMarkup(
+      <LevelMeter.Root aria-label="Output level" orientation="horizontal" value={-12}>
+        <LevelMeter.Scale />
+        <LevelMeter.Track>
+          <LevelMeter.Bar />
+          <LevelMeter.Peak />
+        </LevelMeter.Track>
+      </LevelMeter.Root>,
+    );
+
+    expect(markup).toContain('data-audio-ui="level-meter"');
+    expect(markup).toContain('data-orientation="horizontal"');
+    expect(markup).toContain('data-part="scale"');
+    expect(markup).toContain('data-part="track"');
   });
 
   test("supports custom segments", () => {

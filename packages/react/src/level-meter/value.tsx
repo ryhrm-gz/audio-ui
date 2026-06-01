@@ -23,6 +23,7 @@ export const Value = forwardRef<HTMLSpanElement, LevelMeterValueProps>(function 
     ref,
     "data-part": "value",
     "data-channel": channel,
+    "data-orientation": context.state.orientation,
     "data-clipped": value >= context.state.clip ? "" : undefined,
     "data-disabled": context.disabled ? "" : undefined,
   });

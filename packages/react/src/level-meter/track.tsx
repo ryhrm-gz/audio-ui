@@ -15,7 +15,7 @@ export const Track = forwardRef<HTMLDivElement, LevelMeterTrackProps>(function T
     ref,
     "aria-hidden": true,
     "data-part": "track",
-    "data-orientation": "vertical",
+    "data-orientation": context.state.orientation,
     "data-clipped": context.state.clipped ? "" : undefined,
     "data-disabled": context.disabled ? "" : undefined,
     style: {
