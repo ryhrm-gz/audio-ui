@@ -1,5 +1,7 @@
 import type { RangeOptions } from "../shared/range.ts";
 
+export type FaderOrientation = "horizontal" | "vertical";
+
 export interface FaderRange extends RangeOptions {}
 
 export interface FaderScalePoint {
@@ -9,6 +11,7 @@ export interface FaderScalePoint {
 }
 
 export interface FaderOptions extends FaderRange {
+  orientation?: FaderOrientation;
   inverted?: boolean;
   unity?: number;
   scale?: readonly FaderScalePoint[];
@@ -39,6 +42,7 @@ export interface FaderState {
   max: number;
   step: number;
   percent: number;
+  orientation: FaderOrientation;
   inverted: boolean;
   unity: number;
   unityPercent: number;

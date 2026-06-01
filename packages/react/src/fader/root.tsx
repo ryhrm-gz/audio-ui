@@ -11,6 +11,7 @@ export const Root = forwardRef<HTMLDivElement, FaderRootProps>(function Root(pro
     min,
     max,
     step,
+    orientation,
     inverted,
     unity,
     scale,
@@ -35,8 +36,18 @@ export const Root = forwardRef<HTMLDivElement, FaderRootProps>(function Root(pro
   const [dragging, setDragging] = useState(false);
   const rawValue = isControlled ? value : internalValue;
   const state = useMemo(
-    () => createFaderState(rawValue, { min, max, step, inverted, unity, scale, valueStep }),
-    [rawValue, min, max, step, inverted, unity, scale, valueStep],
+    () =>
+      createFaderState(rawValue, {
+        min,
+        max,
+        step,
+        orientation,
+        inverted,
+        unity,
+        scale,
+        valueStep,
+      }),
+    [rawValue, min, max, step, orientation, inverted, unity, scale, valueStep],
   );
   const valueId = useId();
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -48,13 +59,14 @@ export const Root = forwardRef<HTMLDivElement, FaderRootProps>(function Root(pro
         min,
         max,
         step,
+        orientation,
         inverted,
         unity,
         scale,
         valueStep: nextValueStep,
       });
     },
-    [fineControl, inverted, max, min, scale, state.step, step, unity],
+    [fineControl, inverted, max, min, orientation, scale, state.step, step, unity],
   );
 
   const setValue = useCallback(
@@ -127,7 +139,7 @@ export const Root = forwardRef<HTMLDivElement, FaderRootProps>(function Root(pro
   const rootProps = mergeProps(elementProps, {
     ref,
     "data-audio-ui": "fader",
-    "data-orientation": "vertical",
+    "data-orientation": state.orientation,
     "data-inverted": state.inverted ? "" : undefined,
     "data-unity": state.value === state.unity ? "" : undefined,
     "data-disabled": disabled ? "" : undefined,

@@ -228,7 +228,7 @@ export const Track = forwardRef<HTMLDivElement, FaderTrackProps>(function Track(
   const trackProps = mergeProps(elementProps, {
     ref: composedRef,
     "data-part": "track",
-    "data-orientation": "vertical",
+    "data-orientation": context.state.orientation,
     "data-inverted": context.state.inverted ? "" : undefined,
     "data-unity": context.state.value === context.state.unity ? "" : undefined,
     "data-disabled": disabled ? "" : undefined,

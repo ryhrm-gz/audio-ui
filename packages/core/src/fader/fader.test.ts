@@ -42,6 +42,28 @@ test("maps fader pointer positions through the fader scale", () => {
       { inverted: true, step: 0.5 },
     ),
   ).toBe(-31);
+
+  expect(
+    getFaderValueFromPoint(
+      {
+        trackX: 100,
+        trackY: 20,
+        trackWidth: 200,
+        trackHeight: 40,
+        pointX: 150,
+        pointY: 40,
+      },
+      {
+        orientation: "horizontal",
+        min: 0,
+        max: 100,
+        scale: [
+          { value: 0, percent: 0 },
+          { value: 100, percent: 1 },
+        ],
+      },
+    ),
+  ).toBe(25);
 });
 
 test("handles fader keyboard step commands", () => {
@@ -77,6 +99,33 @@ test("maps fine fader drag movement from the drag start", () => {
       { fine: true },
     ),
   ).toBe(55);
+
+  expect(
+    getFaderValueFromLinearDrag(
+      {
+        trackX: 100,
+        trackY: 20,
+        trackWidth: 200,
+        trackHeight: 40,
+        startValue: 50,
+        startPointX: 200,
+        startPointY: 40,
+        pointX: 300,
+        pointY: 40,
+      },
+      {
+        orientation: "horizontal",
+        min: 0,
+        max: 100,
+        step: 1,
+        scale: [
+          { value: 0, percent: 0 },
+          { value: 100, percent: 1 },
+        ],
+      },
+      { fine: true },
+    ),
+  ).toBe(55);
 });
 
 test("creates a complete serializable fader state object", () => {
@@ -87,6 +136,7 @@ test("creates a complete serializable fader state object", () => {
     min: -60,
     max: 12,
     step: 0.5,
+    orientation: "vertical",
     inverted: false,
     unity: 0,
     unityPercent: 0.78,

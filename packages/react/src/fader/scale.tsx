@@ -19,7 +19,7 @@ export const Scale = forwardRef<HTMLSpanElement, FaderScaleProps>(function Scale
     ref,
     "aria-hidden": true,
     "data-part": "scale",
-    "data-orientation": "vertical",
+    "data-orientation": context.state.orientation,
     "data-inverted": context.state.inverted ? "" : undefined,
     "data-disabled": context.disabled ? "" : undefined,
     "data-readonly": context.readOnly ? "" : undefined,

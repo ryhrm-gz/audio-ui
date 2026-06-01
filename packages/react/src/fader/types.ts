@@ -13,7 +13,7 @@ export interface FaderRootProps
   extends
     Omit<ComponentPropsWithoutRef<"div">, "defaultValue" | "onChange" | "children">,
     FaderRangeOptions,
-    Pick<FaderOptions, "inverted" | "scale" | "unity"> {
+    Pick<FaderOptions, "inverted" | "orientation" | "scale" | "unity"> {
   value?: number;
   defaultValue?: number;
   disabled?: boolean;

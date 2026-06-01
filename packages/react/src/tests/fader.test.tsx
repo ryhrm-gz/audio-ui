@@ -138,6 +138,22 @@ describe("Fader", () => {
     expect(markup).toContain(">0.78:1</span>");
   });
 
+  test("supports horizontal orientation", () => {
+    const markup = renderToStaticMarkup(
+      <Fader.Root defaultValue={0} orientation="horizontal">
+        <Fader.Scale />
+        <Fader.Track>
+          <Fader.Range />
+          <Fader.Thumb aria-label="Level" />
+        </Fader.Track>
+      </Fader.Root>,
+    );
+
+    expect(markup).toContain('data-audio-ui="fader"');
+    expect(markup).toContain('data-orientation="horizontal"');
+    expect(markup).toContain('aria-orientation="horizontal"');
+  });
+
   test("supports custom fader scale labels", () => {
     const markup = renderToStaticMarkup(
       <Fader.Root

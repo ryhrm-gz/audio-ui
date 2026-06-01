@@ -53,11 +53,11 @@ export function ChannelFader() {
 }
 ```
 
-Fader is a vertical dB control for console-style channel strips. It defaults to
-`-60..+12 dB`, `0.1 dB` steps, a `0 dB` unity point, and a non-linear scale so the
-throw has more usable resolution around common mix positions. Use `Fader.Scale`
-to render the dB markings, or pass a custom `scale` array to define a different
-fader law.
+Fader is a dB control for console-style channel strips. It defaults to vertical
+orientation, `-60..+12 dB`, `0.1 dB` steps, a `0 dB` unity point, and a non-linear
+scale so the throw has more usable resolution around common mix positions. Pass
+`orientation="horizontal"` for a left-to-right fader. Use `Fader.Scale` to render
+the dB markings, or pass a custom `scale` array to define a different fader law.
 
 The React package is headless: it ships behavior, accessibility attributes, data attributes,
 and CSS variables such as `--knob-angle` and `--fader-percent`, but no visual styling.

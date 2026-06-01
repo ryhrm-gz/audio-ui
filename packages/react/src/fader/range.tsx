@@ -15,7 +15,7 @@ export const Range = forwardRef<HTMLSpanElement, FaderRangeProps>(function Range
     ref,
     "aria-hidden": true,
     "data-part": "range",
-    "data-orientation": "vertical",
+    "data-orientation": context.state.orientation,
     "data-inverted": context.state.inverted ? "" : undefined,
     "data-unity": context.state.value === context.state.unity ? "" : undefined,
     "data-disabled": context.disabled ? "" : undefined,

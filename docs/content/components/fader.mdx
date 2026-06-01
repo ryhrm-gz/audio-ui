@@ -7,7 +7,7 @@ import { FaderDemo } from "../_components/FaderDemo.tsx";
 
 # Fader
 
-`Fader` is a vertical dB control for console-style channel strips. It defaults to `-60..+12 dB`, `0.1 dB` steps, a `0 dB` unity point, and a non-linear scale with more usable resolution around common mix positions.
+`Fader` is a dB control for console-style channel strips. It defaults to vertical orientation, `-60..+12 dB`, `0.1 dB` steps, a `0 dB` unity point, and a non-linear scale with more usable resolution around common mix positions.
 
 <FaderDemo />
 
@@ -53,6 +53,20 @@ export function ChannelFader() {
 </Fader.Root>
 ```
 
+## Horizontal faders
+
+Pass `orientation="horizontal"` to map pointer movement from left to right while preserving the same fader law.
+
+```tsx
+<Fader.Root defaultValue={-6} orientation="horizontal">
+  <Fader.Scale />
+  <Fader.Track>
+    <Fader.Range />
+    <Fader.Thumb aria-label="Channel gain" />
+  </Fader.Track>
+</Fader.Root>
+```
+
 ## Styling hooks
 
 Fader parts expose `--fader-percent`, `--fader-unity-percent`, and `--fader-mark-percent`.
@@ -64,6 +78,16 @@ Fader parts expose `--fader-percent`, `--fader-unity-percent`, and `--fader-mark
 
 .fader-scale [data-part="scale-mark"] {
   top: calc((1 - var(--fader-mark-percent)) * 100%);
+}
+
+.fader-thumb[data-orientation="horizontal"] {
+  left: calc(var(--fader-percent) * 100%);
+  top: 50%;
+}
+
+.fader-scale[data-orientation="horizontal"] [data-part="scale-mark"] {
+  left: calc(var(--fader-mark-percent) * 100%);
+  top: auto;
 }
 ```
 
@@ -80,6 +104,7 @@ Fader parts expose `--fader-percent`, `--fader-unity-percent`, and `--fader-mark
 | `min`                | `number`                               | `-60`            | Lower dB bound for the fader. Values and scale points are clamped into the resolved range.                                                                     |
 | `max`                | `number`                               | `12`             | Upper dB bound for the fader. If `min` is greater than `max`, the core range resolver normalizes the order.                                                    |
 | `step`               | `number`                               | `0.1`            | Value increment for pointer and keyboard changes. Non-positive or invalid steps fall back to the default.                                                      |
+| `orientation`        | `"horizontal" \| "vertical"`           | `"vertical"`     | Controls whether pointer movement maps left-to-right or bottom-to-top.                                                                                         |
 | `unity`              | `number`                               | `0`              | Unity gain value. The state exposes `unityPercent`, and the root adds `data-unity` when the current value equals unity.                                        |
 | `scale`              | `readonly FaderScalePoint[]`           | console dB curve | Maps values to physical throw positions. Each point is `{ value, percent, label? }`, where `percent` is clamped from `0` to `1`; missing labels are formatted. |
 | `inverted`           | `boolean`                              | `false`          | Reverses the value-to-position mapping and adds `data-inverted`.                                                                                               |
@@ -100,7 +125,7 @@ Fader parts expose `--fader-percent`, `--fader-unity-percent`, and `--fader-mark
 | Part                | Props and behavior                                                                                                                                                                                                                                                                             |
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Fader.Scale`       | Renders a `span` containing marks from the resolved fader scale. It accepts standard `span` props except `children`, `defaultValue`, and `onChange`, plus `children` and `render`. Function children receive `(mark, state)` for custom mark labels. Each mark exposes `--fader-mark-percent`. |
-| `Fader.Track`       | Renders a `div` and accepts standard `div` props plus `render`. It owns pointer drag handling, optional track click handling, and double-click reset. It exposes `data-part="track"`, vertical orientation state, inverted/dragging state, `--fader-percent`, and `--fader-unity-percent`.     |
+| `Fader.Track`       | Renders a `div` and accepts standard `div` props plus `render`. It owns pointer drag handling, optional track click handling, and double-click reset. It exposes `data-part="track"`, orientation state, inverted/dragging state, `--fader-percent`, and `--fader-unity-percent`.              |
 | `Fader.Range`       | Renders an `aria-hidden` `span` and accepts standard `span` props plus `render`. Use it for the visual fill driven by the current fader position; it exposes `--fader-percent` and `--fader-unity-percent`.                                                                                    |
 | `Fader.Thumb`       | Renders a focusable `span` with `role="slider"` and generated ARIA value metadata. It accepts standard `span` props except `defaultValue` and `onChange`, plus `render`. Arrow keys, Page Up/Down, Home, and End are handled by the generated keyboard behavior.                               |
 | `Fader.Value`       | Renders a `span` connected to the thumb by `aria-describedby`. It accepts standard `span` props except `children`, plus `children`, `format`, and `render`. `format(value, state)` customizes display text when explicit children are not supplied.                                            |
