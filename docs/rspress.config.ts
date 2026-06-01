@@ -74,6 +74,10 @@ export default defineConfig({
               link: "/components/eq-curve",
             },
             {
+              text: "CompressorCurve",
+              link: "/components/compressor-curve",
+            },
+            {
               text: "Fader",
               link: "/components/fader",
             },

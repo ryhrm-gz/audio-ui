@@ -1,3 +1,4 @@
+export * from "./compressor-curve/index.ts";
 export * from "./fader/index.ts";
 export * from "./knob/index.ts";
 export * from "./envelope-editor/index.ts";

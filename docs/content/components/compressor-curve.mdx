@@ -1,0 +1,113 @@
+---
+title: CompressorCurve
+description: Render compressor input-output curves from threshold, ratio, knee, and makeup gain values with JSON form values.
+---
+
+import { CompressorCurveDemo } from "../_components/CompressorCurveDemo.tsx";
+
+# CompressorCurve
+
+`CompressorCurve` is a headless display primitive for audio compressor curves. It maps input level to output level in dB and renders hard or soft knee behavior from threshold, ratio, knee, and makeup gain values.
+
+<CompressorCurveDemo />
+
+## Anatomy
+
+```tsx
+import { CompressorCurve } from "@ryhrm-gz/audio-ui-react";
+
+export function BusCompressor() {
+  return (
+    <CompressorCurve.Root
+      defaultValue={{ threshold: -24, ratio: 4, knee: 8, makeupGain: 3 }}
+      name="bus-compressor"
+    >
+      <CompressorCurve.Graph>
+        <CompressorCurve.Grid />
+        <CompressorCurve.Curve />
+      </CompressorCurve.Graph>
+      <CompressorCurve.Value />
+      <CompressorCurve.HiddenInput />
+    </CompressorCurve.Root>
+  );
+}
+```
+
+## Value model
+
+The value is normalized by the core package before it reaches render state. `threshold`, `knee`, and `makeupGain` are measured in dB. `ratio` is expressed as the left side of an `n:1` compressor ratio.
+
+```ts
+type CompressorCurveValue = {
+  threshold: number;
+  ratio: number;
+  knee: number;
+  makeupGain: number;
+};
+```
+
+## Styling hooks
+
+The curve is rendered as an SVG path by default. Use `CompressorCurve.Curve` children or `render` when you need to own the SVG contents while still reading `state.curve`.
+
+```css
+.compressor-curve [data-part="curve-path"] {
+  stroke: currentColor;
+}
+```
+
+## API reference
+
+### `CompressorCurve.Root`
+
+`CompressorCurve.Root` renders a `div`, normalizes compressor values, generates curve points, and provides context to the other parts. It accepts standard `div` props except `defaultValue`, `onChange`, and `children`, which are replaced by the compressor-specific API.
+
+| Prop              | Type                                | Default                                                | Description                                                                                               |
+| ----------------- | ----------------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| `value`           | `CompressorCurveValue`              | -                                                      | Compressor value used to draw the curve.                                                                  |
+| `defaultValue`    | `CompressorCurveValue`              | `{ threshold: -24, ratio: 4, knee: 6, makeupGain: 0 }` | Initial uncontrolled compressor value.                                                                    |
+| `minInput`        | `number`                            | `-60`                                                  | Lower input-level bound in dB for graph positions.                                                        |
+| `maxInput`        | `number`                            | `12`                                                   | Upper input-level bound in dB for graph positions.                                                        |
+| `minOutput`       | `number`                            | `-60`                                                  | Lower output-level bound in dB for graph positions.                                                       |
+| `maxOutput`       | `number`                            | `12`                                                   | Upper output-level bound in dB for graph positions.                                                       |
+| `minThreshold`    | `number`                            | `-60`                                                  | Lower threshold bound in dB.                                                                              |
+| `maxThreshold`    | `number`                            | `12`                                                   | Upper threshold bound in dB.                                                                              |
+| `minRatio`        | `number`                            | `1`                                                    | Lower ratio bound.                                                                                        |
+| `maxRatio`        | `number`                            | `20`                                                   | Upper ratio bound.                                                                                        |
+| `minKnee`         | `number`                            | `0`                                                    | Lower knee width in dB.                                                                                   |
+| `maxKnee`         | `number`                            | `48`                                                   | Upper knee width in dB.                                                                                   |
+| `minMakeupGain`   | `number`                            | `-24`                                                  | Lower makeup gain bound in dB.                                                                            |
+| `maxMakeupGain`   | `number`                            | `24`                                                   | Upper makeup gain bound in dB.                                                                            |
+| `stepThreshold`   | `number`                            | `0.1`                                                  | Threshold normalization increment.                                                                        |
+| `stepRatio`       | `number`                            | `0.1`                                                  | Ratio normalization increment.                                                                            |
+| `stepKnee`        | `number`                            | `0.1`                                                  | Knee normalization increment.                                                                             |
+| `stepMakeupGain`  | `number`                            | `0.1`                                                  | Makeup gain normalization increment.                                                                      |
+| `curveResolution` | `number`                            | `128`                                                  | Number of preview points generated for `CompressorCurve.Curve`.                                           |
+| `disabled`        | `boolean`                           | `false`                                                | Adds disabled state attributes and disables `CompressorCurve.HiddenInput`.                                |
+| `name`            | `string`                            | -                                                      | Default form field name consumed by `CompressorCurve.HiddenInput`.                                        |
+| `required`        | `boolean`                           | -                                                      | Default required flag consumed by `CompressorCurve.HiddenInput`.                                          |
+| `children`        | `ReactNode \| (state) => ReactNode` | -                                                      | Parts to render. Function children receive the render state, including normalized value and curve points. |
+| `render`          | `RenderProp`                        | -                                                      | Replaces the root element while preserving generated props and render state.                              |
+
+### Parts
+
+| Part                          | Props and behavior                                                                                                                                              |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CompressorCurve.Graph`       | Renders a `div` graph area for grid and curve layers.                                                                                                           |
+| `CompressorCurve.Grid`        | Renders an `aria-hidden` `div` for grid styling. It does not generate lines itself; use CSS backgrounds, pseudo-elements, or custom `render`.                   |
+| `CompressorCurve.Curve`       | Renders an `svg` with a generated path by default. Pass children or `render` to own the curve drawing while using `state.curve` points.                         |
+| `CompressorCurve.Value`       | Renders a `span`. `format(value, state)` customizes display text when explicit children are not supplied.                                                       |
+| `CompressorCurve.HiddenInput` | Renders `<input type="hidden">` with the normalized compressor value serialized as JSON. `name`, `required`, and `disabled` default to the matching root props. |
+
+### CSS variables
+
+| Variable                         | Component       | Description                    |
+| -------------------------------- | --------------- | ------------------------------ |
+| `--compressor-curve-min-input`   | `Root`, `Graph` | Lower input-level bound in dB  |
+| `--compressor-curve-max-input`   | `Root`, `Graph` | Upper input-level bound in dB  |
+| `--compressor-curve-min-output`  | `Root`, `Graph` | Lower output-level bound in dB |
+| `--compressor-curve-max-output`  | `Root`, `Graph` | Upper output-level bound in dB |
+| `--compressor-curve-threshold`   | `Root`          | Current threshold in dB        |
+| `--compressor-curve-ratio`       | `Root`          | Current compressor ratio value |
+| `--compressor-curve-knee`        | `Root`          | Current knee width in dB       |
+| `--compressor-curve-makeup-gain` | `Root`          | Current makeup gain in dB      |

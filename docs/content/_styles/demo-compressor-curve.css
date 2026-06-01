@@ -1,0 +1,56 @@
+.demo-compressor-curve {
+  width: min(100%, 30rem);
+}
+
+.demo-compressor-graph {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 2.4;
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background: var(--demo-bg);
+  touch-action: none;
+}
+
+.demo-compressor-grid {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(var(--demo-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--demo-line) 1px, transparent 1px),
+    linear-gradient(
+      45deg,
+      transparent calc(50% - 0.5px),
+      color-mix(in srgb, var(--demo-muted) 45%, transparent) 50%,
+      transparent calc(50% + 0.5px)
+    ),
+    var(--demo-soft);
+  background-size:
+    100% 25%,
+    12.5% 100%,
+    100% 100%;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.demo-compressor-line {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.demo-compressor-line [data-part="curve-path"] {
+  stroke: var(--demo-accent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3px;
+}
+
+.demo-compressor-readout {
+  width: min(100%, 26rem);
+}

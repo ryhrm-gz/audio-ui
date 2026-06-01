@@ -1,4 +1,13 @@
 export {
+  Curve as CompressorCurveCurve,
+  Graph as CompressorCurveGraph,
+  Grid as CompressorCurveGrid,
+  HiddenInput as CompressorCurveHiddenInput,
+  Root as CompressorCurveRoot,
+  Value as CompressorCurveValue,
+} from "./compressor-curve/index.ts";
+export { CompressorCurve } from "./compressor-curve/index.ts";
+export {
   Graph as EnvelopeEditorGraph,
   HiddenInput as EnvelopeEditorHiddenInput,
   Point as EnvelopeEditorPoint,
@@ -97,6 +106,14 @@ export {
   Value as XYPadValue,
 } from "./xypad/index.ts";
 export { XYPad } from "./xypad/index.ts";
+export type {
+  CompressorCurveCurveProps,
+  CompressorCurveGraphProps,
+  CompressorCurveGridProps,
+  CompressorCurveHiddenInputProps,
+  CompressorCurveValue as CompressorCurveValueType,
+  CompressorCurveValueProps,
+} from "./compressor-curve/index.ts";
 export type {
   EnvelopeEditorGraphProps,
   EnvelopeEditorHiddenInputProps,
