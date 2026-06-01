@@ -1,87 +1,76 @@
-# audio-ui
+# Audio UI
 
 Headless primitives for audio interfaces.
+
+Audio UI contains framework-agnostic control logic and React bindings for audio controls.
+The React package handles interaction, accessibility attributes, data attributes, CSS
+variables, and form inputs. Your app keeps control of composition and styling.
+
+Component usage, examples, and API details are documented in `docs/content`.
 
 ## Packages
 
 - `@ryhrm-gz/audio-ui-core`: framework-agnostic math and state helpers.
-- `@ryhrm-gz/audio-ui-react`: React components built on the core package.
+- `@ryhrm-gz/audio-ui-react`: React bindings built on the core package.
+
+## Installation
+
+For React applications:
+
+```sh
+pnpm add @ryhrm-gz/audio-ui-react
+```
+
+For framework-agnostic utilities:
+
+```sh
+pnpm add @ryhrm-gz/audio-ui-core
+```
+
+`@ryhrm-gz/audio-ui-react` has a peer dependency on React 18 or React 19.
 
 ## Documentation
 
-Run `vp run docs` to start the Rspress documentation site. The docs import package
-source directly, so changes in `packages/*/src` are reflected without building the
-packages first.
+Start the documentation site:
 
-## Knob
-
-```tsx
-import { Knob } from "@ryhrm-gz/audio-ui-react";
-
-export function GainKnob() {
-  return (
-    <Knob.Root defaultValue={0} min={-60} max={12} step={0.5} name="gain">
-      <Knob.Control>
-        <Knob.Thumb />
-      </Knob.Control>
-      <Knob.Value format={(value) => `${value} dB`} />
-      <Knob.HiddenInput />
-    </Knob.Root>
-  );
-}
+```sh
+vp run docs
 ```
 
-Pointer interaction uses vertical up/down dragging.
+Build the documentation site:
 
-## Fader
-
-```tsx
-import { Fader } from "@ryhrm-gz/audio-ui-react";
-
-export function ChannelFader() {
-  return (
-    <Fader.Root defaultValue={-6} name="channel-gain">
-      <Fader.Scale />
-      <Fader.Track>
-        <Fader.Range />
-        <Fader.Thumb aria-label="Channel gain" />
-      </Fader.Track>
-      <Fader.Value format={(value) => `${value} dB`} />
-      <Fader.HiddenInput />
-    </Fader.Root>
-  );
-}
+```sh
+vp run docs:build
 ```
 
-Fader is a dB control for console-style channel strips. It defaults to vertical
-orientation, `-60..+12 dB`, `0.1 dB` steps, a `0 dB` unity point, and a non-linear
-scale so the throw has more usable resolution around common mix positions. Pass
-`orientation="horizontal"` for a left-to-right fader. Use `Fader.Scale` to render
-the dB markings, or pass a custom `scale` array to define a different fader law.
+Documentation source lives in `docs/content`.
 
-The React package is headless: it ships behavior, accessibility attributes, data attributes,
-and CSS variables such as `--knob-angle` and `--fader-percent`, but no visual styling.
+## Development
 
-## Piano
+This repository uses Vite+ through the `vp` CLI.
 
-```tsx
-import { Piano } from "@ryhrm-gz/audio-ui-react";
-
-export function MidiKeyboard() {
-  return (
-    <Piano.Root
-      startKey="C4"
-      keyCount={24}
-      onPressedKeysChange={(keys) => {
-        console.log(keys.map((key) => key.midi));
-      }}
-    >
-      <Piano.Keys />
-    </Piano.Root>
-  );
-}
+```sh
+vp install
+vp run build
+vp check
+vp test
 ```
 
-Piano renders key press behavior without producing audio. Use `pressedKeys` for controlled
-state, `defaultPressedKeys` for uncontrolled state, and `onPressedKeysChange` to receive
-the currently pressed key objects.
+Useful workspace commands:
+
+- `vp run docs`: start the Rspress documentation site.
+- `vp run docs:build`: build the documentation site.
+- `vp run dev`: watch package builds.
+- `vp run build`: build all packages.
+- `vp check`: format, lint, and type-check.
+- `vp test`: run tests.
+
+## Repository Layout
+
+- `packages/core`: framework-agnostic primitives.
+- `packages/react`: React component bindings.
+- `docs/content`: Rspress documentation source.
+
+## License
+
+MIT
