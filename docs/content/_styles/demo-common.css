@@ -25,6 +25,7 @@
 .demo-fader,
 .demo-xypad,
 .demo-envelope,
+.demo-eq-curve,
 .demo-piano,
 .demo-toggle-stack,
 .demo-step-sequencer {
@@ -88,6 +89,7 @@
 .demo-fader-thumb:focus-visible,
 .demo-xypad-thumb:focus-visible,
 .demo-envelope-points [data-part="point"]:focus-visible,
+.demo-eq-band:focus-visible,
 .demo-piano-key:focus-visible,
 .demo-step-sequencer-step:focus-visible {
   outline: 2px solid var(--demo-focus);

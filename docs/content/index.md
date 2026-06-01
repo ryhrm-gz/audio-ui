@@ -5,7 +5,7 @@ description: Headless React primitives and core math utilities for building acce
 hero:
   name: Audio UI
   text: Headless audio control primitives
-  tagline: Build knobs, sliders, XY pads, console-style faders, live level meters, and step sequencers with accessible behavior, state, and value math.
+  tagline: Build knobs, sliders, XY pads, EQ curve editors, console-style faders, live level meters, and step sequencers with accessible behavior, state, and value math.
   actions:
     - theme: brand
       text: Get Started
@@ -15,13 +15,13 @@ hero:
       link: /components/knob
 features:
   - title: Framework-agnostic core
-    details: Reuse value clamping, keyboard behavior, angle math, XY position math, sequencer grid state, fader scale calculations, and meter conversion outside React.
+    details: Reuse value clamping, keyboard behavior, angle math, XY position math, EQ curve generation, sequencer grid state, fader scale calculations, and meter conversion outside React.
     icon: ""
   - title: Headless React parts
     details: Compose Root, Track, Thumb, Bar, Value, Scale, and HiddenInput parts while keeping styling in your app.
     icon: ""
   - title: Audio-first controls
-    details: Model common audio UI patterns such as dB faders, level meters, rotary gain knobs, pan sliders, XY pads, step sequencers, and form inputs.
+    details: Model common audio UI patterns such as dB faders, level meters, rotary gain knobs, pan sliders, EQ curve editors, XY pads, step sequencers, and form inputs.
     icon: ""
     link: /components/level-meter
 ---

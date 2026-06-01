@@ -10,6 +10,17 @@ export {
 } from "./envelope-editor/index.ts";
 export { EnvelopeEditor } from "./envelope-editor/index.ts";
 export {
+  Band as EQCurveBand,
+  Bands as EQCurveBands,
+  Curve as EQCurveCurve,
+  Graph as EQCurveGraph,
+  Grid as EQCurveGrid,
+  HiddenInput as EQCurveHiddenInput,
+  Root as EQCurveRoot,
+  Value as EQCurveValue,
+} from "./eq-curve/index.ts";
+export { EQCurve } from "./eq-curve/index.ts";
+export {
   HiddenInput as FaderHiddenInput,
   Range as FaderRange,
   Root as FaderRoot,
@@ -97,6 +108,19 @@ export type {
   EnvelopeEditorValue as EnvelopeEditorValueType,
   EnvelopeEditorValueProps,
 } from "./envelope-editor/index.ts";
+export type {
+  EQCurveBand as EQCurveBandData,
+  EQCurveBandProps,
+  EQCurveBandsProps,
+  EQCurveBandType,
+  EQCurveCurveProps,
+  EQCurveGraphProps,
+  EQCurveGridProps,
+  EQCurveHiddenInputProps,
+  EQCurveRootProps,
+  EQCurveValue as EQCurveValueType,
+  EQCurveValueProps,
+} from "./eq-curve/index.ts";
 export type {
   FaderHiddenInputProps,
   FaderRangeProps,

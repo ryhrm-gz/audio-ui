@@ -70,6 +70,10 @@ export default defineConfig({
               link: "/components/envelope-editor",
             },
             {
+              text: "EQCurve",
+              link: "/components/eq-curve",
+            },
+            {
               text: "Fader",
               link: "/components/fader",
             },
