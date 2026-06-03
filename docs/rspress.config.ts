@@ -86,6 +86,10 @@ export default defineConfig({
               link: "/components/level-meter",
             },
             {
+              text: "SpectrumAnalyzer",
+              link: "/components/spectrum-analyzer",
+            },
+            {
               text: "Piano",
               link: "/components/piano",
             },

@@ -78,6 +78,15 @@ export {
 } from "./slider/index.ts";
 export { Slider } from "./slider/index.ts";
 export {
+  Bars as SpectrumAnalyzerBars,
+  Curve as SpectrumAnalyzerCurve,
+  Graph as SpectrumAnalyzerGraph,
+  HiddenInput as SpectrumAnalyzerHiddenInput,
+  Root as SpectrumAnalyzerRoot,
+  Value as SpectrumAnalyzerValue,
+} from "./spectrum-analyzer/index.ts";
+export { SpectrumAnalyzer } from "./spectrum-analyzer/index.ts";
+export {
   HiddenInput as StepSequencerHiddenInput,
   Playhead as StepSequencerPlayhead,
   Root as StepSequencerRoot,
@@ -180,6 +189,17 @@ export type {
   SliderTrackProps,
   SliderValueProps,
 } from "./slider/index.ts";
+export type {
+  SpectrumAnalyzerBarsProps,
+  SpectrumAnalyzerBin,
+  SpectrumAnalyzerBinState,
+  SpectrumAnalyzerCurveProps,
+  SpectrumAnalyzerGraphProps,
+  SpectrumAnalyzerHiddenInputProps,
+  SpectrumAnalyzerRootProps,
+  SpectrumAnalyzerValue as SpectrumAnalyzerValueType,
+  SpectrumAnalyzerValueProps,
+} from "./spectrum-analyzer/index.ts";
 export type { ToggleButtonHiddenInputProps, ToggleButtonRootProps } from "./toggle-button/index.ts";
 export type {
   ToggleGroupHiddenInputProps,

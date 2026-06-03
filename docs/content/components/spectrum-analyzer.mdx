@@ -1,0 +1,156 @@
+---
+title: SpectrumAnalyzer
+description: Render headless frequency spectrum displays from external bin and dB magnitude arrays.
+---
+
+import { SpectrumAnalyzerDemo } from "../_components/SpectrumAnalyzerDemo.tsx";
+
+# SpectrumAnalyzer
+
+`SpectrumAnalyzer` is a read-only primitive for drawing frequency spectrum data. It does not read from the Web Audio API directly; pass magnitude arrays or `{ frequency, magnitude }` bins from your own analyzer, worker, server, or test fixture.
+
+<SpectrumAnalyzerDemo />
+
+## Anatomy
+
+```tsx
+import { SpectrumAnalyzer } from "@ryhrm-gz/audio-ui-react";
+
+const bins = [
+  { id: "bass", frequency: 125, magnitude: -18 },
+  { id: "vocal", frequency: 1000, magnitude: -16 },
+  { id: "air", frequency: 8000, magnitude: -30 },
+];
+
+export function MixSpectrum() {
+  return (
+    <SpectrumAnalyzer.Root
+      aria-label="Mix spectrum"
+      minFrequency={20}
+      maxFrequency={20000}
+      minMagnitude={-90}
+      maxMagnitude={0}
+      frequencyScale="log"
+      value={bins}
+    >
+      <SpectrumAnalyzer.Graph>
+        <SpectrumAnalyzer.Bars />
+        <SpectrumAnalyzer.Curve />
+      </SpectrumAnalyzer.Graph>
+      <SpectrumAnalyzer.Value />
+      <SpectrumAnalyzer.HiddenInput name="spectrum" />
+    </SpectrumAnalyzer.Root>
+  );
+}
+```
+
+## Magnitude arrays
+
+When you only have a magnitude array, each item is treated as a dB value and assigned a frequency between `minFrequency` and `maxFrequency`.
+
+```tsx
+<SpectrumAnalyzer.Root value={[-72, -48, -24, -12, -30]} />
+```
+
+Use the core helpers when you need the normalized data outside React.
+
+```ts
+import {
+  createSpectrumAnalyzerState,
+  getSpectrumAnalyzerFrequencyPercent,
+  getSpectrumAnalyzerMagnitudePercent,
+} from "@ryhrm-gz/audio-ui-core";
+
+const state = createSpectrumAnalyzerState(bins, {
+  frequencyScale: "log",
+  minMagnitude: -90,
+  maxMagnitude: 0,
+});
+
+const x = getSpectrumAnalyzerFrequencyPercent(1000);
+const y = getSpectrumAnalyzerMagnitudePercent(-12);
+```
+
+## Styling hooks
+
+The generated parts expose normalized position variables for bars and SVG curves.
+
+```css
+.spectrum-graph {
+  position: relative;
+  aspect-ratio: 2.4;
+}
+
+.spectrum-bars [data-part="bar"] {
+  position: absolute;
+  bottom: 0;
+  left: calc(var(--spectrum-analyzer-bin-start) * 100%);
+  width: calc(var(--spectrum-analyzer-bin-width) * 100%);
+  height: calc(var(--spectrum-analyzer-bin-y) * 100%);
+}
+
+.spectrum-curve {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.spectrum-curve [data-part="curve-path"] {
+  stroke: currentColor;
+}
+```
+
+## API reference
+
+### `SpectrumAnalyzer.Root`
+
+`SpectrumAnalyzer.Root` renders a `div` with `role="img"` and provides normalized spectrum state to child parts.
+
+| Prop             | Type                                | Default | Description                                                                                |
+| ---------------- | ----------------------------------- | ------- | ------------------------------------------------------------------------------------------ |
+| `value`          | `readonly (number \| Bin)[]`        | `[]`    | dB magnitudes or `{ frequency, magnitude, id?, label? }` bins.                             |
+| `minFrequency`   | `number`                            | `20`    | Lower frequency bound in Hz. For log scale, non-positive values fall back to the default.  |
+| `maxFrequency`   | `number`                            | `20000` | Upper frequency bound in Hz.                                                               |
+| `minMagnitude`   | `number`                            | `-90`   | Lower dB bound. Values below it are clamped and marked with `data-out-of-range`.           |
+| `maxMagnitude`   | `number`                            | `0`     | Upper dB bound. Values above it are clamped, marked with `data-out-of-range`, and clipped. |
+| `frequencyScale` | `"linear" \| "log"`                 | `"log"` | Frequency-to-x mapping used for bars and curves.                                           |
+| `disabled`       | `boolean`                           | `false` | Adds disabled data attributes and disables the hidden input.                               |
+| `name`           | `string`                            | -       | Default name for `SpectrumAnalyzer.HiddenInput`.                                           |
+| `required`       | `boolean`                           | -       | Default required flag for `SpectrumAnalyzer.HiddenInput`.                                  |
+| `children`       | `ReactNode \| (state) => ReactNode` | -       | Parts to render. Function children receive the full spectrum analyzer state.               |
+| `render`         | `RenderProp<ElementProps, State>`   | -       | Replaces the root element while preserving generated props and render state.               |
+
+### Parts
+
+| Part                           | Props and behavior                                                                                                                                                                      |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SpectrumAnalyzer.Graph`       | Renders a `div` for the visual graph area. It exposes min/max frequency, min/max magnitude, bin count, scale, empty, and disabled attributes.                                           |
+| `SpectrumAnalyzer.Bars`        | Renders a `span` containing one bar span per bin. Function children receive `(bin, state)`. Each bar exposes frequency, magnitude, x/y, start/end, and width CSS variables.             |
+| `SpectrumAnalyzer.Curve`       | Renders an SVG with a default `path` generated from normalized bins. Pass children to replace the default path while keeping the SVG attributes.                                        |
+| `SpectrumAnalyzer.Value`       | Renders the peak bin as text. Use `format(peak, state)` to customize the output. Empty data renders `No data` by default.                                                               |
+| `SpectrumAnalyzer.HiddenInput` | Renders a hidden input whose value is the normalized bin array as JSON. Number arrays are serialized as `{ frequency, magnitude }` objects after frequency and magnitude normalization. |
+
+### CSS variables and data attributes
+
+| Hook                                   | Source                          | Description                                          |
+| -------------------------------------- | ------------------------------- | ---------------------------------------------------- |
+| `data-audio-ui="spectrum-analyzer"`    | Root                            | Identifies the primitive.                            |
+| `data-frequency-scale="linear \| log"` | Root, Graph, Bars, Curve        | Current x-axis scale.                                |
+| `data-empty`                           | Root, Graph, Bars, Curve, Value | Present when there are no bins.                      |
+| `data-clipped`                         | Bar                             | Present when a bin is at or above `maxMagnitude`.    |
+| `data-out-of-range`                    | Bar                             | Present when raw frequency or magnitude was clamped. |
+| `--spectrum-analyzer-bin-count`        | Root, Graph                     | Number of normalized bins.                           |
+| `--spectrum-analyzer-min-frequency`    | Root, Graph                     | Lower frequency bound.                               |
+| `--spectrum-analyzer-max-frequency`    | Root, Graph                     | Upper frequency bound.                               |
+| `--spectrum-analyzer-min-magnitude`    | Root, Graph                     | Lower magnitude bound.                               |
+| `--spectrum-analyzer-max-magnitude`    | Root, Graph                     | Upper magnitude bound.                               |
+| `--spectrum-analyzer-peak-frequency`   | Root                            | Peak bin frequency, or `minFrequency` when empty.    |
+| `--spectrum-analyzer-peak-magnitude`   | Root                            | Peak bin magnitude, or `minMagnitude` when empty.    |
+| `--spectrum-analyzer-bin-frequency`    | Bar                             | Normalized bin frequency.                            |
+| `--spectrum-analyzer-bin-magnitude`    | Bar                             | Normalized bin magnitude.                            |
+| `--spectrum-analyzer-bin-x`            | Bar                             | Normalized frequency position from `0` to `1`.       |
+| `--spectrum-analyzer-bin-y`            | Bar                             | Normalized magnitude position from `0` to `1`.       |
+| `--spectrum-analyzer-bin-start`        | Bar                             | Bar start position from `0` to `1`.                  |
+| `--spectrum-analyzer-bin-end`          | Bar                             | Bar end position from `0` to `1`.                    |
+| `--spectrum-analyzer-bin-width`        | Bar                             | Bar width from `0` to `1`.                           |
