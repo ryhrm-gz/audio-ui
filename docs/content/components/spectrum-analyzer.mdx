@@ -73,7 +73,7 @@ const y = getSpectrumAnalyzerMagnitudePercent(-12);
 
 ## Styling hooks
 
-The generated parts expose normalized position variables for bars and SVG curves.
+The generated parts expose normalized state on the root and graph. `Bars` and `Curve` both render SVG paths, which keeps high-resolution spectra cheap to render.
 
 ```css
 .spectrum-graph {
@@ -81,19 +81,16 @@ The generated parts expose normalized position variables for bars and SVG curves
   aspect-ratio: 2.4;
 }
 
-.spectrum-bars [data-part="bar"] {
-  position: absolute;
-  bottom: 0;
-  left: calc(var(--spectrum-analyzer-bin-start) * 100%);
-  width: calc(var(--spectrum-analyzer-bin-width) * 100%);
-  height: calc(var(--spectrum-analyzer-bin-y) * 100%);
-}
-
+.spectrum-bars,
 .spectrum-curve {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+}
+
+.spectrum-bars [data-part="bars-path"] {
+  fill: currentColor;
 }
 
 .spectrum-curve [data-part="curve-path"] {
@@ -126,31 +123,24 @@ The generated parts expose normalized position variables for bars and SVG curves
 | Part                           | Props and behavior                                                                                                                                                                      |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SpectrumAnalyzer.Graph`       | Renders a `div` for the visual graph area. It exposes min/max frequency, min/max magnitude, bin count, scale, empty, and disabled attributes.                                           |
-| `SpectrumAnalyzer.Bars`        | Renders a `span` containing one bar span per bin. Function children receive `(bin, state)`. Each bar exposes frequency, magnitude, x/y, start/end, and width CSS variables.             |
+| `SpectrumAnalyzer.Bars`        | Renders an SVG with a single default `path` containing all bar rectangles. Pass children to replace the default path while keeping the SVG attributes.                                  |
 | `SpectrumAnalyzer.Curve`       | Renders an SVG with a default `path` generated from normalized bins. Pass children to replace the default path while keeping the SVG attributes.                                        |
 | `SpectrumAnalyzer.Value`       | Renders the peak bin as text. Use `format(peak, state)` to customize the output. Empty data renders `No data` by default.                                                               |
 | `SpectrumAnalyzer.HiddenInput` | Renders a hidden input whose value is the normalized bin array as JSON. Number arrays are serialized as `{ frequency, magnitude }` objects after frequency and magnitude normalization. |
 
 ### CSS variables and data attributes
 
-| Hook                                   | Source                          | Description                                          |
-| -------------------------------------- | ------------------------------- | ---------------------------------------------------- |
-| `data-audio-ui="spectrum-analyzer"`    | Root                            | Identifies the primitive.                            |
-| `data-frequency-scale="linear \| log"` | Root, Graph, Bars, Curve        | Current x-axis scale.                                |
-| `data-empty`                           | Root, Graph, Bars, Curve, Value | Present when there are no bins.                      |
-| `data-clipped`                         | Bar                             | Present when a bin is at or above `maxMagnitude`.    |
-| `data-out-of-range`                    | Bar                             | Present when raw frequency or magnitude was clamped. |
-| `--spectrum-analyzer-bin-count`        | Root, Graph                     | Number of normalized bins.                           |
-| `--spectrum-analyzer-min-frequency`    | Root, Graph                     | Lower frequency bound.                               |
-| `--spectrum-analyzer-max-frequency`    | Root, Graph                     | Upper frequency bound.                               |
-| `--spectrum-analyzer-min-magnitude`    | Root, Graph                     | Lower magnitude bound.                               |
-| `--spectrum-analyzer-max-magnitude`    | Root, Graph                     | Upper magnitude bound.                               |
-| `--spectrum-analyzer-peak-frequency`   | Root                            | Peak bin frequency, or `minFrequency` when empty.    |
-| `--spectrum-analyzer-peak-magnitude`   | Root                            | Peak bin magnitude, or `minMagnitude` when empty.    |
-| `--spectrum-analyzer-bin-frequency`    | Bar                             | Normalized bin frequency.                            |
-| `--spectrum-analyzer-bin-magnitude`    | Bar                             | Normalized bin magnitude.                            |
-| `--spectrum-analyzer-bin-x`            | Bar                             | Normalized frequency position from `0` to `1`.       |
-| `--spectrum-analyzer-bin-y`            | Bar                             | Normalized magnitude position from `0` to `1`.       |
-| `--spectrum-analyzer-bin-start`        | Bar                             | Bar start position from `0` to `1`.                  |
-| `--spectrum-analyzer-bin-end`          | Bar                             | Bar end position from `0` to `1`.                    |
-| `--spectrum-analyzer-bin-width`        | Bar                             | Bar width from `0` to `1`.                           |
+| Hook                                   | Source                          | Description                                              |
+| -------------------------------------- | ------------------------------- | -------------------------------------------------------- |
+| `data-audio-ui="spectrum-analyzer"`    | Root                            | Identifies the primitive.                                |
+| `data-frequency-scale="linear \| log"` | Root, Graph, Bars, Curve        | Current x-axis scale.                                    |
+| `data-empty`                           | Root, Graph, Bars, Curve, Value | Present when there are no bins.                          |
+| `data-clipped`                         | Bars                            | Present when any bin is at or above `maxMagnitude`.      |
+| `data-out-of-range`                    | Bars                            | Present when any raw frequency or magnitude was clamped. |
+| `--spectrum-analyzer-bin-count`        | Root, Graph                     | Number of normalized bins.                               |
+| `--spectrum-analyzer-min-frequency`    | Root, Graph                     | Lower frequency bound.                                   |
+| `--spectrum-analyzer-max-frequency`    | Root, Graph                     | Upper frequency bound.                                   |
+| `--spectrum-analyzer-min-magnitude`    | Root, Graph                     | Lower magnitude bound.                                   |
+| `--spectrum-analyzer-max-magnitude`    | Root, Graph                     | Upper magnitude bound.                                   |
+| `--spectrum-analyzer-peak-frequency`   | Root                            | Peak bin frequency, or `minFrequency` when empty.        |
+| `--spectrum-analyzer-peak-magnitude`   | Root                            | Peak bin magnitude, or `minMagnitude` when empty.        |

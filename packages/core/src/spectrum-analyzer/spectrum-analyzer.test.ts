@@ -3,6 +3,7 @@ import {
   createSpectrumAnalyzerState,
   getSpectrumAnalyzerFrequencyFromPercent,
   getSpectrumAnalyzerFrequencyPercent,
+  getSpectrumAnalyzerBarsPath,
   getSpectrumAnalyzerMagnitudeFromPercent,
   getSpectrumAnalyzerMagnitudePercent,
   getSpectrumAnalyzerPath,
@@ -103,5 +104,13 @@ test("generates a deterministic spectrum curve path", () => {
 
   expect(getSpectrumAnalyzerPath(state.curve)).toBe(
     "M 0.100343 0.466667 L 0.30103 0.2 L 0.734707 0.1 L 0.92605 0.266667",
+  );
+});
+
+test("generates a deterministic high-density bars path", () => {
+  const state = createSpectrumAnalyzerState([...bins]);
+
+  expect(getSpectrumAnalyzerBarsPath(state.bins)).toBe(
+    "M 0 1 L 0 0.466667 L 0.200687 0.466667 L 0.200687 1 Z M 0.200687 1 L 0.200687 0.2 L 0.517868 0.2 L 0.517868 1 Z M 0.517868 1 L 0.517868 0.1 L 0.830379 0.1 L 0.830379 1 Z M 0.830379 1 L 0.830379 0.266667 L 1 0.266667 L 1 1 Z",
   );
 });

@@ -33,12 +33,9 @@ export interface SpectrumAnalyzerGraphProps extends Omit<
 }
 
 export interface SpectrumAnalyzerBarsProps extends Omit<
-  ComponentPropsWithoutRef<"span">,
-  "children" | "defaultValue" | "onChange"
+  ComponentPropsWithoutRef<"svg">,
+  "defaultValue" | "onChange"
 > {
-  children?:
-    | ReactNode
-    | ((bin: SpectrumAnalyzerBinState, state: RenderState<SpectrumAnalyzerState>) => ReactNode);
   render?: RenderProp<ElementProps, SpectrumAnalyzerState>;
 }
 

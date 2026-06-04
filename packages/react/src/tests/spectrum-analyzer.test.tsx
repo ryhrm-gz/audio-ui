@@ -37,8 +37,8 @@ describe("SpectrumAnalyzer", () => {
     expect(markup).toContain('aria-valuetext="-9.0 dB at 3200 Hz"');
     expect(markup).toContain('data-part="graph"');
     expect(markup).toContain('data-part="bars"');
-    expect(markup).toContain('data-part="bar"');
-    expect(markup).toContain('data-bin="presence"');
+    expect(markup).toContain('data-part="bars-path"');
+    expect(markup).toContain('viewBox="0 0 1 1"');
     expect(markup).toContain('data-part="curve"');
     expect(markup).toContain('data-part="curve-path"');
     expect(markup).toContain('data-part="value"');
@@ -79,7 +79,7 @@ describe("SpectrumAnalyzer", () => {
         ]}
       >
         <SpectrumAnalyzer.Graph>
-          <SpectrumAnalyzer.Bars>{(bin) => bin.label ?? bin.id}</SpectrumAnalyzer.Bars>
+          <SpectrumAnalyzer.Bars />
           <SpectrumAnalyzer.Curve />
         </SpectrumAnalyzer.Graph>
       </SpectrumAnalyzer.Root>,
@@ -91,10 +91,7 @@ describe("SpectrumAnalyzer", () => {
     expect(markup).toContain('data-clipped=""');
     expect(markup).toContain("--spectrum-analyzer-bin-count:2");
     expect(markup).toContain("--spectrum-analyzer-min-frequency:0");
-    expect(markup).toContain("--spectrum-analyzer-bin-frequency:1000");
-    expect(markup).toContain("--spectrum-analyzer-bin-magnitude:6");
-    expect(markup).toContain("--spectrum-analyzer-bin-x:");
-    expect(markup).toContain("--spectrum-analyzer-bin-y:");
+    expect(markup).toContain('data-part="bars-path"');
   });
 
   test("supports empty data, render state, and render replacement", () => {

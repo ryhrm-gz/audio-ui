@@ -1,17 +1,40 @@
 import { SpectrumAnalyzer } from "@ryhrm-gz/audio-ui-react";
 
-const spectrumBins = [
-  { id: "sub", frequency: 31.5, magnitude: -52 },
-  { id: "kick", frequency: 63, magnitude: -28 },
-  { id: "bass", frequency: 125, magnitude: -18 },
-  { id: "low-mid", frequency: 250, magnitude: -24 },
-  { id: "mid", frequency: 500, magnitude: -31 },
-  { id: "vocal", frequency: 1000, magnitude: -16 },
-  { id: "presence", frequency: 2000, magnitude: -12 },
-  { id: "edge", frequency: 4000, magnitude: -21 },
-  { id: "air", frequency: 8000, magnitude: -30 },
-  { id: "sparkle", frequency: 16000, magnitude: -46 },
-] as const;
+const minFrequency = 20;
+const maxFrequency = 20000;
+
+const spectrumBins = Array.from({ length: 512 }, (_, index) => {
+  const percent = index / 511;
+  const frequency = minFrequency * (maxFrequency / minFrequency) ** percent;
+  const octave = Math.log2(frequency);
+  const logPeak = (center: number, width: number, gain: number) =>
+    gain * Math.exp(-0.5 * ((octave - Math.log2(center)) / width) ** 2);
+  const texture =
+    2.8 * Math.sin(index * 0.37) +
+    1.7 * Math.sin(index * 0.91 + 1.4) +
+    1.1 * Math.sin(index * 1.73 + 0.8);
+  const rolloff = -13 * percent - Math.max(0, Math.log2(frequency / 12000)) * 9;
+  const magnitude =
+    -66 +
+    rolloff +
+    logPeak(56, 0.16, 30) +
+    logPeak(92, 0.2, 22) +
+    logPeak(145, 0.23, 15) +
+    logPeak(230, 0.34, 16) -
+    logPeak(360, 0.24, 8) +
+    logPeak(760, 0.36, 11) +
+    logPeak(1500, 0.28, 8) +
+    logPeak(2600, 0.34, 17) +
+    logPeak(4700, 0.2, 10) +
+    logPeak(8700, 0.5, 13) +
+    logPeak(13500, 0.34, 8) +
+    texture;
+
+  return {
+    frequency,
+    magnitude: Math.min(-4, Math.max(-78, magnitude)),
+  };
+});
 
 export function SpectrumAnalyzerDemo() {
   return (
@@ -20,10 +43,12 @@ export function SpectrumAnalyzerDemo() {
       <SpectrumAnalyzer.Root
         aria-label="Mix spectrum"
         className="demo-spectrum-analyzer"
+        maxFrequency={maxFrequency}
         maxMagnitude={0}
-        minMagnitude={-60}
+        minFrequency={minFrequency}
+        minMagnitude={-78}
         name="mix-spectrum"
-        value={[...spectrumBins]}
+        value={spectrumBins}
       >
         <SpectrumAnalyzer.Graph className="demo-spectrum-graph">
           <SpectrumAnalyzer.Bars className="demo-spectrum-bars" />
@@ -37,7 +62,6 @@ export function SpectrumAnalyzerDemo() {
               : `${peak.magnitude.toFixed(1)} dB @ ${Math.round(peak.frequency)} Hz`
           }
         />
-        <SpectrumAnalyzer.HiddenInput />
       </SpectrumAnalyzer.Root>
     </div>
   );

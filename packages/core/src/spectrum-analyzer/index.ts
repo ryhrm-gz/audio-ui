@@ -1,4 +1,4 @@
-export { getSpectrumAnalyzerPath } from "./curve.ts";
+export { getSpectrumAnalyzerBarsPath, getSpectrumAnalyzerPath } from "./curve.ts";
 export {
   getSpectrumAnalyzerFrequencyFromPercent,
   getSpectrumAnalyzerFrequencyPercent,
