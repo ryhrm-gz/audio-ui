@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Knob } from "@ryhrm-gz/audio-ui-react";
 
+function formatGainDb(value: number) {
+  return value.toFixed(1);
+}
+
 export function KnobDemo() {
   const [value, setValue] = useState(-6);
 
@@ -13,13 +17,21 @@ export function KnobDemo() {
         max={12}
         min={-60}
         onValueChange={setValue}
-        step={0.5}
+        step={1}
         value={value}
       >
         <Knob.Control aria-label="Gain" className="demo-knob-control">
           <Knob.Thumb className="demo-knob-thumb" />
         </Knob.Control>
-        <Knob.Value className="demo-readout" format={(nextValue) => `${nextValue} dB`} />
+        <Knob.Value
+          className="demo-readout demo-knob-readout"
+          format={(nextValue) => (
+            <>
+              <span className="demo-knob-readout-value">{formatGainDb(nextValue)}</span>
+              <span className="demo-knob-readout-unit">dB</span>
+            </>
+          )}
+        />
       </Knob.Root>
     </div>
   );
