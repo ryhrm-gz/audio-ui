@@ -1,4 +1,4 @@
-import type { SliderState } from "@ryhrm-gz/audio-ui-core";
+import type { SliderState, SliderThumbIndex, SliderValue } from "@ryhrm-gz/audio-ui-core";
 import { createContext, useContext, type RefObject } from "react";
 import type { FineControlProp } from "../shared/fine-control.ts";
 
@@ -11,17 +11,20 @@ export interface SliderContextValue {
   resetOnDoubleClick: boolean;
   allowTrackClick: boolean;
   dragging: boolean;
+  activeThumb: SliderThumbIndex | null;
   valueId: string;
   name?: string;
   required?: boolean;
   trackRef: RefObject<HTMLDivElement | null>;
   setDragging: (dragging: boolean) => void;
-  setValue: (value: number, options?: SliderValueOptions) => void;
-  commitValue: (value: number, options?: SliderValueOptions) => void;
+  setActiveThumb: (index: SliderThumbIndex | null) => void;
+  setValue: (value: SliderValue, options?: SliderValueOptions) => void;
+  commitValue: (value: SliderValue, options?: SliderValueOptions) => void;
   resetValue: () => void;
 }
 
 export interface SliderValueOptions {
+  activeThumb?: SliderThumbIndex;
   fine?: boolean;
 }
 

@@ -14,8 +14,8 @@
 .demo-range-slider-range {
   position: absolute;
   inset-block: 0;
-  inset-inline-start: calc(var(--range-slider-start-percent) * 100%);
-  width: calc(var(--range-slider-size-percent) * 100%);
+  inset-inline-start: calc(var(--slider-range-start-percent) * 100%);
+  width: calc(var(--slider-range-size-percent) * 100%);
   border-radius: inherit;
   background: var(--demo-fill);
 }
@@ -23,7 +23,7 @@
 .demo-range-slider-thumb {
   position: absolute;
   top: 50%;
-  left: calc(var(--range-slider-thumb-percent) * 100%);
+  left: calc(var(--slider-thumb-percent) * 100%);
   width: 1.35rem;
   height: 1.35rem;
   border: 2px solid var(--demo-bg);

@@ -4,26 +4,31 @@ import { useSliderContext } from "./context.tsx";
 import type { SliderValueProps } from "./types.ts";
 
 export const Value = forwardRef<HTMLSpanElement, SliderValueProps>(function Value(props, ref) {
-  const { render, children, format, ...elementProps } = props;
+  const { index, render, children, format, ...elementProps } = props;
   const context = useSliderContext("Slider.Value");
   const renderState = getRenderState(context.state, {
     disabled: context.disabled,
     readOnly: context.readOnly,
     dragging: context.dragging,
   });
+  const value = index === undefined ? context.state.value : context.state.value[index];
   const content =
     typeof children === "function"
       ? children(renderState)
-      : (children ?? format?.(context.state.value, context.state) ?? context.state.value);
+      : (children ??
+        format?.(value, context.state, index) ??
+        (Array.isArray(value) ? value.join(" - ") : value));
   const valueProps = mergeProps(elementProps, {
     ref,
-    id: context.valueId,
+    id: index === undefined ? context.valueId : undefined,
     "data-part": "value",
+    "data-thumb-count": context.state.thumbs.length,
     "data-orientation": context.state.orientation,
     "data-inverted": context.state.inverted ? "" : undefined,
     "data-disabled": context.disabled ? "" : undefined,
     "data-readonly": context.readOnly ? "" : undefined,
     "data-dragging": context.dragging ? "" : undefined,
+    "data-thumb-index": index,
   });
 
   return renderElement("span", render, valueProps, renderState, content);

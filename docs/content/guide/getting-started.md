@@ -62,15 +62,18 @@ import { useState } from "react";
 import { Slider } from "@ryhrm-gz/audio-ui-react";
 
 export function PanSlider() {
-  const [pan, setPan] = useState(0);
+  const [pan, setPan] = useState([0]);
 
   return (
     <Slider.Root value={pan} onValueChange={setPan} min={-100} max={100} step={1} origin="center">
       <Slider.Track>
         <Slider.Range />
-        <Slider.Thumb aria-label="Pan" />
+        <Slider.Thumb index={0} aria-label="Pan" />
       </Slider.Track>
-      <Slider.Value format={(value) => `${value}%`} />
+      <Slider.Value
+        index={0}
+        format={(value) => (Array.isArray(value) ? value.join(" - ") : `${value}%`)}
+      />
     </Slider.Root>
   );
 }

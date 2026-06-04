@@ -5,7 +5,6 @@ export * from "./envelope-editor/index.ts";
 export * from "./eq-curve/index.ts";
 export * from "./level-meter/index.ts";
 export * from "./piano/index.ts";
-export * from "./range-slider/index.ts";
 export { resolveFineControlFactor } from "./shared/range.ts";
 export * from "./slider/index.ts";
 export * from "./spectrum-analyzer/index.ts";

@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { RangeSlider } from "@ryhrm-gz/audio-ui-react";
+import { Slider } from "@ryhrm-gz/audio-ui-react";
 
-export function RangeSliderDemo() {
-  const [value, setValue] = useState<[number, number]>([120, 8000]);
+export function SliderRangeDemo() {
+  const [value, setValue] = useState([120, 8000]);
 
   return (
     <div className="audio-demo" data-variant="range-slider">
       <span className="demo-label">Filter band</span>
-      <RangeSlider.Root
+      <Slider.Root
         className="demo-range-slider"
         defaultValue={[120, 8000]}
         max={12000}
@@ -18,20 +18,20 @@ export function RangeSliderDemo() {
         step={10}
         value={value}
       >
-        <RangeSlider.Track className="demo-range-slider-track">
-          <RangeSlider.Range className="demo-range-slider-range" />
-          <RangeSlider.Thumb
+        <Slider.Track className="demo-range-slider-track">
+          <Slider.Range className="demo-range-slider-range" />
+          <Slider.Thumb
             index={0}
             aria-label="Minimum frequency"
             className="demo-range-slider-thumb"
           />
-          <RangeSlider.Thumb
+          <Slider.Thumb
             index={1}
             aria-label="Maximum frequency"
             className="demo-range-slider-thumb"
           />
-        </RangeSlider.Track>
-        <RangeSlider.Value
+        </Slider.Track>
+        <Slider.Value
           className="demo-readout"
           format={(nextValue) =>
             Array.isArray(nextValue)
@@ -39,8 +39,8 @@ export function RangeSliderDemo() {
               : formatFrequency(nextValue)
           }
         />
-        <RangeSlider.HiddenInput />
-      </RangeSlider.Root>
+        <Slider.HiddenInput />
+      </Slider.Root>
     </div>
   );
 }

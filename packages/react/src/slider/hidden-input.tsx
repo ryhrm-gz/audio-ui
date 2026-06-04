@@ -15,7 +15,7 @@ export const HiddenInput = forwardRef<HTMLInputElement, SliderHiddenInputProps>(
         name={name ?? context.name}
         required={required ?? context.required}
         disabled={disabled ?? context.disabled}
-        value={context.state.value}
+        value={JSON.stringify(context.state.value)}
       />
     );
   },

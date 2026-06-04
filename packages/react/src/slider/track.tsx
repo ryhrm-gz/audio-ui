@@ -1,22 +1,22 @@
-import { getSliderValueFromLinearDrag, getSliderValueFromPoint } from "@ryhrm-gz/audio-ui-core";
 import {
-  forwardRef,
-  useCallback,
-  useRef,
-  type CSSProperties,
-  type MouseEvent,
-  type PointerEvent,
-} from "react";
+  getClosestSliderThumbIndexFromPoint,
+  getSliderValueFromLinearDrag,
+  getSliderValueFromPoint,
+  type SliderThumbIndex,
+  type SliderValue,
+} from "@ryhrm-gz/audio-ui-core";
+import { forwardRef, useCallback, useRef, type MouseEvent, type PointerEvent } from "react";
 import { isFineControlEnabled } from "../shared/fine-control.ts";
 import { useComposedRefs } from "../shared/refs.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { useSliderContext } from "./context.tsx";
+import { getSliderStyle } from "./root.tsx";
 import type { SliderTrackProps } from "./types.ts";
 
 interface ActiveDrag {
   pointerId: number;
-  currentValue: number;
-  startValue: number;
+  activeThumb: SliderThumbIndex;
+  currentValue: SliderValue;
   startPointX: number;
   startPointY: number;
   fine: boolean;
@@ -43,19 +43,25 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
   const readOnly = context.readOnly;
   const allowTrackClick = context.allowTrackClick;
 
-  const getValueFromPointer = useCallback(
-    (event: PointerEvent<HTMLDivElement>) => {
-      const rect = event.currentTarget.getBoundingClientRect();
+  const getPoint = (event: PointerEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
 
+    return {
+      trackX: rect.left,
+      trackY: rect.top,
+      trackWidth: rect.width,
+      trackHeight: rect.height,
+      pointX: event.clientX,
+      pointY: event.clientY,
+    };
+  };
+
+  const getValueFromPointer = useCallback(
+    (event: PointerEvent<HTMLDivElement>, activeThumb: SliderThumbIndex) => {
       return getSliderValueFromPoint(
-        {
-          trackX: rect.left,
-          trackY: rect.top,
-          trackWidth: rect.width,
-          trackHeight: rect.height,
-          pointX: event.clientX,
-          pointY: event.clientY,
-        },
+        getPoint(event),
+        context.state.value,
+        activeThumb,
         context.state,
       );
     },
@@ -68,7 +74,7 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
 
       if (!fine) {
         return {
-          value: getValueFromPointer(event),
+          value: getValueFromPointer(event, activeDrag.activeThumb),
           fine,
           fineStartValue: undefined,
           fineStartPointX: undefined,
@@ -81,29 +87,37 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
         activeDrag.fineStartPointX === undefined ||
         activeDrag.fineStartPointY === undefined
       ) {
+        const currentThumbValue = Array.isArray(activeDrag.currentValue)
+          ? activeDrag.currentValue[activeDrag.activeThumb]
+          : activeDrag.currentValue;
+
         return {
           value: activeDrag.currentValue,
           fine,
-          fineStartValue: activeDrag.currentValue,
+          fineStartValue: currentThumbValue,
           fineStartPointX: event.clientX,
           fineStartPointY: event.clientY,
         };
       }
 
       const rect = event.currentTarget.getBoundingClientRect();
+      const drag = {
+        trackX: rect.left,
+        trackY: rect.top,
+        trackWidth: rect.width,
+        trackHeight: rect.height,
+        startValue: activeDrag.fineStartValue,
+        startPointX: activeDrag.fineStartPointX,
+        startPointY: activeDrag.fineStartPointY,
+        pointX: event.clientX,
+        pointY: event.clientY,
+      };
+
       return {
         value: getSliderValueFromLinearDrag(
-          {
-            trackX: rect.left,
-            trackY: rect.top,
-            trackWidth: rect.width,
-            trackHeight: rect.height,
-            startValue: activeDrag.fineStartValue,
-            startPointX: activeDrag.fineStartPointX,
-            startPointY: activeDrag.fineStartPointY,
-            pointX: event.clientX,
-            pointY: event.clientY,
-          },
+          drag,
+          context.state.value,
+          activeDrag.activeThumb,
           context.state,
           {
             fine,
@@ -138,23 +152,30 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
 
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
+    const activeThumb =
+      getThumbIndexFromTarget(event) ??
+      getClosestSliderThumbIndexFromPoint(getPoint(event), context.state.value, context.state);
     const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
-    const nextValue = allowTrackClick ? getValueFromPointer(event) : context.state.value;
+    const shouldUpdateFromPointer = allowTrackClick;
+    const nextValue = shouldUpdateFromPointer
+      ? getValueFromPointer(event, activeThumb)
+      : context.state.value;
+    const currentThumbValue = nextValue[activeThumb];
     activeDragRef.current = {
       pointerId: event.pointerId,
+      activeThumb,
       currentValue: nextValue,
-      startValue: nextValue,
       startPointX: event.clientX,
       startPointY: event.clientY,
       fine,
-      fineStartValue: fine ? nextValue : undefined,
+      fineStartValue: fine ? currentThumbValue : undefined,
       fineStartPointX: fine ? event.clientX : undefined,
       fineStartPointY: fine ? event.clientY : undefined,
     };
-    context.setDragging(true);
+    context.setActiveThumb(activeThumb);
 
-    if (allowTrackClick) {
-      context.setValue(nextValue, { fine });
+    if (shouldUpdateFromPointer) {
+      context.setValue(nextValue, { activeThumb, fine });
     }
   };
 
@@ -167,7 +188,6 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
       event.defaultPrevented ||
       disabled ||
       readOnly ||
-      !context.dragging ||
       activeDrag === null ||
       activeDrag.pointerId !== event.pointerId
     ) {
@@ -183,32 +203,50 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
       fineStartPointX: dragValue.fineStartPointX,
       fineStartPointY: dragValue.fineStartPointY,
     };
-    context.setValue(dragValue.value, { fine: dragValue.fine });
+    context.setValue(dragValue.value, {
+      activeThumb: activeDrag.activeThumb,
+      fine: dragValue.fine,
+    });
   };
 
   const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
     onPointerUp?.(event);
 
-    if (event.defaultPrevented || disabled || readOnly || !context.dragging) {
+    if (event.defaultPrevented || disabled || readOnly) {
       return;
     }
 
     const activeDrag = activeDragRef.current;
-    const dragValue = activeDrag?.currentValue ?? context.state.value;
+    if (activeDrag === null || activeDrag.pointerId !== event.pointerId) {
+      return;
+    }
+
+    const dragValue = activeDrag.currentValue;
     releasePointerCapture(event);
+    context.setActiveThumb(null);
     context.setDragging(false);
     activeDragRef.current = null;
-    context.commitValue(dragValue, { fine: activeDrag?.fine });
+    context.commitValue(dragValue, {
+      activeThumb: activeDrag.activeThumb,
+      fine: activeDrag.fine,
+    });
   };
 
   const handlePointerCancel = (event: PointerEvent<HTMLDivElement>) => {
     onPointerCancel?.(event);
 
-    if (event.defaultPrevented || disabled || readOnly || !context.dragging) {
+    if (event.defaultPrevented || disabled || readOnly) {
+      return;
+    }
+
+    const activeDrag = activeDragRef.current;
+
+    if (activeDrag === null || activeDrag.pointerId !== event.pointerId) {
       return;
     }
 
     releasePointerCapture(event);
+    context.setActiveThumb(null);
     context.setDragging(false);
     activeDragRef.current = null;
   };
@@ -232,6 +270,7 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
   const trackProps = mergeProps(elementProps, {
     ref: composedRef,
     "data-part": "track",
+    "data-thumb-count": context.state.thumbs.length,
     "data-orientation": context.state.orientation,
     "data-origin": context.state.origin,
     "data-inverted": context.state.inverted ? "" : undefined,
@@ -239,15 +278,7 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
     "data-readonly": readOnly ? "" : undefined,
     "data-track-click-disabled": allowTrackClick ? undefined : "",
     "data-dragging": context.dragging ? "" : undefined,
-    style: {
-      ...style,
-      "--slider-value": context.state.value,
-      "--slider-percent": context.state.percent,
-      "--slider-origin-percent": context.state.originPercent,
-      "--slider-range-start-percent": context.state.rangeStartPercent,
-      "--slider-range-end-percent": context.state.rangeEndPercent,
-      "--slider-range-size-percent": context.state.rangeSizePercent,
-    } as CSSProperties,
+    style: getSliderStyle(style, context.state),
     onPointerDown: handlePointerDown,
     onPointerMove: handlePointerMove,
     onPointerUp: handlePointerUp,
@@ -259,10 +290,24 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
 });
 
 function isThumbPointerTarget(event: PointerEvent<HTMLDivElement>) {
-  if (!(event.target instanceof Element)) {
+  if (typeof Element === "undefined" || !(event.target instanceof Element)) {
     return false;
   }
 
   const thumb = event.target.closest('[data-part="thumb"]');
   return thumb !== null && event.currentTarget.contains(thumb);
+}
+
+function getThumbIndexFromTarget(event: PointerEvent<HTMLDivElement>) {
+  if (typeof Element === "undefined" || !(event.target instanceof Element)) {
+    return undefined;
+  }
+
+  const thumb = event.target.closest("[data-thumb-index]");
+
+  if (thumb === null || !event.currentTarget.contains(thumb)) {
+    return undefined;
+  }
+
+  return thumb.getAttribute("data-thumb-index") === "1" ? 1 : 0;
 }

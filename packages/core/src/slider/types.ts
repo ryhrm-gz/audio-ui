@@ -2,8 +2,19 @@ import type { RangeOptions } from "../shared/range.ts";
 
 export type SliderOrientation = "horizontal" | "vertical";
 export type SliderOrigin = "left" | "center" | "right";
+export type SliderThumbIndex = number;
+export type SliderValue = number[];
 
-export interface SliderRange extends RangeOptions {}
+export interface SliderThumbOptions {
+  min?: number;
+  max?: number;
+}
+
+export interface SliderRange extends RangeOptions {
+  minStepsBetweenThumbs?: number;
+  minDistance?: number;
+  thumbs?: readonly SliderThumbOptions[];
+}
 
 export interface SliderOptions extends SliderRange {
   orientation?: SliderOrientation;
@@ -31,12 +42,22 @@ export interface SliderDragOptions {
   fineFactor?: number;
 }
 
-export interface SliderState {
+export interface SliderThumbState {
+  index: SliderThumbIndex;
   value: number;
+  percent: number;
+  min: number;
+  max: number;
+}
+
+export interface SliderState {
   min: number;
   max: number;
   step: number;
-  percent: number;
+  minStepsBetweenThumbs: number;
+  minDistance: number;
+  value: SliderValue;
+  percent: SliderValue;
   origin: SliderOrigin;
   originPercent: number;
   rangeStartPercent: number;
@@ -44,4 +65,5 @@ export interface SliderState {
   rangeSizePercent: number;
   orientation: SliderOrientation;
   inverted: boolean;
+  thumbs: SliderThumbState[];
 }

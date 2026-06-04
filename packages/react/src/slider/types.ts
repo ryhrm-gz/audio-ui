@@ -2,6 +2,8 @@ import type {
   SliderOptions,
   SliderRange as SliderRangeOptions,
   SliderState,
+  SliderThumbIndex,
+  SliderValue,
 } from "@ryhrm-gz/audio-ui-core";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import type { FineControlProp } from "../shared/fine-control.ts";
@@ -14,8 +16,8 @@ export interface SliderRootProps
     Omit<ComponentPropsWithoutRef<"div">, "defaultValue" | "onChange" | "children">,
     SliderRangeOptions,
     Pick<SliderOptions, "orientation" | "inverted" | "origin"> {
-  value?: number;
-  defaultValue?: number;
+  value?: SliderValue;
+  defaultValue?: SliderValue;
   disabled?: boolean;
   readOnly?: boolean;
   fineControl?: FineControlProp;
@@ -24,9 +26,9 @@ export interface SliderRootProps
   name?: string;
   required?: boolean;
   children?: ReactNode | ((state: RenderState<SliderState>) => ReactNode);
-  onValueChange?: (value: number) => void;
-  onValueCommit?: (value: number) => void;
   render?: RenderProp<ElementProps, SliderState>;
+  onValueChange?: (value: SliderValue) => void;
+  onValueCommit?: (value: SliderValue) => void;
 }
 
 export interface SliderTrackProps extends Omit<
@@ -44,12 +46,14 @@ export interface SliderThumbProps extends Omit<
   ComponentPropsWithoutRef<"span">,
   "defaultValue" | "onChange"
 > {
+  index: SliderThumbIndex;
   render?: RenderProp<ElementProps, SliderState>;
 }
 
 export interface SliderValueProps extends Omit<ComponentPropsWithoutRef<"span">, "children"> {
+  index?: SliderThumbIndex;
   children?: ReactNode | ((state: RenderState<SliderState>) => ReactNode);
-  format?: (value: number, state: SliderState) => ReactNode;
+  format?: (value: SliderValue | number, state: SliderState, index?: SliderThumbIndex) => ReactNode;
   render?: RenderProp<ElementProps, SliderState>;
 }
 

@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { RangeSlider } from "@ryhrm-gz/audio-ui-react";
+import { Slider } from "@ryhrm-gz/audio-ui-react";
 
 function formatFrequency(value: number) {
   return value >= 1000 ? `${(value / 1000).toFixed(1)} kHz` : `${value} Hz`;
 }
 
-export function RangeSliderVerticalExample() {
-  const [value, setValue] = useState<[number, number]>([200, 4000]);
+export function SliderRangeVerticalExample() {
+  const [value, setValue] = useState([200, 4000]);
 
   return (
     <div className="audio-demo" data-variant="range-slider">
       <span className="demo-label">Vertical</span>
-      <RangeSlider.Root
+      <Slider.Root
         className="demo-range-slider"
         defaultValue={[200, 4000]}
         max={12000}
@@ -21,12 +21,12 @@ export function RangeSliderVerticalExample() {
         step={10}
         value={value}
       >
-        <RangeSlider.Track className="demo-range-slider-track">
-          <RangeSlider.Range className="demo-range-slider-range" />
-          <RangeSlider.Thumb index={0} aria-label="Low band" className="demo-range-slider-thumb" />
-          <RangeSlider.Thumb index={1} aria-label="High band" className="demo-range-slider-thumb" />
-        </RangeSlider.Track>
-        <RangeSlider.Value
+        <Slider.Track className="demo-range-slider-track">
+          <Slider.Range className="demo-range-slider-range" />
+          <Slider.Thumb index={0} aria-label="Low band" className="demo-range-slider-thumb" />
+          <Slider.Thumb index={1} aria-label="High band" className="demo-range-slider-thumb" />
+        </Slider.Track>
+        <Slider.Value
           className="demo-readout"
           format={(nextValue) =>
             Array.isArray(nextValue)
@@ -34,18 +34,18 @@ export function RangeSliderVerticalExample() {
               : formatFrequency(nextValue)
           }
         />
-      </RangeSlider.Root>
+      </Slider.Root>
     </div>
   );
 }
 
-export function RangeSliderInvertedExample() {
-  const [value, setValue] = useState<[number, number]>([500, 6000]);
+export function SliderRangeInvertedExample() {
+  const [value, setValue] = useState([500, 6000]);
 
   return (
     <div className="audio-demo" data-variant="range-slider">
       <span className="demo-label">Inverted</span>
-      <RangeSlider.Root
+      <Slider.Root
         className="demo-range-slider"
         defaultValue={[500, 6000]}
         inverted
@@ -55,16 +55,12 @@ export function RangeSliderInvertedExample() {
         step={10}
         value={value}
       >
-        <RangeSlider.Track className="demo-range-slider-track">
-          <RangeSlider.Range className="demo-range-slider-range" />
-          <RangeSlider.Thumb
-            index={0}
-            aria-label="Band start"
-            className="demo-range-slider-thumb"
-          />
-          <RangeSlider.Thumb index={1} aria-label="Band end" className="demo-range-slider-thumb" />
-        </RangeSlider.Track>
-        <RangeSlider.Value
+        <Slider.Track className="demo-range-slider-track">
+          <Slider.Range className="demo-range-slider-range" />
+          <Slider.Thumb index={0} aria-label="Band start" className="demo-range-slider-thumb" />
+          <Slider.Thumb index={1} aria-label="Band end" className="demo-range-slider-thumb" />
+        </Slider.Track>
+        <Slider.Value
           className="demo-readout"
           format={(nextValue) =>
             Array.isArray(nextValue)
@@ -72,16 +68,16 @@ export function RangeSliderInvertedExample() {
               : formatFrequency(nextValue)
           }
         />
-      </RangeSlider.Root>
+      </Slider.Root>
     </div>
   );
 }
 
-export function RangeSliderReadOnlyExample() {
+export function SliderRangeReadOnlyExample() {
   return (
     <div className="audio-demo" data-variant="range-slider">
       <span className="demo-label">Read only</span>
-      <RangeSlider.Root
+      <Slider.Root
         className="demo-range-slider"
         defaultValue={[80, 12000]}
         max={12000}
@@ -89,12 +85,12 @@ export function RangeSliderReadOnlyExample() {
         readOnly
         step={10}
       >
-        <RangeSlider.Track className="demo-range-slider-track">
-          <RangeSlider.Range className="demo-range-slider-range" />
-          <RangeSlider.Thumb index={0} aria-label="HP cutoff" className="demo-range-slider-thumb" />
-          <RangeSlider.Thumb index={1} aria-label="LP cutoff" className="demo-range-slider-thumb" />
-        </RangeSlider.Track>
-        <RangeSlider.Value
+        <Slider.Track className="demo-range-slider-track">
+          <Slider.Range className="demo-range-slider-range" />
+          <Slider.Thumb index={0} aria-label="HP cutoff" className="demo-range-slider-thumb" />
+          <Slider.Thumb index={1} aria-label="LP cutoff" className="demo-range-slider-thumb" />
+        </Slider.Track>
+        <Slider.Value
           className="demo-readout"
           format={(nextValue) =>
             Array.isArray(nextValue)
@@ -102,7 +98,7 @@ export function RangeSliderReadOnlyExample() {
               : formatFrequency(nextValue)
           }
         />
-      </RangeSlider.Root>
+      </Slider.Root>
     </div>
   );
 }

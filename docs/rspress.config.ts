@@ -58,10 +58,6 @@ export default defineConfig({
               link: "/components/slider",
             },
             {
-              text: "RangeSlider",
-              link: "/components/range-slider",
-            },
-            {
               text: "XYPad",
               link: "/components/xypad",
             },
