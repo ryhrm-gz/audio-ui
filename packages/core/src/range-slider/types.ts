@@ -31,7 +31,7 @@ export interface RangeSliderLinearDrag extends RangeSliderPoint {
 
 export interface RangeSliderDragOptions {
   fine?: boolean;
-  fineStep?: number;
+  fineFactor?: number;
 }
 
 export interface RangeSliderThumbState {

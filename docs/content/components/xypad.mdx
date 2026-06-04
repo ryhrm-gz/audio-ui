@@ -40,7 +40,7 @@ export function FilterPad() {
 
 ## Keyboard interaction
 
-Arrow Left and Arrow Right move the X axis. Arrow Down and Arrow Up move the Y axis. Page Down and Page Up move Y by a larger step, and Shift reduces the step size for fine control. Home moves both axes to their minimum values; End moves both axes to their maximum values so the behavior stays deterministic for a two-axis control.
+Arrow Left and Arrow Right move the X axis. Arrow Down and Arrow Up move the Y axis. Page Down and Page Up move Y by a larger step. Hold Shift while dragging for fine control. Home moves both axes to their minimum values; End moves both axes to their maximum values so the behavior stays deterministic for a two-axis control.
 
 ## Styling hooks
 
@@ -60,25 +60,25 @@ The root and interactive parts expose X/Y value and percent variables. Percent v
 
 `XYPad.Root` renders a `div`, owns XYPad state, and provides context to the other parts. It accepts standard `div` props except `defaultValue`, `onChange`, and `children`, which are replaced by the XYPad-specific API.
 
-| Prop                 | Type                                    | Default                | Description                                                                                                        |
-| -------------------- | --------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `value`              | `{ x: number; y: number }`              | -                      | Controlled value. Pass with `onValueChange` when external state owns the XYPad value.                              |
-| `defaultValue`       | `{ x: number; y: number }`              | `{ x: minX, y: minY }` | Initial uncontrolled value. Also becomes the double-click reset target.                                            |
-| `minX` / `maxX`      | `number`                                | `0` / `100`            | X-axis value bounds. If min is greater than max, the core range resolver normalizes the order.                     |
-| `stepX`              | `number`                                | `1`                    | X-axis increment for pointer and keyboard changes. Non-positive or invalid steps fall back to the default.         |
-| `minY` / `maxY`      | `number`                                | `0` / `100`            | Y-axis value bounds. If min is greater than max, the core range resolver normalizes the order.                     |
-| `stepY`              | `number`                                | `1`                    | Y-axis increment for pointer and keyboard changes. Non-positive or invalid steps fall back to the default.         |
-| `disabled`           | `boolean`                               | `false`                | Prevents pointer and keyboard interaction, removes the thumb from tab order, and adds disabled state attributes.   |
-| `readOnly`           | `boolean`                               | `false`                | Keeps the thumb focusable while preventing value changes, and adds readonly state attributes.                      |
-| `fineControl`        | `boolean \| { x?: number; y?: number }` | `true`                 | When `true`, Shift uses 10% of each axis `step`. Pass `false` to disable, or an object to set per-axis fine steps. |
-| `resetOnDoubleClick` | `boolean`                               | `true`                 | Allows a double click on the area to reset to `defaultValue`, or to the minimum axes when no default is supplied.  |
-| `allowTrackClick`    | `boolean`                               | `true`                 | When true, pointer down anywhere in the area jumps to the pointer position before dragging.                        |
-| `name`               | `string`                                | -                      | Default form field name consumed by `XYPad.HiddenInput`.                                                           |
-| `required`           | `boolean`                               | -                      | Default required flag consumed by `XYPad.HiddenInput`.                                                             |
-| `children`           | `ReactNode \| (state) => ReactNode`     | -                      | Parts to render. Function children receive the render state, including value state plus interaction flags.         |
-| `onValueChange`      | `(value: XYPadValue) => void`           | -                      | Fires when interaction produces a new clamped and snapped value.                                                   |
-| `onValueCommit`      | `(value: XYPadValue) => void`           | -                      | Fires when an interaction commits, such as pointer up, keyboard step, or reset.                                    |
-| `render`             | `RenderProp<ElementProps, XYPadState>`  | -                      | Replaces the root element while preserving generated props and render state.                                       |
+| Prop                 | Type                                    | Default                | Description                                                                                                                          |
+| -------------------- | --------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `value`              | `{ x: number; y: number }`              | -                      | Controlled value. Pass with `onValueChange` when external state owns the XYPad value.                                                |
+| `defaultValue`       | `{ x: number; y: number }`              | `{ x: minX, y: minY }` | Initial uncontrolled value. Also becomes the double-click reset target.                                                              |
+| `minX` / `maxX`      | `number`                                | `0` / `100`            | X-axis value bounds. If min is greater than max, the core range resolver normalizes the order.                                       |
+| `stepX`              | `number`                                | `1`                    | X-axis increment for pointer and keyboard changes. Non-positive or invalid steps fall back to the default.                           |
+| `minY` / `maxY`      | `number`                                | `0` / `100`            | Y-axis value bounds. If min is greater than max, the core range resolver normalizes the order.                                       |
+| `stepY`              | `number`                                | `1`                    | Y-axis increment for pointer and keyboard changes. Non-positive or invalid steps fall back to the default.                           |
+| `disabled`           | `boolean`                               | `false`                | Prevents pointer and keyboard interaction, removes the thumb from tab order, and adds disabled state attributes.                     |
+| `readOnly`           | `boolean`                               | `false`                | Keeps the thumb focusable while preventing value changes, and adds readonly state attributes.                                        |
+| `fineControl`        | `boolean \| { x?: number; y?: number }` | `true`                 | When `true`, Shift scales pointer drag movement to 10% per axis. Pass `false` to disable, or an object to set per-axis drag factors. |
+| `resetOnDoubleClick` | `boolean`                               | `true`                 | Allows a double click on the area to reset to `defaultValue`, or to the minimum axes when no default is supplied.                    |
+| `allowTrackClick`    | `boolean`                               | `true`                 | When true, pointer down anywhere in the area jumps to the pointer position before dragging.                                          |
+| `name`               | `string`                                | -                      | Default form field name consumed by `XYPad.HiddenInput`.                                                                             |
+| `required`           | `boolean`                               | -                      | Default required flag consumed by `XYPad.HiddenInput`.                                                                               |
+| `children`           | `ReactNode \| (state) => ReactNode`     | -                      | Parts to render. Function children receive the render state, including value state plus interaction flags.                           |
+| `onValueChange`      | `(value: XYPadValue) => void`           | -                      | Fires when interaction produces a new clamped and snapped value.                                                                     |
+| `onValueCommit`      | `(value: XYPadValue) => void`           | -                      | Fires when an interaction commits, such as pointer up, keyboard step, or reset.                                                      |
+| `render`             | `RenderProp<ElementProps, XYPadState>`  | -                      | Replaces the root element while preserving generated props and render state.                                                         |
 
 ### Parts
 

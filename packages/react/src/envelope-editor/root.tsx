@@ -15,7 +15,7 @@ import {
   useState,
   type CSSProperties,
 } from "react";
-import { isFineControlEnabled, resolveFineAxisValueStep } from "../shared/fine-control.ts";
+import { resolveFineAxisFactor } from "../shared/fine-control.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import {
   EnvelopeEditorContext,
@@ -49,7 +49,6 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
   } = props;
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState(defaultValue);
-  const [valueStep, setValueStep] = useState<{ time?: number; level?: number }>({});
   const [draggingPoint, setDraggingPoint] = useState<EnvelopeEditorPointId | null>(null);
   const rawValue = isControlled ? value : internalValue;
   const state = useMemo(
@@ -64,8 +63,6 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
         mode,
         disabled,
         readOnly,
-        valueStepTime: valueStep.time,
-        valueStepLevel: valueStep.level,
         activePoint: draggingPoint,
       }),
     [
@@ -79,14 +76,13 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
       mode,
       disabled,
       readOnly,
-      valueStep,
       draggingPoint,
     ],
   );
   const valueId = useId();
   const graphRef = useRef<HTMLDivElement | null>(null);
-  const getFineValueStep = useCallback(
-    (step: number, axis: "time" | "level") => resolveFineAxisValueStep(step, axis, fineControl),
+  const getFineFactor = useCallback(
+    (axis: "time" | "level") => resolveFineAxisFactor(axis, fineControl),
     [fineControl],
   );
 
@@ -95,17 +91,6 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
       nextValue: EnvelopeEditorValue,
       options: EnvelopeEditorValueChangeOptions = {},
     ): EnvelopeEditorState => {
-      const nextValueStep = {
-        time:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepTime, "time")
-            : undefined,
-        level:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepLevel, "level")
-            : undefined,
-      };
-
       return createEnvelopeEditorState(nextValue, {
         minTime,
         maxTime,
@@ -116,24 +101,18 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
         mode,
         disabled,
         readOnly,
-        valueStepTime: nextValueStep.time,
-        valueStepLevel: nextValueStep.level,
         activePoint: options.activePoint ?? draggingPoint,
       });
     },
     [
       disabled,
       draggingPoint,
-      fineControl,
-      getFineValueStep,
       maxLevel,
       maxTime,
       minLevel,
       minTime,
       mode,
       readOnly,
-      state.stepLevel,
-      state.stepTime,
       stepLevel,
       stepTime,
     ],
@@ -142,17 +121,6 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
   const setValue = useCallback(
     (nextValue: EnvelopeEditorValue, options: EnvelopeEditorValueChangeOptions = {}) => {
       const nextState = getStateForValue(nextValue, options);
-      const nextValueStep = {
-        time:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepTime, "time")
-            : undefined,
-        level:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepLevel, "level")
-            : undefined,
-      };
-      setValueStep(nextValueStep);
 
       if (!isControlled) {
         setInternalValue(nextState.value);
@@ -162,16 +130,7 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
         onValueChange?.(nextState.value);
       }
     },
-    [
-      fineControl,
-      getFineValueStep,
-      getStateForValue,
-      isControlled,
-      onValueChange,
-      state.stepLevel,
-      state.stepTime,
-      state.value,
-    ],
+    [getStateForValue, isControlled, onValueChange, state.value],
   );
 
   const commitValue = useCallback(
@@ -188,7 +147,7 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       draggingPoint,
       valueId,
       name,
@@ -203,7 +162,7 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       draggingPoint,
       valueId,
       name,

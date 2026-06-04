@@ -1,5 +1,5 @@
 import { createXYPadState, type XYPadState } from "@ryhrm-gz/audio-ui-core";
-import { isFineControlEnabled, resolveFineAxisValueStep } from "../shared/fine-control.ts";
+import { resolveFineAxisFactor } from "../shared/fine-control.ts";
 import {
   forwardRef,
   useCallback,
@@ -12,8 +12,6 @@ import {
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { XYPadContext, type XYPadContextValue, type XYPadValueChangeOptions } from "./context.tsx";
 import type { XYPadRootProps } from "./types.ts";
-
-const defaultValueStep = {};
 
 export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(props, ref) {
   const {
@@ -43,7 +41,6 @@ export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(pro
   const initialValue = defaultValueProp ?? { x: minX ?? 0, y: minY ?? 0 };
   const resetValueTarget = defaultValueProp ?? { x: minX ?? 0, y: minY ?? 0 };
   const [internalValue, setInternalValue] = useState(initialValue);
-  const [valueStep, setValueStep] = useState<{ x?: number; y?: number }>(defaultValueStep);
   const [dragging, setDragging] = useState(false);
   const rawValue = isControlled ? value : internalValue;
   const state = useMemo(
@@ -55,31 +52,18 @@ export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(pro
         minY,
         maxY,
         stepY,
-        valueStepX: valueStep.x,
-        valueStepY: valueStep.y,
       }),
-    [rawValue, minX, maxX, stepX, minY, maxY, stepY, valueStep],
+    [rawValue, minX, maxX, stepX, minY, maxY, stepY],
   );
   const valueId = useId();
   const areaRef = useRef<HTMLDivElement | null>(null);
-  const getFineValueStep = useCallback(
-    (step: number, axis: "x" | "y") => resolveFineAxisValueStep(step, axis, fineControl),
+  const getFineFactor = useCallback(
+    (axis: "x" | "y") => resolveFineAxisFactor(axis, fineControl),
     [fineControl],
   );
 
   const getStateForValue = useCallback(
-    (nextValue: { x: number; y: number }, options: XYPadValueChangeOptions = {}): XYPadState => {
-      const nextValueStep = {
-        x:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepX, "x")
-            : undefined,
-        y:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepY, "y")
-            : undefined,
-      };
-
+    (nextValue: { x: number; y: number }, _options: XYPadValueChangeOptions = {}): XYPadState => {
       return createXYPadState(nextValue, {
         minX,
         maxX,
@@ -87,27 +71,14 @@ export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(pro
         minY,
         maxY,
         stepY,
-        valueStepX: nextValueStep.x,
-        valueStepY: nextValueStep.y,
       });
     },
-    [fineControl, getFineValueStep, maxX, maxY, minX, minY, state.stepX, state.stepY, stepX, stepY],
+    [maxX, maxY, minX, minY, stepX, stepY],
   );
 
   const setValue = useCallback(
     (nextValue: { x: number; y: number }, options: XYPadValueChangeOptions = {}) => {
       const nextState = getStateForValue(nextValue, options);
-      const nextValueStep = {
-        x:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepX, "x")
-            : undefined,
-        y:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepY, "y")
-            : undefined,
-      };
-      setValueStep(nextValueStep);
 
       if (!isControlled) {
         setInternalValue(nextState.value);
@@ -117,17 +88,7 @@ export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(pro
         onValueChange?.(nextState.value);
       }
     },
-    [
-      fineControl,
-      getFineValueStep,
-      getStateForValue,
-      isControlled,
-      onValueChange,
-      state.stepX,
-      state.stepY,
-      state.value.x,
-      state.value.y,
-    ],
+    [getStateForValue, isControlled, onValueChange, state.value.x, state.value.y],
   );
 
   const commitValue = useCallback(
@@ -149,7 +110,7 @@ export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(pro
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       resetOnDoubleClick,
       allowTrackClick,
       dragging,
@@ -167,7 +128,7 @@ export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(pro
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       resetOnDoubleClick,
       allowTrackClick,
       dragging,

@@ -6,8 +6,8 @@ export interface EQCurveContextValue {
   state: EQCurveState;
   disabled: boolean;
   readOnly: boolean;
-  fineControl: FineControlAxesProp<"frequency" | "gain" | "q">;
-  getFineValueStep: (step: number, axis: "frequency" | "gain" | "q") => number;
+  fineControl: FineControlAxesProp<"frequency" | "gain">;
+  getFineFactor: (axis: "frequency" | "gain") => number;
   draggingBand: string | null;
   valueId: string;
   name?: string;

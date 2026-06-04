@@ -141,7 +141,7 @@ test("handles point keyboard movement", () => {
   ).toBeUndefined();
 });
 
-test("handles point keyboard movement with fine control", () => {
+test("keeps point keyboard movement on the configured step", () => {
   expect(
     getNextEnvelopeEditorKeyboardValue(
       { attack: 0.1, decay: 0.2, sustain: 0.5, release: 0.3 },
@@ -151,7 +151,7 @@ test("handles point keyboard movement with fine control", () => {
       { fine: true },
     ),
   ).toEqual({
-    attack: expect.closeTo(0.105, 10),
+    attack: expect.closeTo(0.15, 10),
     decay: expect.closeTo(0.2, 10),
     sustain: 0.5,
     release: expect.closeTo(0.3, 10),
@@ -168,7 +168,7 @@ test("handles point keyboard movement with fine control", () => {
   ).toEqual({
     attack: 0.1,
     decay: 0.2,
-    sustain: expect.closeTo(0.51, 10),
+    sustain: expect.closeTo(0.6, 10),
     release: 0.3,
   });
 });

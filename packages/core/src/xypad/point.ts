@@ -1,4 +1,4 @@
-import { getFineStep } from "../shared/range.ts";
+import { resolveFineControlFactor } from "../shared/range.ts";
 import { defaultXYPadOptions, resolveXYPadOptions } from "./options.ts";
 import type { XYPadDragOptions, XYPadLinearDrag, XYPadOptions, XYPadPoint } from "./types.ts";
 import { getXYPadPercent, getXYPadValueFromPercent } from "./value.ts";
@@ -25,24 +25,17 @@ export function getXYPadValueFromLinearDrag(
   dragOptions: XYPadDragOptions = {},
 ) {
   const resolvedOptions = resolveXYPadOptions(options);
-  const dragFactor = dragOptions.fine ? 0.1 : 1;
+  const dragFactorX = dragOptions.fine ? resolveFineControlFactor(dragOptions.fineFactorX) : 1;
+  const dragFactorY = dragOptions.fine ? resolveFineControlFactor(dragOptions.fineFactorY) : 1;
   const width = getValidSize(drag.areaWidth);
   const height = getValidSize(drag.areaHeight);
   const startPercent = getXYPadPercent(drag.startValue, resolvedOptions);
   const nextPercent = {
-    x: startPercent.x + ((drag.pointX - drag.startPointX) / width) * dragFactor,
-    y: startPercent.y + ((drag.startPointY - drag.pointY) / height) * dragFactor,
+    x: startPercent.x + ((drag.pointX - drag.startPointX) / width) * dragFactorX,
+    y: startPercent.y + ((drag.startPointY - drag.pointY) / height) * dragFactorY,
   };
 
-  return getXYPadValueFromPercent(nextPercent, {
-    ...resolvedOptions,
-    valueStepX: dragOptions.fine
-      ? getFineStep(resolvedOptions.stepX, dragOptions.fineStepX)
-      : undefined,
-    valueStepY: dragOptions.fine
-      ? getFineStep(resolvedOptions.stepY, dragOptions.fineStepY)
-      : undefined,
-  });
+  return getXYPadValueFromPercent(nextPercent, resolvedOptions);
 }
 
 function clampPercent(percent: number) {

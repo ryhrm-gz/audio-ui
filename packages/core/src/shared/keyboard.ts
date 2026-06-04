@@ -1,32 +1,28 @@
 import type { RangeOptions } from "./range.ts";
-import { getFineStep, normalizeRangeValue, resolveRangeOptions } from "./range.ts";
+import { normalizeRangeValue, resolveRangeOptions } from "./range.ts";
 
-export interface RangeKeyboardOptions {
-  fine?: boolean;
-  fineStep?: number;
-}
+export type RangeKeyboardOptions = object;
 
 export function getNextRangeKeyboardValue(
   value: number,
   key: string,
   options: RangeOptions = {},
-  keyboard: RangeKeyboardOptions = {},
+  _keyboard: RangeKeyboardOptions = {},
 ) {
   const { min, max, step } = resolveRangeOptions(options);
-  const valueStep = keyboard.fine ? getFineStep(step, keyboard.fineStep) : step;
-  const largeStep = valueStep * 10;
+  const largeStep = step * 10;
 
   switch (key) {
     case "ArrowUp":
     case "ArrowRight":
-      return normalizeRangeValue(value + valueStep, { min, max, step, valueStep });
+      return normalizeRangeValue(value + step, { min, max, step });
     case "ArrowDown":
     case "ArrowLeft":
-      return normalizeRangeValue(value - valueStep, { min, max, step, valueStep });
+      return normalizeRangeValue(value - step, { min, max, step });
     case "PageUp":
-      return normalizeRangeValue(value + largeStep, { min, max, step, valueStep });
+      return normalizeRangeValue(value + largeStep, { min, max, step });
     case "PageDown":
-      return normalizeRangeValue(value - largeStep, { min, max, step, valueStep });
+      return normalizeRangeValue(value - largeStep, { min, max, step });
     case "Home":
       return min;
     case "End":

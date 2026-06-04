@@ -126,9 +126,9 @@ test("maps range slider linear drag with fine control", () => {
   // Normal drag: 50% track moved left -> 25% value
   expect(getRangeSliderValueFromLinearDrag(drag, [10, 80], 0)).toEqual([25, 80]);
 
-  // Fine drag: 50% track moved left at 0.1 factor -> 47.5% value
+  // Fine drag: 50% track moved left at 0.1 factor -> 47.5%, snapped to the normal step.
   expect(getRangeSliderValueFromLinearDrag(drag, [10, 80], 0, {}, { fine: true })).toEqual([
-    47.5, 80,
+    48, 80,
   ]);
 
   // Vertical orientation

@@ -13,7 +13,7 @@ import {
   useState,
   type CSSProperties,
 } from "react";
-import { isFineControlEnabled, resolveFineValueStep } from "../shared/fine-control.ts";
+import { resolveFineFactor } from "../shared/fine-control.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import {
   RangeSliderContext,
@@ -50,7 +50,6 @@ export const Root = forwardRef<HTMLDivElement, RangeSliderRootProps>(function Ro
   const initialValue: RangeSliderValue = defaultValue ?? [min ?? 0, max ?? 100];
   const resetValueTarget: RangeSliderValue = defaultValue ?? [min ?? 0, max ?? 100];
   const [internalValue, setInternalValue] = useState<RangeSliderValue>(initialValue);
-  const [valueStep, setValueStep] = useState<number | undefined>(undefined);
   const [activeThumb, setActiveThumb] = useState<RangeSliderThumbIndex | null>(null);
   const rawValue = isControlled ? value : internalValue;
   const state = useMemo(
@@ -63,34 +62,16 @@ export const Root = forwardRef<HTMLDivElement, RangeSliderRootProps>(function Ro
         minDistance,
         orientation,
         inverted,
-        valueStep,
       }),
-    [
-      rawValue,
-      min,
-      max,
-      step,
-      minStepsBetweenThumbs,
-      minDistance,
-      orientation,
-      inverted,
-      valueStep,
-    ],
+    [rawValue, min, max, step, minStepsBetweenThumbs, minDistance, orientation, inverted],
   );
   const valueId = useId();
   const trackRef = useRef<HTMLDivElement | null>(null);
   const dragging = activeThumb !== null;
-  const getFineValueStep = useCallback(
-    (step: number) => resolveFineValueStep(step, fineControl),
-    [fineControl],
-  );
+  const getFineFactor = useCallback(() => resolveFineFactor(fineControl), [fineControl]);
 
   const getStateForValue = useCallback(
-    (nextValue: RangeSliderValue, options: RangeSliderValueOptions = {}): RangeSliderState => {
-      const nextValueStep =
-        isFineControlEnabled(fineControl) && options.fine
-          ? getFineValueStep(state.step)
-          : undefined;
+    (nextValue: RangeSliderValue, _options: RangeSliderValueOptions = {}): RangeSliderState => {
       return createRangeSliderState(nextValue, {
         min,
         max,
@@ -99,29 +80,13 @@ export const Root = forwardRef<HTMLDivElement, RangeSliderRootProps>(function Ro
         minDistance,
         orientation,
         inverted,
-        valueStep: nextValueStep,
       });
     },
-    [
-      fineControl,
-      getFineValueStep,
-      inverted,
-      max,
-      min,
-      minDistance,
-      minStepsBetweenThumbs,
-      orientation,
-      state.step,
-      step,
-    ],
+    [inverted, max, min, minDistance, minStepsBetweenThumbs, orientation, step],
   );
 
   const setValue = useCallback(
     (nextValue: RangeSliderValue, options: RangeSliderValueOptions = {}) => {
-      const nextValueStep =
-        isFineControlEnabled(fineControl) && options.fine
-          ? getFineValueStep(state.step)
-          : undefined;
       const nextState = createRangeSliderState(nextValue, {
         min,
         max,
@@ -130,10 +95,8 @@ export const Root = forwardRef<HTMLDivElement, RangeSliderRootProps>(function Ro
         minDistance,
         orientation,
         inverted,
-        valueStep: nextValueStep,
         activeThumb: options.activeThumb,
       });
-      setValueStep(nextValueStep);
 
       if (!isControlled) {
         setInternalValue(nextState.value);
@@ -144,8 +107,6 @@ export const Root = forwardRef<HTMLDivElement, RangeSliderRootProps>(function Ro
       }
     },
     [
-      fineControl,
-      getFineValueStep,
       inverted,
       isControlled,
       max,
@@ -154,7 +115,6 @@ export const Root = forwardRef<HTMLDivElement, RangeSliderRootProps>(function Ro
       minStepsBetweenThumbs,
       onValueChange,
       orientation,
-      state.step,
       state.value,
       step,
     ],
@@ -179,7 +139,7 @@ export const Root = forwardRef<HTMLDivElement, RangeSliderRootProps>(function Ro
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       resetOnDoubleClick,
       dragging,
       activeThumb,
@@ -197,7 +157,7 @@ export const Root = forwardRef<HTMLDivElement, RangeSliderRootProps>(function Ro
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       resetOnDoubleClick,
       dragging,
       activeThumb,

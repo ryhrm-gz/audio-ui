@@ -20,7 +20,7 @@ export const defaultRangeOptions = {
   step: 1,
 } satisfies Required<RangeOptions>;
 
-export const fineStepFactor = 0.1;
+export const defaultFineControlFactor = 0.1;
 
 export function resolveRangeOptions(
   options: RangeOptions = {},
@@ -80,12 +80,12 @@ export function getRangeValueFromPercent(
   });
 }
 
-export function getFineStep(step: number, fineStep?: number) {
-  if (typeof fineStep === "number" && Number.isFinite(fineStep) && fineStep > 0) {
-    return fineStep;
-  }
-
-  return step * fineStepFactor;
+export function resolveFineControlFactor(fineControlFactor?: number) {
+  return typeof fineControlFactor === "number" &&
+    Number.isFinite(fineControlFactor) &&
+    fineControlFactor > 0
+    ? fineControlFactor
+    : defaultFineControlFactor;
 }
 
 function resolveValueStep(valueStep: number | undefined, fallbackStep: number) {

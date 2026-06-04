@@ -1,34 +1,24 @@
-import { getFineStep, normalizeRangeValue } from "../shared/range.ts";
+import { normalizeRangeValue } from "../shared/range.ts";
 import { resolveEnvelopeEditorOptions } from "./options.ts";
 import type { EnvelopeEditorOptions, EnvelopeEditorPointId, EnvelopeEditorValue } from "./types.ts";
 import { normalizeEnvelopeEditorValue } from "./value.ts";
 
-export interface EnvelopeEditorKeyboardOptions {
-  fine?: boolean;
-  fineStepTime?: number;
-  fineStepLevel?: number;
-}
+export type EnvelopeEditorKeyboardOptions = object;
 
 export function getNextEnvelopeEditorKeyboardValue(
   value: EnvelopeEditorValue,
   pointId: EnvelopeEditorPointId,
   key: string,
   options: EnvelopeEditorOptions = {},
-  keyboard: EnvelopeEditorKeyboardOptions = {},
+  _keyboard: EnvelopeEditorKeyboardOptions = {},
 ): EnvelopeEditorValue | undefined {
   const resolvedOptions = resolveEnvelopeEditorOptions(options);
-  const timeStep = keyboard.fine
-    ? getFineStep(resolvedOptions.stepTime, keyboard.fineStepTime)
-    : resolvedOptions.stepTime;
-  const levelStep = keyboard.fine
-    ? getFineStep(resolvedOptions.stepLevel, keyboard.fineStepLevel)
-    : resolvedOptions.stepLevel;
+  const timeStep = resolvedOptions.stepTime;
+  const levelStep = resolvedOptions.stepLevel;
   const largeTimeStep = timeStep * 10;
   const largeLevelStep = levelStep * 10;
   const normalizedValue = normalizeEnvelopeEditorValue(value, {
     ...resolvedOptions,
-    valueStepTime: timeStep,
-    valueStepLevel: levelStep,
   });
 
   switch (key) {

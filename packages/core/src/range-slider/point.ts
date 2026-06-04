@@ -1,4 +1,4 @@
-import { getFineStep, getRangePercent } from "../shared/range.ts";
+import { getRangePercent, resolveFineControlFactor } from "../shared/range.ts";
 import { defaultRangeSliderOptions, resolveRangeSliderOptions } from "./options.ts";
 import type {
   RangeSliderDragOptions,
@@ -44,10 +44,7 @@ export function getRangeSliderValueFromLinearDrag(
   dragOptions: RangeSliderDragOptions = {},
 ): RangeSliderValue {
   const resolvedOptions = resolveRangeSliderOptions(options);
-  const valueStep = dragOptions.fine
-    ? getFineStep(resolvedOptions.step, dragOptions.fineStep)
-    : resolvedOptions.step;
-  const dragFactor = dragOptions.fine ? 0.1 : 1;
+  const dragFactor = dragOptions.fine ? resolveFineControlFactor(dragOptions.fineFactor) : 1;
   const trackSize =
     resolvedOptions.orientation === "vertical"
       ? getValidSize(drag.trackHeight)
@@ -60,10 +57,7 @@ export function getRangeSliderValueFromLinearDrag(
   const deltaPercent = (pointDelta / trackSize) * direction * dragFactor;
   const nextPercent = getRangePercent(drag.startValue, resolvedOptions) + deltaPercent;
 
-  return getRangeSliderValueFromPercent(nextPercent, value, activeThumb, {
-    ...resolvedOptions,
-    valueStep,
-  });
+  return getRangeSliderValueFromPercent(nextPercent, value, activeThumb, resolvedOptions);
 }
 
 export function getClosestRangeSliderThumbIndexFromPoint(

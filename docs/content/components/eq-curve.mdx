@@ -56,7 +56,7 @@ type EQCurveBand = {
 
 ## Keyboard interaction
 
-Focus a band and use Arrow Left/Right to change frequency and Arrow Up/Down to change gain. Page Up and Page Down adjust Q by a larger step. Hold Shift for fine control. Hold Alt with arrow keys to adjust Q directly.
+Focus a band and use Arrow Left/Right to change frequency and Arrow Up/Down to change gain. Page Up and Page Down adjust Q by a larger step. Hold Shift while dragging for fine control. Hold Alt with arrow keys to adjust Q directly.
 
 ## Styling hooks
 
@@ -79,29 +79,29 @@ The curve is rendered as an SVG path by default, and each band exposes normalize
 
 `EQCurve.Root` renders a `div`, owns band state, and provides context to the other parts. It accepts standard `div` props except `defaultValue`, `onChange`, and `children`, which are replaced by the EQ-specific API.
 
-| Prop              | Type                                                           | Default | Description                                                                                                        |
-| ----------------- | -------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
-| `value`           | `EQCurveBand[]`                                                | -       | Controlled band array. Pass with `onValueChange` when external state owns the EQ bands.                            |
-| `defaultValue`    | `EQCurveBand[]`                                                | `[]`    | Initial uncontrolled band array.                                                                                   |
-| `minFrequency`    | `number`                                                       | `20`    | Lower frequency bound in hertz. Frequency positions use a logarithmic scale.                                       |
-| `maxFrequency`    | `number`                                                       | `20000` | Upper frequency bound in hertz.                                                                                    |
-| `minGain`         | `number`                                                       | `-24`   | Lower gain bound in dB.                                                                                            |
-| `maxGain`         | `number`                                                       | `24`    | Upper gain bound in dB.                                                                                            |
-| `minQ`            | `number`                                                       | `0.1`   | Lower Q bound.                                                                                                     |
-| `maxQ`            | `number`                                                       | `18`    | Upper Q bound.                                                                                                     |
-| `stepFrequency`   | `number`                                                       | `1`     | Frequency increment for pointer and keyboard changes.                                                              |
-| `stepGain`        | `number`                                                       | `0.1`   | Gain increment for pointer and keyboard changes.                                                                   |
-| `stepQ`           | `number`                                                       | `0.1`   | Q increment for keyboard changes.                                                                                  |
-| `curveResolution` | `number`                                                       | `128`   | Number of preview points generated for `EQCurve.Curve`.                                                            |
-| `disabled`        | `boolean`                                                      | `false` | Prevents pointer and keyboard interaction, removes bands from tab order, and adds disabled attributes.             |
-| `readOnly`        | `boolean`                                                      | `false` | Keeps bands focusable while preventing value changes.                                                              |
-| `fineControl`     | `boolean \| { frequency?: number; gain?: number; q?: number }` | `true`  | When `true`, Shift uses 10% of each axis `step`. Pass `false` to disable, or an object to set per-axis fine steps. |
-| `name`            | `string`                                                       | -       | Default form field name consumed by `EQCurve.HiddenInput`.                                                         |
-| `required`        | `boolean`                                                      | -       | Default required flag consumed by `EQCurve.HiddenInput`.                                                           |
-| `children`        | `ReactNode \| (state) => ReactNode`                            | -       | Parts to render. Function children receive the render state, including bands, curve points, and flags.             |
-| `onValueChange`   | `(value: EQCurveBand[]) => void`                               | -       | Fires when interaction produces a normalized band array.                                                           |
-| `onValueCommit`   | `(value: EQCurveBand[]) => void`                               | -       | Fires when an interaction commits, such as pointer up or keyboard step.                                            |
-| `render`          | `RenderProp`                                                   | -       | Replaces the root element while preserving generated props and render state.                                       |
+| Prop              | Type                                               | Default | Description                                                                                                                          |
+| ----------------- | -------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `value`           | `EQCurveBand[]`                                    | -       | Controlled band array. Pass with `onValueChange` when external state owns the EQ bands.                                              |
+| `defaultValue`    | `EQCurveBand[]`                                    | `[]`    | Initial uncontrolled band array.                                                                                                     |
+| `minFrequency`    | `number`                                           | `20`    | Lower frequency bound in hertz. Frequency positions use a logarithmic scale.                                                         |
+| `maxFrequency`    | `number`                                           | `20000` | Upper frequency bound in hertz.                                                                                                      |
+| `minGain`         | `number`                                           | `-24`   | Lower gain bound in dB.                                                                                                              |
+| `maxGain`         | `number`                                           | `24`    | Upper gain bound in dB.                                                                                                              |
+| `minQ`            | `number`                                           | `0.1`   | Lower Q bound.                                                                                                                       |
+| `maxQ`            | `number`                                           | `18`    | Upper Q bound.                                                                                                                       |
+| `stepFrequency`   | `number`                                           | `1`     | Frequency increment for pointer and keyboard changes.                                                                                |
+| `stepGain`        | `number`                                           | `0.1`   | Gain increment for pointer and keyboard changes.                                                                                     |
+| `stepQ`           | `number`                                           | `0.1`   | Q increment for keyboard changes.                                                                                                    |
+| `curveResolution` | `number`                                           | `128`   | Number of preview points generated for `EQCurve.Curve`.                                                                              |
+| `disabled`        | `boolean`                                          | `false` | Prevents pointer and keyboard interaction, removes bands from tab order, and adds disabled attributes.                               |
+| `readOnly`        | `boolean`                                          | `false` | Keeps bands focusable while preventing value changes.                                                                                |
+| `fineControl`     | `boolean \| { frequency?: number; gain?: number }` | `true`  | When `true`, Shift scales pointer drag movement to 10% per axis. Pass `false` to disable, or an object to set per-axis drag factors. |
+| `name`            | `string`                                           | -       | Default form field name consumed by `EQCurve.HiddenInput`.                                                                           |
+| `required`        | `boolean`                                          | -       | Default required flag consumed by `EQCurve.HiddenInput`.                                                                             |
+| `children`        | `ReactNode \| (state) => ReactNode`                | -       | Parts to render. Function children receive the render state, including bands, curve points, and flags.                               |
+| `onValueChange`   | `(value: EQCurveBand[]) => void`                   | -       | Fires when interaction produces a normalized band array.                                                                             |
+| `onValueCommit`   | `(value: EQCurveBand[]) => void`                   | -       | Fires when an interaction commits, such as pointer up or keyboard step.                                                              |
+| `render`          | `RenderProp`                                       | -       | Replaces the root element while preserving generated props and render state.                                                         |
 
 ### Parts
 

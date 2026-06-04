@@ -76,7 +76,7 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
         context.state,
         {
           fine,
-          fineStep: fine ? context.getFineValueStep(context.state.step) : undefined,
+          fineFactor: fine ? context.getFineFactor() : undefined,
         },
       );
 
@@ -178,19 +178,15 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
       return;
     }
 
-    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
-    const nextValue = getNextKeyboardValue(context.state.value, event.key, context.state, {
-      fine,
-      fineStep: fine ? context.getFineValueStep(context.state.step) : undefined,
-    });
+    const nextValue = getNextKeyboardValue(context.state.value, event.key, context.state);
 
     if (nextValue === undefined) {
       return;
     }
 
     event.preventDefault();
-    context.setValue(nextValue, { fine });
-    context.commitValue(nextValue, { fine });
+    context.setValue(nextValue);
+    context.commitValue(nextValue);
   };
 
   const renderState = getRenderState(context.state, {

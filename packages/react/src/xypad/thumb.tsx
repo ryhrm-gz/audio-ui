@@ -1,6 +1,5 @@
 import { getNextXYPadKeyboardValue } from "@ryhrm-gz/audio-ui-core";
 import { forwardRef, type CSSProperties, type KeyboardEvent } from "react";
-import { isFineControlEnabled } from "../shared/fine-control.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { useXYPadContext } from "./context.tsx";
 import type { XYPadThumbProps } from "./types.ts";
@@ -18,20 +17,15 @@ export const Thumb = forwardRef<HTMLSpanElement, XYPadThumbProps>(function Thumb
       return;
     }
 
-    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
-    const nextValue = getNextXYPadKeyboardValue(context.state.value, event.key, context.state, {
-      fine,
-      fineStepX: fine ? context.getFineValueStep(context.state.stepX, "x") : undefined,
-      fineStepY: fine ? context.getFineValueStep(context.state.stepY, "y") : undefined,
-    });
+    const nextValue = getNextXYPadKeyboardValue(context.state.value, event.key, context.state);
 
     if (nextValue === undefined) {
       return;
     }
 
     event.preventDefault();
-    context.setValue(nextValue, { fine });
-    context.commitValue(nextValue, { fine });
+    context.setValue(nextValue);
+    context.commitValue(nextValue);
   };
 
   const renderState = getRenderState(context.state, {

@@ -107,8 +107,8 @@ export const Area = forwardRef<HTMLDivElement, XYPadAreaProps>(function Area(pro
           context.state,
           {
             fine,
-            fineStepX: context.getFineValueStep(context.state.stepX, "x"),
-            fineStepY: context.getFineValueStep(context.state.stepY, "y"),
+            fineFactorX: context.getFineFactor("x"),
+            fineFactorY: context.getFineFactor("y"),
           },
         ),
         fine,
@@ -117,7 +117,7 @@ export const Area = forwardRef<HTMLDivElement, XYPadAreaProps>(function Area(pro
         fineStartPointY: activeDrag.fineStartPointY,
       };
     },
-    [context.getFineValueStep, context.state, getValueFromPointer],
+    [context.getFineFactor, context.state, getValueFromPointer],
   );
 
   const releasePointerCapture = (event: PointerEvent<HTMLDivElement>) => {

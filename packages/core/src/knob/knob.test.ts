@@ -6,8 +6,8 @@ import {
   getKnobValueFromPoint,
   getNextKeyboardValue,
   normalizeKnobValue,
+  resolveFineControlFactor,
 } from "../index.ts";
-import { getFineStep } from "../shared/range.ts";
 
 test("normalizes values to the configured range and step", () => {
   expect(normalizeKnobValue(12.26, { min: 0, max: 20, step: 0.5 })).toBe(12.5);
@@ -63,7 +63,7 @@ test("maps vertical drag movement to values", () => {
 
 test("handles keyboard step commands", () => {
   expect(getNextKeyboardValue(10, "ArrowUp", { step: 2 })).toBe(12);
-  expect(getNextKeyboardValue(10, "ArrowUp", { step: 2 }, { fine: true })).toBe(10.2);
+  expect(getNextKeyboardValue(10, "ArrowUp", { step: 2 }, { fine: true })).toBe(12);
   expect(getNextKeyboardValue(10, "PageDown", { step: 2 })).toBe(0);
   expect(getNextKeyboardValue(10, "End", { max: 24 })).toBe(24);
   expect(getNextKeyboardValue(10, "Escape")).toBeUndefined();
@@ -98,9 +98,9 @@ test("creates a complete serializable state object", () => {
   });
 });
 
-test("preserves fine-resolution values without changing the configured step", () => {
-  expect(getFineStep(2)).toBe(0.2);
-  expect(getFineStep(2, 0.05)).toBe(0.05);
+test("resolves fine control factors without changing the configured step", () => {
+  expect(resolveFineControlFactor()).toBe(0.1);
+  expect(resolveFineControlFactor(0.05)).toBe(0.05);
   expect(createKnobState(10.24, { step: 2, valueStep: 0.2 })).toMatchObject({
     value: 10.2,
     step: 2,

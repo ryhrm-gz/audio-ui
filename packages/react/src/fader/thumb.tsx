@@ -1,6 +1,5 @@
 import { getNextFaderKeyboardValue } from "@ryhrm-gz/audio-ui-core";
 import { forwardRef, type CSSProperties, type KeyboardEvent } from "react";
-import { isFineControlEnabled } from "../shared/fine-control.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { useFaderContext } from "./context.tsx";
 import type { FaderThumbProps } from "./types.ts";
@@ -18,19 +17,15 @@ export const Thumb = forwardRef<HTMLSpanElement, FaderThumbProps>(function Thumb
       return;
     }
 
-    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
-    const nextValue = getNextFaderKeyboardValue(context.state.value, event.key, context.state, {
-      fine,
-      fineStep: fine ? context.getFineValueStep(context.state.step) : undefined,
-    });
+    const nextValue = getNextFaderKeyboardValue(context.state.value, event.key, context.state);
 
     if (nextValue === undefined) {
       return;
     }
 
     event.preventDefault();
-    context.setValue(nextValue, { fine });
-    context.commitValue(nextValue, { fine });
+    context.setValue(nextValue);
+    context.commitValue(nextValue);
   };
 
   const renderState = getRenderState(context.state, {

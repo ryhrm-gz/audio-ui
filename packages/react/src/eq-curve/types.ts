@@ -24,7 +24,7 @@ export interface EQCurveRootProps
   defaultValue?: EQCurveValue;
   disabled?: boolean;
   readOnly?: boolean;
-  fineControl?: FineControlAxesProp<"frequency" | "gain" | "q">;
+  fineControl?: FineControlAxesProp<"frequency" | "gain">;
   name?: string;
   required?: boolean;
   children?: ReactNode | ((state: RenderState<EQCurveState>) => ReactNode);

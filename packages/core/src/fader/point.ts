@@ -1,4 +1,4 @@
-import { getFineStep } from "../shared/range.ts";
+import { resolveFineControlFactor } from "../shared/range.ts";
 import { defaultFaderOptions, resolveFaderOptions } from "./options.ts";
 import type { FaderDragOptions, FaderLinearDrag, FaderOptions, FaderPoint } from "./types.ts";
 import { getFaderPercent, getFaderValueFromPercent } from "./value.ts";
@@ -27,10 +27,7 @@ export function getFaderValueFromLinearDrag(
   dragOptions: FaderDragOptions = {},
 ) {
   const resolvedOptions = resolveFaderOptions(options);
-  const valueStep = dragOptions.fine
-    ? getFineStep(resolvedOptions.step, dragOptions.fineStep)
-    : resolvedOptions.step;
-  const dragFactor = dragOptions.fine ? 0.1 : 1;
+  const dragFactor = dragOptions.fine ? resolveFineControlFactor(dragOptions.fineFactor) : 1;
   const trackSize =
     resolvedOptions.orientation === "vertical"
       ? getValidSize(drag.trackHeight)
@@ -43,7 +40,7 @@ export function getFaderValueFromLinearDrag(
   const deltaPercent = (pointDelta / trackSize) * direction * dragFactor;
   const nextPercent = getFaderPercent(drag.startValue, resolvedOptions) + deltaPercent;
 
-  return getFaderValueFromPercent(nextPercent, { ...resolvedOptions, valueStep });
+  return getFaderValueFromPercent(nextPercent, resolvedOptions);
 }
 
 function getValidSize(size: number) {

@@ -81,7 +81,7 @@ test("updates q from keyboard movement", () => {
       "mid",
       "ArrowUp",
       { stepQ: 0.2 },
-      { q: true, fine: true },
+      { q: true },
     ),
   ).toEqual([
     {
@@ -89,7 +89,7 @@ test("updates q from keyboard movement", () => {
       type: "bell",
       frequency: 1000,
       gain: expect.closeTo(0, 10),
-      q: expect.closeTo(1.02, 10),
+      q: expect.closeTo(1.1, 10),
       enabled: true,
     },
   ]);

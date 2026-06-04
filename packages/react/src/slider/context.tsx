@@ -7,7 +7,7 @@ export interface SliderContextValue {
   disabled: boolean;
   readOnly: boolean;
   fineControl: FineControlProp;
-  getFineValueStep: (step: number) => number;
+  getFineFactor: () => number;
   resetOnDoubleClick: boolean;
   allowTrackClick: boolean;
   dragging: boolean;

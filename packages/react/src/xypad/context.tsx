@@ -7,7 +7,7 @@ export interface XYPadContextValue {
   disabled: boolean;
   readOnly: boolean;
   fineControl: FineControlAxesProp<"x" | "y">;
-  getFineValueStep: (step: number, axis: "x" | "y") => number;
+  getFineFactor: (axis: "x" | "y") => number;
   resetOnDoubleClick: boolean;
   allowTrackClick: boolean;
   dragging: boolean;

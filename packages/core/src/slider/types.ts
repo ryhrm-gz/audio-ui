@@ -28,7 +28,7 @@ export interface SliderLinearDrag extends SliderPoint {
 
 export interface SliderDragOptions {
   fine?: boolean;
-  fineStep?: number;
+  fineFactor?: number;
 }
 
 export interface SliderState {

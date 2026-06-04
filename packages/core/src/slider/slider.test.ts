@@ -59,7 +59,7 @@ test("maps slider pointer positions to values", () => {
 
 test("handles slider keyboard step commands", () => {
   expect(getNextSliderKeyboardValue(10, "ArrowRight", { step: 2 })).toBe(12);
-  expect(getNextSliderKeyboardValue(10, "ArrowRight", { step: 2 }, { fine: true })).toBe(10.2);
+  expect(getNextSliderKeyboardValue(10, "ArrowRight", { step: 2 }, { fine: true })).toBe(12);
   expect(getNextSliderKeyboardValue(10, "PageUp", { step: 2 })).toBe(30);
   expect(getNextSliderKeyboardValue(10, "Home", { min: -12 })).toBe(-12);
 });
@@ -81,7 +81,7 @@ test("maps fine slider drag movement from the drag start", () => {
       { max: 50, min: 0, step: 1 },
       { fine: true },
     ),
-  ).toBe(27.5);
+  ).toBe(28);
 });
 
 test("creates a complete serializable slider state object", () => {

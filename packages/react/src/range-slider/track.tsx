@@ -114,7 +114,7 @@ export const Track = forwardRef<HTMLDivElement, RangeSliderTrackProps>(function 
           context.state,
           {
             fine,
-            fineStep: context.getFineValueStep(context.state.step),
+            fineFactor: context.getFineFactor(),
           },
         ),
         fine,
@@ -123,7 +123,7 @@ export const Track = forwardRef<HTMLDivElement, RangeSliderTrackProps>(function 
         fineStartPointY: activeDrag.fineStartPointY,
       };
     },
-    [context.getFineValueStep, context.state, getValueFromPointer],
+    [context.getFineFactor, context.state, getValueFromPointer],
   );
 
   const releasePointerCapture = (event: PointerEvent<HTMLDivElement>) => {

@@ -1,5 +1,4 @@
 import { getNextRangeKeyboardValue, type RangeKeyboardOptions } from "../shared/keyboard.ts";
-import { getFineStep, resolveRangeOptions } from "../shared/range.ts";
 import type { RangeSliderRange, RangeSliderThumbIndex, RangeSliderValue } from "./types.ts";
 import { normalizeRangeSliderValue } from "./value.ts";
 
@@ -22,8 +21,5 @@ export function getNextRangeSliderKeyboardValue(
   return normalizeRangeSliderValue(nextValue, {
     ...options,
     activeThumb,
-    valueStep: keyboard.fine
-      ? getFineStep(resolveRangeOptions(options).step, keyboard.fineStep)
-      : undefined,
   });
 }

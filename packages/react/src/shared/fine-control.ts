@@ -1,4 +1,4 @@
-import { getFineStep } from "@ryhrm-gz/audio-ui-core";
+import { resolveFineControlFactor } from "@ryhrm-gz/audio-ui-core";
 
 export type FineControlProp = boolean | number;
 
@@ -10,25 +10,21 @@ export function isFineControlEnabled(
   return fineControl !== false;
 }
 
-export function resolveFineValueStep(
-  step: number,
-  fineControl: FineControlProp | undefined = true,
-): number {
+export function resolveFineFactor(fineControl: FineControlProp | undefined = true): number {
   if (typeof fineControl === "number") {
-    return fineControl;
+    return resolveFineControlFactor(fineControl);
   }
 
-  return getFineStep(step);
+  return resolveFineControlFactor();
 }
 
-export function resolveFineAxisValueStep<T extends string>(
-  step: number,
+export function resolveFineAxisFactor<T extends string>(
   axis: T,
   fineControl: FineControlAxesProp<T> | undefined = true,
 ): number {
   if (typeof fineControl === "object" && typeof fineControl[axis] === "number") {
-    return fineControl[axis]!;
+    return resolveFineControlFactor(fineControl[axis]);
   }
 
-  return getFineStep(step);
+  return resolveFineControlFactor();
 }

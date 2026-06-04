@@ -48,12 +48,7 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
     return null;
   }
 
-  const getValueFromPointer = (
-    clientX: number,
-    clientY: number,
-    targetRect: DOMRect,
-    fine: boolean,
-  ) => {
+  const getValueFromPointer = (clientX: number, clientY: number, targetRect: DOMRect) => {
     const graph = context.graphRef.current;
     const rect = graph?.getBoundingClientRect() ?? targetRect;
 
@@ -68,13 +63,7 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
         pointX: clientX,
         pointY: clientY,
       },
-      {
-        ...context.state,
-        valueStepFrequency: fine
-          ? context.getFineValueStep(context.state.stepFrequency, "frequency")
-          : undefined,
-        valueStepGain: fine ? context.getFineValueStep(context.state.stepGain, "gain") : undefined,
-      },
+      context.state,
     );
   };
 
@@ -87,7 +76,6 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
           event.clientX,
           event.clientY,
           event.currentTarget.getBoundingClientRect(),
-          false,
         ),
         fine: false,
         fineStartValue: undefined,
@@ -112,8 +100,12 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
 
     const graph = context.graphRef.current;
     const rect = graph?.getBoundingClientRect() ?? event.currentTarget.getBoundingClientRect();
-    const pointX = activeDrag.fineStartPointX + (event.clientX - activeDrag.fineStartPointX) * 0.1;
-    const pointY = activeDrag.fineStartPointY + (event.clientY - activeDrag.fineStartPointY) * 0.1;
+    const pointX =
+      activeDrag.fineStartPointX +
+      (event.clientX - activeDrag.fineStartPointX) * context.getFineFactor("frequency");
+    const pointY =
+      activeDrag.fineStartPointY +
+      (event.clientY - activeDrag.fineStartPointY) * context.getFineFactor("gain");
 
     return {
       value: getEQCurveValueFromBandRect(
@@ -127,11 +119,7 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
           pointX,
           pointY,
         },
-        {
-          ...context.state,
-          valueStepFrequency: context.getFineValueStep(context.state.stepFrequency, "frequency"),
-          valueStepGain: context.getFineValueStep(context.state.stepGain, "gain"),
-        },
+        context.state,
       ),
       fine: true,
       fineStartValue: activeDrag.fineStartValue,
@@ -147,20 +135,13 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
       return;
     }
 
-    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
     const nextValue = getNextEQCurveKeyboardValue(
       context.state.value,
       band.id,
       event.key,
       context.state,
       {
-        fine,
         q: event.altKey,
-        fineStepFrequency: fine
-          ? context.getFineValueStep(context.state.stepFrequency, "frequency")
-          : undefined,
-        fineStepGain: fine ? context.getFineValueStep(context.state.stepGain, "gain") : undefined,
-        fineStepQ: fine ? context.getFineValueStep(context.state.stepQ, "q") : undefined,
       },
     );
 
@@ -169,8 +150,8 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
     }
 
     event.preventDefault();
-    context.setValue(nextValue, { fine, activeBand: band.id });
-    context.commitValue(nextValue, { fine, activeBand: band.id });
+    context.setValue(nextValue, { activeBand: band.id });
+    context.commitValue(nextValue, { activeBand: band.id });
   };
 
   const handlePointerDown = (event: PointerEvent<HTMLSpanElement>) => {
@@ -187,7 +168,6 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
       event.clientX,
       event.clientY,
       event.currentTarget.getBoundingClientRect(),
-      fine,
     );
     activeDragRef.current = {
       pointerId: event.pointerId,
@@ -198,7 +178,7 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
       fineStartPointY: fine ? event.clientY : undefined,
     };
     context.setDraggingBand(band.id);
-    context.setValue(nextValue, { fine, activeBand: band.id });
+    context.setValue(nextValue, { activeBand: band.id });
   };
 
   const handlePointerMove = (event: PointerEvent<HTMLSpanElement>) => {

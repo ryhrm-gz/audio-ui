@@ -1,63 +1,53 @@
-import { getFineStep, normalizeRangeValue } from "../shared/range.ts";
+import { normalizeRangeValue } from "../shared/range.ts";
 import { resolveXYPadOptions } from "./options.ts";
 import type { XYPadOptions, XYPadValue } from "./types.ts";
 
-export interface XYPadKeyboardOptions {
-  fine?: boolean;
-  fineStepX?: number;
-  fineStepY?: number;
-}
+export type XYPadKeyboardOptions = object;
 
 export function getNextXYPadKeyboardValue(
   value: XYPadValue,
   key: string,
   options: XYPadOptions = {},
-  keyboard: XYPadKeyboardOptions = {},
+  _keyboard: XYPadKeyboardOptions = {},
 ): XYPadValue | undefined {
   const { minX, maxX, stepX, minY, maxY, stepY } = resolveXYPadOptions(options);
-  const valueStepX = keyboard.fine ? getFineStep(stepX, keyboard.fineStepX) : stepX;
-  const valueStepY = keyboard.fine ? getFineStep(stepY, keyboard.fineStepY) : stepY;
-  const largeStepY = valueStepY * 10;
+  const largeStepY = stepY * 10;
 
   switch (key) {
     case "ArrowRight":
       return {
         ...value,
-        x: normalizeRangeValue(value.x + valueStepX, {
+        x: normalizeRangeValue(value.x + stepX, {
           min: minX,
           max: maxX,
           step: stepX,
-          valueStep: valueStepX,
         }),
       };
     case "ArrowLeft":
       return {
         ...value,
-        x: normalizeRangeValue(value.x - valueStepX, {
+        x: normalizeRangeValue(value.x - stepX, {
           min: minX,
           max: maxX,
           step: stepX,
-          valueStep: valueStepX,
         }),
       };
     case "ArrowUp":
       return {
         ...value,
-        y: normalizeRangeValue(value.y + valueStepY, {
+        y: normalizeRangeValue(value.y + stepY, {
           min: minY,
           max: maxY,
           step: stepY,
-          valueStep: valueStepY,
         }),
       };
     case "ArrowDown":
       return {
         ...value,
-        y: normalizeRangeValue(value.y - valueStepY, {
+        y: normalizeRangeValue(value.y - stepY, {
           min: minY,
           max: maxY,
           step: stepY,
-          valueStep: valueStepY,
         }),
       };
     case "PageUp":
@@ -67,7 +57,6 @@ export function getNextXYPadKeyboardValue(
           min: minY,
           max: maxY,
           step: stepY,
-          valueStep: valueStepY,
         }),
       };
     case "PageDown":
@@ -77,7 +66,6 @@ export function getNextXYPadKeyboardValue(
           min: minY,
           max: maxY,
           step: stepY,
-          valueStep: valueStepY,
         }),
       };
     case "Home":

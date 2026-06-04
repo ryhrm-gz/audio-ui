@@ -1,6 +1,6 @@
 import { createKnobState, type KnobState } from "@ryhrm-gz/audio-ui-core";
 import { forwardRef, useCallback, useId, useMemo, useState } from "react";
-import { isFineControlEnabled, resolveFineValueStep } from "../shared/fine-control.ts";
+import { resolveFineFactor } from "../shared/fine-control.ts";
 import { KnobContext, type KnobContextValue, type KnobValueOptions } from "./context.tsx";
 import { getRenderState, mergeProps, renderElement } from "./render.tsx";
 import type { KnobRootProps } from "./types.ts";
@@ -30,45 +30,31 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
   const initialValue = defaultValue ?? min ?? 0;
   const resetValueTarget = defaultValue ?? min ?? 0;
   const [internalValue, setInternalValue] = useState(initialValue);
-  const [valueStep, setValueStep] = useState<number | undefined>(undefined);
   const [dragging, setDragging] = useState(false);
   const rawValue = isControlled ? value : internalValue;
   const state = useMemo(
-    () => createKnobState(rawValue, { min, max, step, minAngle, maxAngle, valueStep }),
-    [rawValue, min, max, step, minAngle, maxAngle, valueStep],
+    () => createKnobState(rawValue, { min, max, step, minAngle, maxAngle }),
+    [rawValue, min, max, step, minAngle, maxAngle],
   );
   const valueId = useId();
-  const getFineValueStep = useCallback(
-    (step: number) => resolveFineValueStep(step, fineControl),
-    [fineControl],
-  );
+  const getFineFactor = useCallback(() => resolveFineFactor(fineControl), [fineControl]);
 
   const getStateForValue = useCallback(
-    (nextValue: number, options: KnobValueOptions = {}): KnobState => {
-      const nextValueStep =
-        isFineControlEnabled(fineControl) && options.fine
-          ? getFineValueStep(state.step)
-          : undefined;
+    (nextValue: number, _options: KnobValueOptions = {}): KnobState => {
       return createKnobState(nextValue, {
         min,
         max,
         step,
         minAngle,
         maxAngle,
-        valueStep: nextValueStep,
       });
     },
-    [fineControl, getFineValueStep, max, maxAngle, min, minAngle, state.step, step],
+    [max, maxAngle, min, minAngle, step],
   );
 
   const setValue = useCallback(
     (nextValue: number, options: KnobValueOptions = {}) => {
       const nextState = getStateForValue(nextValue, options);
-      setValueStep(
-        isFineControlEnabled(fineControl) && options.fine
-          ? getFineValueStep(state.step)
-          : undefined,
-      );
 
       if (!isControlled) {
         setInternalValue(nextState.value);
@@ -78,15 +64,7 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
         onValueChange?.(nextState.value);
       }
     },
-    [
-      fineControl,
-      getFineValueStep,
-      getStateForValue,
-      isControlled,
-      onValueChange,
-      state.step,
-      state.value,
-    ],
+    [getStateForValue, isControlled, onValueChange, state.value],
   );
 
   const commitValue = useCallback(
@@ -108,7 +86,7 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       resetOnDoubleClick,
       dragging,
       valueId,
@@ -124,7 +102,7 @@ export const Root = forwardRef<HTMLDivElement, KnobRootProps>(function Root(prop
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       resetOnDoubleClick,
       dragging,
       valueId,

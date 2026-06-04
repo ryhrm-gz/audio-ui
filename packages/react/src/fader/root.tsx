@@ -1,6 +1,6 @@
 import { createFaderState, type FaderState } from "@ryhrm-gz/audio-ui-core";
 import { forwardRef, useCallback, useId, useMemo, useRef, useState } from "react";
-import { isFineControlEnabled, resolveFineValueStep } from "../shared/fine-control.ts";
+import { resolveFineFactor } from "../shared/fine-control.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { FaderContext, type FaderContextValue, type FaderValueOptions } from "./context.tsx";
 import type { FaderRootProps } from "./types.ts";
@@ -33,7 +33,6 @@ export const Root = forwardRef<HTMLDivElement, FaderRootProps>(function Root(pro
   const initialValue = defaultValue ?? min ?? 0;
   const resetValueTarget = defaultValue ?? min ?? 0;
   const [internalValue, setInternalValue] = useState(initialValue);
-  const [valueStep, setValueStep] = useState<number | undefined>(undefined);
   const [dragging, setDragging] = useState(false);
   const rawValue = isControlled ? value : internalValue;
   const state = useMemo(
@@ -46,23 +45,15 @@ export const Root = forwardRef<HTMLDivElement, FaderRootProps>(function Root(pro
         inverted,
         unity,
         scale,
-        valueStep,
       }),
-    [rawValue, min, max, step, orientation, inverted, unity, scale, valueStep],
+    [rawValue, min, max, step, orientation, inverted, unity, scale],
   );
   const valueId = useId();
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const getFineValueStep = useCallback(
-    (step: number) => resolveFineValueStep(step, fineControl),
-    [fineControl],
-  );
+  const getFineFactor = useCallback(() => resolveFineFactor(fineControl), [fineControl]);
 
   const getStateForValue = useCallback(
-    (nextValue: number, options: FaderValueOptions = {}): FaderState => {
-      const nextValueStep =
-        isFineControlEnabled(fineControl) && options.fine
-          ? getFineValueStep(state.step)
-          : undefined;
+    (nextValue: number, _options: FaderValueOptions = {}): FaderState => {
       return createFaderState(nextValue, {
         min,
         max,
@@ -71,31 +62,14 @@ export const Root = forwardRef<HTMLDivElement, FaderRootProps>(function Root(pro
         inverted,
         unity,
         scale,
-        valueStep: nextValueStep,
       });
     },
-    [
-      fineControl,
-      getFineValueStep,
-      inverted,
-      max,
-      min,
-      orientation,
-      scale,
-      state.step,
-      step,
-      unity,
-    ],
+    [inverted, max, min, orientation, scale, step, unity],
   );
 
   const setValue = useCallback(
     (nextValue: number, options: FaderValueOptions = {}) => {
       const nextState = getStateForValue(nextValue, options);
-      setValueStep(
-        isFineControlEnabled(fineControl) && options.fine
-          ? getFineValueStep(state.step)
-          : undefined,
-      );
 
       if (!isControlled) {
         setInternalValue(nextState.value);
@@ -105,15 +79,7 @@ export const Root = forwardRef<HTMLDivElement, FaderRootProps>(function Root(pro
         onValueChange?.(nextState.value);
       }
     },
-    [
-      fineControl,
-      getFineValueStep,
-      getStateForValue,
-      isControlled,
-      onValueChange,
-      state.step,
-      state.value,
-    ],
+    [getStateForValue, isControlled, onValueChange, state.value],
   );
 
   const commitValue = useCallback(
@@ -135,7 +101,7 @@ export const Root = forwardRef<HTMLDivElement, FaderRootProps>(function Root(pro
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       resetOnDoubleClick,
       allowTrackClick,
       dragging,
@@ -153,7 +119,7 @@ export const Root = forwardRef<HTMLDivElement, FaderRootProps>(function Root(pro
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       resetOnDoubleClick,
       allowTrackClick,
       dragging,

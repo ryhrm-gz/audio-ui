@@ -76,27 +76,27 @@ The root and interactive parts expose `data-orientation`, `data-origin`, `data-i
 
 `Slider.Root` renders a `div`, owns slider state, and provides context to the other parts. It accepts standard `div` props except `defaultValue`, `onChange`, and `children`, which are replaced by the slider-specific API.
 
-| Prop                 | Type                                    | Default        | Description                                                                                                                          |
-| -------------------- | --------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `value`              | `number`                                | -              | Controlled value. Pass with `onValueChange` when external state owns the slider value.                                               |
-| `defaultValue`       | `number`                                | `min` or `0`   | Initial uncontrolled value. Also becomes the double-click reset target.                                                              |
-| `min`                | `number`                                | `0`            | Lower value bound. Values are clamped into the resolved range.                                                                       |
-| `max`                | `number`                                | `100`          | Upper value bound. If `min` is greater than `max`, the core range resolver normalizes the order.                                     |
-| `step`               | `number`                                | `1`            | Value increment for pointer and keyboard changes. Non-positive or invalid steps fall back to the default.                            |
-| `orientation`        | `"horizontal" \| "vertical"`            | `"horizontal"` | Controls pointer mapping, `aria-orientation`, and `data-orientation`.                                                                |
-| `origin`             | `"left" \| "center" \| "right"`         | `"left"`       | Sets the visual fill origin. `center` is useful for pan controls; `right` fills back from the maximum edge.                          |
-| `inverted`           | `boolean`                               | `false`        | Reverses the value-to-position mapping and adds `data-inverted`.                                                                     |
-| `disabled`           | `boolean`                               | `false`        | Prevents pointer and keyboard interaction, removes the thumb from tab order, and adds disabled state attributes.                     |
-| `readOnly`           | `boolean`                               | `false`        | Keeps the thumb focusable while preventing value changes, and adds readonly state attributes.                                        |
-| `fineControl`        | `boolean \| number`                     | `true`         | When `true`, Shift uses 10% of `step` for fine adjustment. Pass `false` to disable, or a number to set the fine step explicitly.     |
-| `resetOnDoubleClick` | `boolean`                               | `true`         | Allows a double click on the track to reset to `defaultValue`, or to `min`/`0` when no default value is supplied.                    |
-| `allowTrackClick`    | `boolean`                               | `false`        | When true, pointer down on the track jumps to the pointer position before dragging. When false, dragging starts from the thumb only. |
-| `name`               | `string`                                | -              | Default form field name consumed by `Slider.HiddenInput`.                                                                            |
-| `required`           | `boolean`                               | -              | Default required flag consumed by `Slider.HiddenInput`.                                                                              |
-| `children`           | `ReactNode \| (state) => ReactNode`     | -              | Parts to render. Function children receive the render state, including value state plus interaction flags.                           |
-| `onValueChange`      | `(value: number) => void`               | -              | Fires when interaction produces a new clamped and snapped value.                                                                     |
-| `onValueCommit`      | `(value: number) => void`               | -              | Fires when an interaction commits, such as pointer up, keyboard step, or reset.                                                      |
-| `render`             | `RenderProp<ElementProps, SliderState>` | -              | Replaces the root element while preserving generated props and render state.                                                         |
+| Prop                 | Type                                    | Default        | Description                                                                                                                              |
+| -------------------- | --------------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`              | `number`                                | -              | Controlled value. Pass with `onValueChange` when external state owns the slider value.                                                   |
+| `defaultValue`       | `number`                                | `min` or `0`   | Initial uncontrolled value. Also becomes the double-click reset target.                                                                  |
+| `min`                | `number`                                | `0`            | Lower value bound. Values are clamped into the resolved range.                                                                           |
+| `max`                | `number`                                | `100`          | Upper value bound. If `min` is greater than `max`, the core range resolver normalizes the order.                                         |
+| `step`               | `number`                                | `1`            | Value increment for pointer and keyboard changes. Non-positive or invalid steps fall back to the default.                                |
+| `orientation`        | `"horizontal" \| "vertical"`            | `"horizontal"` | Controls pointer mapping, `aria-orientation`, and `data-orientation`.                                                                    |
+| `origin`             | `"left" \| "center" \| "right"`         | `"left"`       | Sets the visual fill origin. `center` is useful for pan controls; `right` fills back from the maximum edge.                              |
+| `inverted`           | `boolean`                               | `false`        | Reverses the value-to-position mapping and adds `data-inverted`.                                                                         |
+| `disabled`           | `boolean`                               | `false`        | Prevents pointer and keyboard interaction, removes the thumb from tab order, and adds disabled state attributes.                         |
+| `readOnly`           | `boolean`                               | `false`        | Keeps the thumb focusable while preventing value changes, and adds readonly state attributes.                                            |
+| `fineControl`        | `boolean \| number`                     | `true`         | When `true`, Shift scales pointer drag movement to 10% for fine adjustment. Pass `false` to disable, or a number to set the drag factor. |
+| `resetOnDoubleClick` | `boolean`                               | `true`         | Allows a double click on the track to reset to `defaultValue`, or to `min`/`0` when no default value is supplied.                        |
+| `allowTrackClick`    | `boolean`                               | `false`        | When true, pointer down on the track jumps to the pointer position before dragging. When false, dragging starts from the thumb only.     |
+| `name`               | `string`                                | -              | Default form field name consumed by `Slider.HiddenInput`.                                                                                |
+| `required`           | `boolean`                               | -              | Default required flag consumed by `Slider.HiddenInput`.                                                                                  |
+| `children`           | `ReactNode \| (state) => ReactNode`     | -              | Parts to render. Function children receive the render state, including value state plus interaction flags.                               |
+| `onValueChange`      | `(value: number) => void`               | -              | Fires when interaction produces a new clamped and snapped value.                                                                         |
+| `onValueCommit`      | `(value: number) => void`               | -              | Fires when an interaction commits, such as pointer up, keyboard step, or reset.                                                          |
+| `render`             | `RenderProp<ElementProps, SliderState>` | -              | Replaces the root element while preserving generated props and render state.                                                             |
 
 ### Parts
 

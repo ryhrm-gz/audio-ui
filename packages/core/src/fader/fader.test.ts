@@ -68,7 +68,7 @@ test("maps fader pointer positions through the fader scale", () => {
 
 test("handles fader keyboard step commands", () => {
   expect(getNextFaderKeyboardValue(10, "ArrowUp", { step: 2 })).toBe(12);
-  expect(getNextFaderKeyboardValue(10, "ArrowUp", { step: 2 }, { fine: true })).toBe(10.2);
+  expect(getNextFaderKeyboardValue(10, "ArrowUp", { step: 2 }, { fine: true })).toBe(12);
   expect(getNextFaderKeyboardValue(10, "PageDown", { step: 2 })).toBe(0);
   expect(getNextFaderKeyboardValue(10, "End", { max: 24 })).toBe(24);
 });

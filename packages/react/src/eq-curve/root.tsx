@@ -13,7 +13,7 @@ import {
   useState,
   type CSSProperties,
 } from "react";
-import { isFineControlEnabled, resolveFineAxisValueStep } from "../shared/fine-control.ts";
+import { resolveFineAxisFactor } from "../shared/fine-control.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import {
   EQCurveContext,
@@ -52,7 +52,6 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
   } = props;
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState(defaultValueProp);
-  const [valueStep, setValueStep] = useState<{ frequency?: number; gain?: number; q?: number }>({});
   const [draggingBand, setDraggingBand] = useState<string | null>(null);
   const rawValue = isControlled ? value : internalValue;
   const state = useMemo(
@@ -68,9 +67,6 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
         stepGain,
         stepQ,
         curveResolution,
-        valueStepFrequency: valueStep.frequency,
-        valueStepGain: valueStep.gain,
-        valueStepQ: valueStep.q,
         activeBand: draggingBand,
       }),
     [
@@ -85,35 +81,18 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
       stepGain,
       stepQ,
       curveResolution,
-      valueStep,
       draggingBand,
     ],
   );
   const valueId = useId();
   const graphRef = useRef<HTMLDivElement | null>(null);
-  const getFineValueStep = useCallback(
-    (step: number, axis: "frequency" | "gain" | "q") =>
-      resolveFineAxisValueStep(step, axis, fineControl),
+  const getFineFactor = useCallback(
+    (axis: "frequency" | "gain") => resolveFineAxisFactor(axis, fineControl),
     [fineControl],
   );
 
   const getStateForValue = useCallback(
     (nextValue: EQCurveValue, options: EQCurveValueChangeOptions = {}): EQCurveState => {
-      const nextValueStep = {
-        frequency:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepFrequency, "frequency")
-            : undefined,
-        gain:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepGain, "gain")
-            : undefined,
-        q:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepQ, "q")
-            : undefined,
-      };
-
       return createEQCurveState(nextValue, {
         minFrequency,
         maxFrequency,
@@ -125,26 +104,18 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
         stepGain,
         stepQ,
         curveResolution,
-        valueStepFrequency: nextValueStep.frequency,
-        valueStepGain: nextValueStep.gain,
-        valueStepQ: nextValueStep.q,
         activeBand: options.activeBand ?? draggingBand,
       });
     },
     [
       curveResolution,
       draggingBand,
-      fineControl,
-      getFineValueStep,
       maxFrequency,
       maxGain,
       maxQ,
       minFrequency,
       minGain,
       minQ,
-      state.stepFrequency,
-      state.stepGain,
-      state.stepQ,
       stepFrequency,
       stepGain,
       stepQ,
@@ -154,21 +125,6 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
   const setValue = useCallback(
     (nextValue: EQCurveValue, options: EQCurveValueChangeOptions = {}) => {
       const nextState = getStateForValue(nextValue, options);
-      const nextValueStep = {
-        frequency:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepFrequency, "frequency")
-            : undefined,
-        gain:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepGain, "gain")
-            : undefined,
-        q:
-          isFineControlEnabled(fineControl) && options.fine
-            ? getFineValueStep(state.stepQ, "q")
-            : undefined,
-      };
-      setValueStep(nextValueStep);
 
       if (!isControlled) {
         setInternalValue(nextState.value);
@@ -178,17 +134,7 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
         onValueChange?.(nextState.value);
       }
     },
-    [
-      fineControl,
-      getFineValueStep,
-      getStateForValue,
-      isControlled,
-      onValueChange,
-      state.stepFrequency,
-      state.stepGain,
-      state.stepQ,
-      state.value,
-    ],
+    [getStateForValue, isControlled, onValueChange, state.value],
   );
 
   const commitValue = useCallback(
@@ -205,7 +151,7 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       draggingBand,
       valueId,
       name,
@@ -220,7 +166,7 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
       disabled,
       readOnly,
       fineControl,
-      getFineValueStep,
+      getFineFactor,
       draggingBand,
       valueId,
       name,

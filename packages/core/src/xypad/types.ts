@@ -49,8 +49,8 @@ export interface XYPadLinearDrag extends XYPadPoint {
 
 export interface XYPadDragOptions {
   fine?: boolean;
-  fineStepX?: number;
-  fineStepY?: number;
+  fineFactorX?: number;
+  fineFactorY?: number;
 }
 
 export interface XYPadState extends XYPadResolvedOptions {

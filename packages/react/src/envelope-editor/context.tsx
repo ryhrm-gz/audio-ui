@@ -11,7 +11,7 @@ export interface EnvelopeEditorContextValue {
   disabled: boolean;
   readOnly: boolean;
   fineControl: FineControlAxesProp<"time" | "level">;
-  getFineValueStep: (step: number, axis: "time" | "level") => number;
+  getFineFactor: (axis: "time" | "level") => number;
   draggingPoint: EnvelopeEditorPointId | null;
   valueId: string;
   name?: string;

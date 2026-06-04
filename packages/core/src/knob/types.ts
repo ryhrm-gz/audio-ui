@@ -25,7 +25,7 @@ export interface KnobLinearDrag {
 
 export interface KnobDragOptions {
   fine?: boolean;
-  fineStep?: number;
+  fineFactor?: number;
 }
 
 export interface KnobState {

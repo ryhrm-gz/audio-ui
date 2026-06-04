@@ -52,12 +52,7 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
       return null;
     }
 
-    const getValueFromPointer = (
-      clientX: number,
-      clientY: number,
-      targetRect: DOMRect,
-      fine: boolean,
-    ) => {
+    const getValueFromPointer = (clientX: number, clientY: number, targetRect: DOMRect) => {
       const graph = context.graphRef.current;
       const rect = graph?.getBoundingClientRect() ?? targetRect;
 
@@ -72,15 +67,7 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
           pointY: clientY,
         },
         context.state.value,
-        {
-          ...context.state,
-          valueStepTime: fine
-            ? context.getFineValueStep(context.state.stepTime, "time")
-            : undefined,
-          valueStepLevel: fine
-            ? context.getFineValueStep(context.state.stepLevel, "level")
-            : undefined,
-        },
+        context.state,
       );
     };
 
@@ -93,7 +80,6 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
             event.clientX,
             event.clientY,
             event.currentTarget.getBoundingClientRect(),
-            false,
           ),
           fine: false,
           fineStartValue: undefined,
@@ -120,8 +106,8 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
       const rect = graph?.getBoundingClientRect() ?? event.currentTarget.getBoundingClientRect();
       const deltaX = event.clientX - activeDrag.fineStartPointX;
       const deltaY = event.clientY - activeDrag.fineStartPointY;
-      const scaledDeltaX = deltaX * 0.1;
-      const scaledDeltaY = deltaY * 0.1;
+      const scaledDeltaX = deltaX * context.getFineFactor("time");
+      const scaledDeltaY = deltaY * context.getFineFactor("level");
       const pointX = activeDrag.fineStartPointX + scaledDeltaX;
       const pointY = activeDrag.fineStartPointY + scaledDeltaY;
 
@@ -136,11 +122,7 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
           pointY,
         },
         activeDrag.fineStartValue,
-        {
-          ...context.state,
-          valueStepTime: context.getFineValueStep(context.state.stepTime, "time"),
-          valueStepLevel: context.getFineValueStep(context.state.stepLevel, "level"),
-        },
+        context.state,
       );
 
       return {
@@ -159,19 +141,11 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
         return;
       }
 
-      const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
       const nextValue = getNextEnvelopeEditorKeyboardValue(
         context.state.value,
         point.id,
         event.key,
         context.state,
-        {
-          fine,
-          fineStepTime: fine ? context.getFineValueStep(context.state.stepTime, "time") : undefined,
-          fineStepLevel: fine
-            ? context.getFineValueStep(context.state.stepLevel, "level")
-            : undefined,
-        },
       );
 
       if (nextValue === undefined) {
@@ -179,8 +153,8 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
       }
 
       event.preventDefault();
-      context.setValue(nextValue, { fine, activePoint: point.id });
-      context.commitValue(nextValue, { fine, activePoint: point.id });
+      context.setValue(nextValue, { activePoint: point.id });
+      context.commitValue(nextValue, { activePoint: point.id });
     };
 
     const handlePointerDown = (event: PointerEvent<HTMLSpanElement>) => {
@@ -197,7 +171,6 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
         event.clientX,
         event.clientY,
         event.currentTarget.getBoundingClientRect(),
-        fine,
       );
       activeDragRef.current = {
         pointerId: event.pointerId,
@@ -211,7 +184,7 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
         fineStartPointY: fine ? event.clientY : undefined,
       };
       context.setDraggingPoint(point.id);
-      context.setValue(nextValue, { fine, activePoint: point.id });
+      context.setValue(nextValue, { activePoint: point.id });
     };
 
     const handlePointerMove = (event: PointerEvent<HTMLSpanElement>) => {

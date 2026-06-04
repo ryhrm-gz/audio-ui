@@ -7,7 +7,7 @@ export interface KnobContextValue {
   disabled: boolean;
   readOnly: boolean;
   fineControl: FineControlProp;
-  getFineValueStep: (step: number) => number;
+  getFineFactor: () => number;
   resetOnDoubleClick: boolean;
   dragging: boolean;
   valueId: string;

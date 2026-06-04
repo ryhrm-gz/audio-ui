@@ -74,7 +74,7 @@ test("maps fine XYPad drag movement from the drag start", () => {
       { maxX: 50, minX: 0, stepX: 1, maxY: 100, minY: 0, stepY: 1 },
       { fine: true },
     ),
-  ).toEqual({ x: 27.5, y: 55 });
+  ).toEqual({ x: 28, y: 55 });
 });
 
 test("handles XYPad keyboard movement", () => {
@@ -84,7 +84,7 @@ test("handles XYPad keyboard movement", () => {
   });
   expect(
     getNextXYPadKeyboardValue({ x: 10, y: 20 }, "ArrowUp", { stepY: 2 }, { fine: true }),
-  ).toEqual({ x: 10, y: 20.2 });
+  ).toEqual({ x: 10, y: 22 });
   expect(getNextXYPadKeyboardValue({ x: 10, y: 20 }, "PageDown", { stepY: 2 })).toEqual({
     x: 10,
     y: 0,

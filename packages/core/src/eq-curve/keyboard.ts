@@ -1,14 +1,9 @@
-import { getFineStep } from "../shared/range.ts";
 import { updateEQCurveBand } from "./bands.ts";
 import { resolveEQCurveOptions } from "./options.ts";
 import type { EQCurveOptions, EQCurveValue } from "./types.ts";
 
 export interface EQCurveKeyboardOptions {
-  fine?: boolean;
   q?: boolean;
-  fineStepFrequency?: number;
-  fineStepGain?: number;
-  fineStepQ?: number;
 }
 
 export function getNextEQCurveKeyboardValue(
@@ -25,39 +20,18 @@ export function getNextEQCurveKeyboardValue(
     return undefined;
   }
 
-  const frequencyStep = keyboard.fine
-    ? getFineStep(resolvedOptions.stepFrequency, keyboard.fineStepFrequency)
-    : resolvedOptions.stepFrequency;
-  const gainStep = keyboard.fine
-    ? getFineStep(resolvedOptions.stepGain, keyboard.fineStepGain)
-    : resolvedOptions.stepGain;
-  const qStep = keyboard.fine
-    ? getFineStep(resolvedOptions.stepQ, keyboard.fineStepQ)
-    : resolvedOptions.stepQ;
-  const valueSteps = {
-    valueStepFrequency: frequencyStep,
-    valueStepGain: gainStep,
-    valueStepQ: qStep,
-  };
+  const frequencyStep = resolvedOptions.stepFrequency;
+  const gainStep = resolvedOptions.stepGain;
+  const qStep = resolvedOptions.stepQ;
 
   if (keyboard.q) {
     switch (key) {
       case "ArrowUp":
       case "ArrowRight":
-        return updateEQCurveBand(
-          value,
-          bandId,
-          { q: band.q + qStep },
-          { ...resolvedOptions, ...valueSteps },
-        );
+        return updateEQCurveBand(value, bandId, { q: band.q + qStep }, resolvedOptions);
       case "ArrowDown":
       case "ArrowLeft":
-        return updateEQCurveBand(
-          value,
-          bandId,
-          { q: band.q - qStep },
-          { ...resolvedOptions, ...valueSteps },
-        );
+        return updateEQCurveBand(value, bandId, { q: band.q - qStep }, resolvedOptions);
       default:
         return undefined;
     }
@@ -69,56 +43,36 @@ export function getNextEQCurveKeyboardValue(
         value,
         bandId,
         { frequency: band.frequency + frequencyStep },
-        { ...resolvedOptions, ...valueSteps },
+        resolvedOptions,
       );
     case "ArrowLeft":
       return updateEQCurveBand(
         value,
         bandId,
         { frequency: band.frequency - frequencyStep },
-        { ...resolvedOptions, ...valueSteps },
+        resolvedOptions,
       );
     case "ArrowUp":
-      return updateEQCurveBand(
-        value,
-        bandId,
-        { gain: band.gain + gainStep },
-        { ...resolvedOptions, ...valueSteps },
-      );
+      return updateEQCurveBand(value, bandId, { gain: band.gain + gainStep }, resolvedOptions);
     case "ArrowDown":
-      return updateEQCurveBand(
-        value,
-        bandId,
-        { gain: band.gain - gainStep },
-        { ...resolvedOptions, ...valueSteps },
-      );
+      return updateEQCurveBand(value, bandId, { gain: band.gain - gainStep }, resolvedOptions);
     case "PageUp":
-      return updateEQCurveBand(
-        value,
-        bandId,
-        { q: band.q + qStep * 10 },
-        { ...resolvedOptions, ...valueSteps },
-      );
+      return updateEQCurveBand(value, bandId, { q: band.q + qStep * 10 }, resolvedOptions);
     case "PageDown":
-      return updateEQCurveBand(
-        value,
-        bandId,
-        { q: band.q - qStep * 10 },
-        { ...resolvedOptions, ...valueSteps },
-      );
+      return updateEQCurveBand(value, bandId, { q: band.q - qStep * 10 }, resolvedOptions);
     case "Home":
       return updateEQCurveBand(
         value,
         bandId,
         { frequency: resolvedOptions.minFrequency },
-        { ...resolvedOptions, ...valueSteps },
+        resolvedOptions,
       );
     case "End":
       return updateEQCurveBand(
         value,
         bandId,
         { frequency: resolvedOptions.maxFrequency },
-        { ...resolvedOptions, ...valueSteps },
+        resolvedOptions,
       );
     default:
       return undefined;

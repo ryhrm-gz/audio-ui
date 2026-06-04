@@ -1,7 +1,7 @@
 import { defaultSliderOptions, resolveSliderOptions } from "./options.ts";
 import type { SliderDragOptions, SliderLinearDrag, SliderOptions, SliderPoint } from "./types.ts";
 import { getSliderPercent, getSliderValueFromPercent } from "./value.ts";
-import { getFineStep } from "../shared/range.ts";
+import { resolveFineControlFactor } from "../shared/range.ts";
 
 export function getSliderPercentFromPoint(point: SliderPoint, options: SliderOptions = {}) {
   const { orientation, inverted } = resolveSliderOptions(options);
@@ -27,10 +27,7 @@ export function getSliderValueFromLinearDrag(
   dragOptions: SliderDragOptions = {},
 ) {
   const resolvedOptions = resolveSliderOptions(options);
-  const valueStep = dragOptions.fine
-    ? getFineStep(resolvedOptions.step, dragOptions.fineStep)
-    : resolvedOptions.step;
-  const dragFactor = dragOptions.fine ? 0.1 : 1;
+  const dragFactor = dragOptions.fine ? resolveFineControlFactor(dragOptions.fineFactor) : 1;
   const trackSize =
     resolvedOptions.orientation === "vertical"
       ? getValidSize(drag.trackHeight)
@@ -43,7 +40,7 @@ export function getSliderValueFromLinearDrag(
   const deltaPercent = (pointDelta / trackSize) * direction * dragFactor;
   const nextPercent = getSliderPercent(drag.startValue, resolvedOptions) + deltaPercent;
 
-  return getSliderValueFromPercent(nextPercent, { ...resolvedOptions, valueStep });
+  return getSliderValueFromPercent(nextPercent, resolvedOptions);
 }
 
 function getValidSize(size: number) {

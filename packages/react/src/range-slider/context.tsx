@@ -11,7 +11,7 @@ export interface RangeSliderContextValue {
   disabled: boolean;
   readOnly: boolean;
   fineControl: FineControlProp;
-  getFineValueStep: (step: number) => number;
+  getFineFactor: () => number;
   resetOnDoubleClick: boolean;
   dragging: boolean;
   activeThumb: RangeSliderThumbIndex | null;

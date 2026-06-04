@@ -102,26 +102,26 @@ The default point and segment parts expose normalized positions through CSS vari
 
 `EnvelopeEditor.Root` renders a `div`, owns ADSR state, and provides context to the other parts.
 
-| Prop            | Type                                           | Default      | Description                                                                                                        |
-| --------------- | ---------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `value`         | `EnvelopeEditorValue`                          | -            | Controlled ADSR value. Pass with `onValueChange` when external state owns the envelope.                            |
-| `defaultValue`  | `EnvelopeEditorValue`                          | ADSR default | Initial uncontrolled ADSR value.                                                                                   |
-| `minTime`       | `number`                                       | `0`          | Lower bound for attack, decay, and release times.                                                                  |
-| `maxTime`       | `number`                                       | `1`          | Upper bound for attack, decay, and release times.                                                                  |
-| `minLevel`      | `number`                                       | `0`          | Lower bound for sustain level.                                                                                     |
-| `maxLevel`      | `number`                                       | `1`          | Upper bound for sustain level.                                                                                     |
-| `stepTime`      | `number`                                       | `0.01`       | Time increment for pointer and keyboard changes.                                                                   |
-| `stepLevel`     | `number`                                       | `0.01`       | Sustain-level increment for pointer and keyboard changes.                                                          |
-| `mode`          | `"adsr"`                                       | `"adsr"`     | Current envelope mode. The initial implementation supports ADSR and leaves room for variants.                      |
-| `disabled`      | `boolean`                                      | `false`      | Prevents pointer and keyboard interaction and adds disabled state attributes.                                      |
-| `readOnly`      | `boolean`                                      | `false`      | Keeps points focusable while preventing value changes.                                                             |
-| `fineControl`   | `boolean \| { time?: number; level?: number }` | `true`       | When `true`, Shift uses 10% of each axis `step`. Pass `false` to disable, or an object to set per-axis fine steps. |
-| `name`          | `string`                                       | -            | Default form field name consumed by `EnvelopeEditor.HiddenInput`.                                                  |
-| `required`      | `boolean`                                      | -            | Default required flag consumed by `EnvelopeEditor.HiddenInput`.                                                    |
-| `children`      | `ReactNode \| (state) => ReactNode`            | -            | Parts to render. Function children receive the render state.                                                       |
-| `onValueChange` | `(value) => void`                              | -            | Fires when interaction produces a new normalized ADSR value.                                                       |
-| `onValueCommit` | `(value) => void`                              | -            | Fires when an interaction commits, such as pointer up or keyboard step.                                            |
-| `render`        | `RenderProp`                                   | -            | Replaces the root element while preserving generated props and render state.                                       |
+| Prop            | Type                                           | Default      | Description                                                                                                                          |
+| --------------- | ---------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `value`         | `EnvelopeEditorValue`                          | -            | Controlled ADSR value. Pass with `onValueChange` when external state owns the envelope.                                              |
+| `defaultValue`  | `EnvelopeEditorValue`                          | ADSR default | Initial uncontrolled ADSR value.                                                                                                     |
+| `minTime`       | `number`                                       | `0`          | Lower bound for attack, decay, and release times.                                                                                    |
+| `maxTime`       | `number`                                       | `1`          | Upper bound for attack, decay, and release times.                                                                                    |
+| `minLevel`      | `number`                                       | `0`          | Lower bound for sustain level.                                                                                                       |
+| `maxLevel`      | `number`                                       | `1`          | Upper bound for sustain level.                                                                                                       |
+| `stepTime`      | `number`                                       | `0.01`       | Time increment for pointer and keyboard changes.                                                                                     |
+| `stepLevel`     | `number`                                       | `0.01`       | Sustain-level increment for pointer and keyboard changes.                                                                            |
+| `mode`          | `"adsr"`                                       | `"adsr"`     | Current envelope mode. The initial implementation supports ADSR and leaves room for variants.                                        |
+| `disabled`      | `boolean`                                      | `false`      | Prevents pointer and keyboard interaction and adds disabled state attributes.                                                        |
+| `readOnly`      | `boolean`                                      | `false`      | Keeps points focusable while preventing value changes.                                                                               |
+| `fineControl`   | `boolean \| { time?: number; level?: number }` | `true`       | When `true`, Shift scales pointer drag movement to 10% per axis. Pass `false` to disable, or an object to set per-axis drag factors. |
+| `name`          | `string`                                       | -            | Default form field name consumed by `EnvelopeEditor.HiddenInput`.                                                                    |
+| `required`      | `boolean`                                      | -            | Default required flag consumed by `EnvelopeEditor.HiddenInput`.                                                                      |
+| `children`      | `ReactNode \| (state) => ReactNode`            | -            | Parts to render. Function children receive the render state.                                                                         |
+| `onValueChange` | `(value) => void`                              | -            | Fires when interaction produces a new normalized ADSR value.                                                                         |
+| `onValueCommit` | `(value) => void`                              | -            | Fires when an interaction commits, such as pointer up or keyboard step.                                                              |
+| `render`        | `RenderProp`                                   | -            | Replaces the root element while preserving generated props and render state.                                                         |
 
 ### Parts
 
