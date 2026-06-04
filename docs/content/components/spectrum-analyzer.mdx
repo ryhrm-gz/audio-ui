@@ -4,6 +4,11 @@ description: Render headless frequency spectrum displays from external bin and d
 ---
 
 import { SpectrumAnalyzerDemo } from "../_components/SpectrumAnalyzerDemo.tsx";
+import {
+  SpectrumBassFocusExample,
+  SpectrumEmptyValueExample,
+  SpectrumVocalRangeExample,
+} from "../_components/examples/spectrum-analyzer-examples.tsx";
 
 # SpectrumAnalyzer
 
@@ -16,32 +21,58 @@ import { SpectrumAnalyzerDemo } from "../_components/SpectrumAnalyzerDemo.tsx";
 ```tsx
 import { SpectrumAnalyzer } from "@ryhrm-gz/audio-ui-react";
 
-const bins = [
-  { id: "bass", frequency: 125, magnitude: -18 },
-  { id: "vocal", frequency: 1000, magnitude: -16 },
-  { id: "air", frequency: 8000, magnitude: -30 },
-];
+<SpectrumAnalyzer.Root>
+  <SpectrumAnalyzer.Graph>
+    <SpectrumAnalyzer.Bars />
+    <SpectrumAnalyzer.Curve />
+  </SpectrumAnalyzer.Graph>
+  <SpectrumAnalyzer.Value />
+  <SpectrumAnalyzer.HiddenInput />
+</SpectrumAnalyzer.Root>;
+```
 
-export function MixSpectrum() {
-  return (
-    <SpectrumAnalyzer.Root
-      aria-label="Mix spectrum"
-      minFrequency={20}
-      maxFrequency={20000}
-      minMagnitude={-90}
-      maxMagnitude={0}
-      frequencyScale="log"
-      value={bins}
-    >
-      <SpectrumAnalyzer.Graph>
-        <SpectrumAnalyzer.Bars />
-        <SpectrumAnalyzer.Curve />
-      </SpectrumAnalyzer.Graph>
-      <SpectrumAnalyzer.Value />
-      <SpectrumAnalyzer.HiddenInput name="spectrum" />
-    </SpectrumAnalyzer.Root>
-  );
-}
+## Examples
+
+### Vocal range
+
+<SpectrumVocalRangeExample />
+
+Narrow `minFrequency` and `maxFrequency` to zoom into a vocal band.
+
+```tsx
+<SpectrumAnalyzer.Root value={bins} minFrequency={80} maxFrequency={12000}>
+  <SpectrumAnalyzer.Graph>
+    <SpectrumAnalyzer.Bars />
+  </SpectrumAnalyzer.Graph>
+</SpectrumAnalyzer.Root>
+```
+
+### Bass focus
+
+<SpectrumBassFocusExample />
+
+Combine a tighter frequency window with a higher `minMagnitude` floor for low-end detail.
+
+```tsx
+<SpectrumAnalyzer.Root value={bins} minFrequency={30} maxFrequency={4000} minMagnitude={-72}>
+  <SpectrumAnalyzer.Graph>
+    <SpectrumAnalyzer.Bars />
+  </SpectrumAnalyzer.Graph>
+</SpectrumAnalyzer.Root>
+```
+
+### Empty value
+
+<SpectrumEmptyValueExample />
+
+An empty `value` array renders an idle analyzer state.
+
+```tsx
+<SpectrumAnalyzer.Root value={[]} minFrequency={20} maxFrequency={20000}>
+  <SpectrumAnalyzer.Graph>
+    <SpectrumAnalyzer.Bars />
+  </SpectrumAnalyzer.Graph>
+</SpectrumAnalyzer.Root>
 ```
 
 ## Magnitude arrays

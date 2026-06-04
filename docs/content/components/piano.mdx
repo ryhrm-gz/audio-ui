@@ -4,6 +4,11 @@ description: Compose pressable Piano keyboards that report pressed key state and
 ---
 
 import { PianoDemo } from "../_components/PianoDemo.tsx";
+import {
+  PianoDefaultChordExample,
+  PianoDisabledExample,
+  PianoSingleNoteExample,
+} from "../_components/examples/piano-examples.tsx";
 
 # Piano
 
@@ -16,13 +21,49 @@ import { PianoDemo } from "../_components/PianoDemo.tsx";
 ```tsx
 import { Piano } from "@ryhrm-gz/audio-ui-react";
 
-export function MidiKeyboard() {
-  return (
-    <Piano.Root startKey="C4" keyCount={24} onPressedKeysChange={(keys) => console.log(keys)}>
-      <Piano.Keys />
-    </Piano.Root>
-  );
-}
+<Piano.Root>
+  <Piano.Keys>
+    <Piano.Key />
+  </Piano.Keys>
+</Piano.Root>;
+```
+
+## Examples
+
+### Default chord
+
+<PianoDefaultChordExample />
+
+`defaultPressedKeys` sets the initial uncontrolled pressed keys.
+
+```tsx
+<Piano.Root keyCount={12} startKey="C4" defaultPressedKeys={["C4", "E4", "G4"]}>
+  <Piano.Keys>{(key) => <Piano.Key pianoKey={key.id} />}</Piano.Keys>
+</Piano.Root>
+```
+
+### Single note
+
+<PianoSingleNoteExample />
+
+`pressedKeys` controls which keys are pressed from external state.
+
+```tsx
+<Piano.Root keyCount={13} startKey="C4" pressedKeys={["A4"]}>
+  <Piano.Keys>{(key) => <Piano.Key pianoKey={key.id} />}</Piano.Keys>
+</Piano.Root>
+```
+
+### Disabled
+
+<PianoDisabledExample />
+
+`disabled` blocks key presses while keeping the layout visible.
+
+```tsx
+<Piano.Root keyCount={12} startKey="C4" disabled>
+  <Piano.Keys>{(key) => <Piano.Key pianoKey={key.id} />}</Piano.Keys>
+</Piano.Root>
 ```
 
 ## Controlled pressed state

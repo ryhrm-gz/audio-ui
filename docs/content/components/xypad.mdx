@@ -4,6 +4,11 @@ description: Compose two-dimensional XYPad controls with pointer drag, keyboard 
 ---
 
 import { XYPadDemo } from "../_components/XYPadDemo.tsx";
+import {
+  XYPadBipolarExample,
+  XYPadCoarseStepsExample,
+  XYPadDisabledExample,
+} from "../_components/examples/xypad-examples.tsx";
 
 # XYPad
 
@@ -16,26 +21,73 @@ import { XYPadDemo } from "../_components/XYPadDemo.tsx";
 ```tsx
 import { XYPad } from "@ryhrm-gz/audio-ui-react";
 
-export function FilterPad() {
-  return (
-    <XYPad.Root
-      defaultValue={{ x: 20, y: 70 }}
-      minX={0}
-      maxX={100}
-      minY={0}
-      maxY={100}
-      stepX={1}
-      stepY={1}
-      name="filter-position"
-    >
-      <XYPad.Area>
-        <XYPad.Thumb aria-label="Filter position" />
-      </XYPad.Area>
-      <XYPad.Value format={(value) => `${value.x}, ${value.y}`} />
-      <XYPad.HiddenInput />
-    </XYPad.Root>
-  );
-}
+<XYPad.Root>
+  <XYPad.Area>
+    <XYPad.Thumb />
+  </XYPad.Area>
+  <XYPad.Value />
+  <XYPad.HiddenInput />
+</XYPad.Root>;
+```
+
+## Examples
+
+### Bipolar
+
+<XYPadBipolarExample />
+
+Negative minimums create a centered pad for pan/width or other signed pairs.
+
+```tsx
+<XYPad.Root
+  defaultValue={{ x: -0.4, y: 0.6 }}
+  minX={-1}
+  maxX={1}
+  minY={-1}
+  maxY={1}
+  stepX={0.01}
+  stepY={0.01}
+>
+  <XYPad.Area>
+    <XYPad.Thumb aria-label="Pan and width" />
+  </XYPad.Area>
+</XYPad.Root>
+```
+
+### Coarse steps
+
+<XYPadCoarseStepsExample />
+
+Larger `stepX` and `stepY` values snap movement to macro positions.
+
+```tsx
+<XYPad.Root
+  defaultValue={{ x: 4, y: 12 }}
+  minX={0}
+  maxX={16}
+  minY={0}
+  maxY={16}
+  stepX={4}
+  stepY={4}
+>
+  <XYPad.Area>
+    <XYPad.Thumb aria-label="Macro position" />
+  </XYPad.Area>
+</XYPad.Root>
+```
+
+### Disabled
+
+<XYPadDisabledExample />
+
+`disabled` blocks pointer and keyboard interaction.
+
+```tsx
+<XYPad.Root defaultValue={{ x: 50, y: 50 }} disabled>
+  <XYPad.Area>
+    <XYPad.Thumb aria-label="Locked pad" />
+  </XYPad.Area>
+</XYPad.Root>
 ```
 
 ## Keyboard interaction

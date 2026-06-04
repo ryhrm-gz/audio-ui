@@ -4,6 +4,10 @@ description: Build parametric EQ curve editors with draggable bands, log-frequen
 ---
 
 import { EQCurveDemo } from "../_components/EQCurveDemo.tsx";
+import {
+  EQCurveDisabledBandsExample,
+  EQCurveMasteringExample,
+} from "../_components/examples/eq-curve-examples.tsx";
 
 # EQCurve
 
@@ -16,25 +20,51 @@ import { EQCurveDemo } from "../_components/EQCurveDemo.tsx";
 ```tsx
 import { EQCurve } from "@ryhrm-gz/audio-ui-react";
 
-const bands = [
-  { id: "low", type: "low-shelf", frequency: 120, gain: 3, q: 0.8 },
-  { id: "mid", type: "bell", frequency: 900, gain: -4, q: 1.4 },
-  { id: "air", type: "high-shelf", frequency: 9000, gain: 4, q: 0.7 },
-];
+<EQCurve.Root>
+  <EQCurve.Graph>
+    <EQCurve.Grid />
+    <EQCurve.Curve />
+    <EQCurve.Bands>
+      <EQCurve.Band />
+    </EQCurve.Bands>
+  </EQCurve.Graph>
+  <EQCurve.Value />
+  <EQCurve.HiddenInput />
+</EQCurve.Root>;
+```
 
-export function ChannelEQ() {
-  return (
-    <EQCurve.Root defaultValue={bands} name="channel-eq">
-      <EQCurve.Graph>
-        <EQCurve.Grid />
-        <EQCurve.Curve />
-        <EQCurve.Bands>{(band) => <EQCurve.Band key={band.id} band={band} />}</EQCurve.Bands>
-      </EQCurve.Graph>
-      <EQCurve.Value />
-      <EQCurve.HiddenInput />
-    </EQCurve.Root>
-  );
-}
+## Examples
+
+### Mastering
+
+<EQCurveMasteringExample />
+
+Tighter `minGain` and `maxGain` bounds suit gentle mastering moves.
+
+```tsx
+<EQCurve.Root value={bands} onValueChange={setBands} minGain={-9} maxGain={9}>
+  <EQCurve.Graph>
+    <EQCurve.Grid />
+    <EQCurve.Curve />
+    <EQCurve.Bands>{(band) => <EQCurve.Band band={band} />}</EQCurve.Bands>
+  </EQCurve.Graph>
+</EQCurve.Root>
+```
+
+### Disabled bands
+
+<EQCurveDisabledBandsExample />
+
+`disabled` keeps the curve visible while blocking band edits.
+
+```tsx
+<EQCurve.Root value={bands} disabled>
+  <EQCurve.Graph>
+    <EQCurve.Grid />
+    <EQCurve.Curve />
+    <EQCurve.Bands>{(band) => <EQCurve.Band band={band} />}</EQCurve.Bands>
+  </EQCurve.Graph>
+</EQCurve.Root>
 ```
 
 ## Band model

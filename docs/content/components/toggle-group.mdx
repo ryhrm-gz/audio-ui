@@ -4,12 +4,69 @@ description: Compose single-select and multi-select toggle button groups with ke
 ---
 
 import { ToggleGroupDemo } from "../_components/ToggleGroupDemo.tsx";
+import {
+  ToggleGroupAllowEmptyExample,
+  ToggleGroupDisabledExample,
+  ToggleGroupVerticalExample,
+} from "../_components/examples/toggle-group-examples.tsx";
 
 # ToggleGroup
 
 `ToggleGroup` groups related pressed buttons for mode selection, exclusive states, and multi-select audio states such as mute, solo, arm, and monitor.
 
 <ToggleGroupDemo />
+
+## Anatomy
+
+```tsx
+import { ToggleGroup } from "@ryhrm-gz/audio-ui-react";
+
+<ToggleGroup.Root>
+  <ToggleGroup.Item />
+  <ToggleGroup.HiddenInput />
+</ToggleGroup.Root>;
+```
+
+## Examples
+
+### Allow empty
+
+<ToggleGroupAllowEmptyExample />
+
+`allowEmpty` lets a single-selection group clear back to no value.
+
+```tsx
+<ToggleGroup.Root type="single" allowEmpty value={view} onValueChange={setView}>
+  <ToggleGroup.Item value="mixer">Mixer</ToggleGroup.Item>
+  <ToggleGroup.Item value="editor">Editor</ToggleGroup.Item>
+</ToggleGroup.Root>
+```
+
+### Vertical
+
+<ToggleGroupVerticalExample />
+
+`orientation="vertical"` stacks items for routing or mode pickers.
+
+```tsx
+<ToggleGroup.Root type="single" orientation="vertical" value={routing} onValueChange={setRouting}>
+  <ToggleGroup.Item value="main">Main</ToggleGroup.Item>
+  <ToggleGroup.Item value="aux">Aux</ToggleGroup.Item>
+</ToggleGroup.Root>
+```
+
+### Disabled
+
+<ToggleGroupDisabledExample />
+
+`disabled` prevents all items from changing.
+
+```tsx
+<ToggleGroup.Root type="single" disabled value="lowpass">
+  <ToggleGroup.Item value="lowpass">LP</ToggleGroup.Item>
+  <ToggleGroup.Item value="highpass">HP</ToggleGroup.Item>
+</ToggleGroup.Root>
+```
 
 ## Single selection
 

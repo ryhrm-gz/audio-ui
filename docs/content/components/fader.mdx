@@ -4,6 +4,11 @@ description: Create console-style dB faders with scale markings, non-linear valu
 ---
 
 import { FaderDemo } from "../_components/FaderDemo.tsx";
+import {
+  FaderCustomUnityExample,
+  FaderHorizontalExample,
+  FaderReadOnlyExample,
+} from "../_components/examples/fader-examples.tsx";
 
 # Fader
 
@@ -16,19 +21,65 @@ import { FaderDemo } from "../_components/FaderDemo.tsx";
 ```tsx
 import { Fader } from "@ryhrm-gz/audio-ui-react";
 
-export function ChannelFader() {
-  return (
-    <Fader.Root defaultValue={-6} name="channel-gain">
-      <Fader.Scale />
-      <Fader.Track>
-        <Fader.Range />
-        <Fader.Thumb aria-label="Channel gain" />
-      </Fader.Track>
-      <Fader.Value format={(value) => `${value.toFixed(1)} dB`} />
-      <Fader.HiddenInput />
-    </Fader.Root>
-  );
-}
+<Fader.Root>
+  <Fader.Scale />
+  <Fader.Track>
+    <Fader.Range />
+    <Fader.Thumb />
+  </Fader.Track>
+  <Fader.Value />
+  <Fader.HiddenInput />
+</Fader.Root>;
+```
+
+## Examples
+
+### Horizontal
+
+<FaderHorizontalExample />
+
+`orientation="horizontal"` maps pointer movement from left to right.
+
+```tsx
+<Fader.Root defaultValue={-12} orientation="horizontal">
+  <Fader.Scale />
+  <Fader.Track>
+    <Fader.Range />
+    <Fader.Thumb aria-label="Bus gain" />
+  </Fader.Track>
+</Fader.Root>
+```
+
+### Custom unity
+
+<FaderCustomUnityExample />
+
+`unity` moves the unity gain marker and `data-unity` styling hook.
+
+```tsx
+<Fader.Root defaultValue={2} unity={2}>
+  <Fader.Scale />
+  <Fader.Track>
+    <Fader.Range />
+    <Fader.Thumb aria-label="Aux send" />
+  </Fader.Track>
+</Fader.Root>
+```
+
+### Read only
+
+<FaderReadOnlyExample />
+
+`readOnly` keeps the fader visible without allowing value changes.
+
+```tsx
+<Fader.Root defaultValue={-18} readOnly>
+  <Fader.Scale />
+  <Fader.Track>
+    <Fader.Range />
+    <Fader.Thumb aria-label="Monitor level" />
+  </Fader.Track>
+</Fader.Root>
 ```
 
 ## Scale marks

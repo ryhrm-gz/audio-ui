@@ -4,6 +4,10 @@ description: Build ADSR envelope editors with headless points, segments, ARIA sl
 ---
 
 import { EnvelopeEditorDemo } from "../_components/EnvelopeEditorDemo.tsx";
+import {
+  EnvelopeFastPluckExample,
+  EnvelopeLongPadExample,
+} from "../_components/examples/envelope-editor-examples.tsx";
 
 # EnvelopeEditor
 
@@ -16,25 +20,52 @@ import { EnvelopeEditorDemo } from "../_components/EnvelopeEditorDemo.tsx";
 ```tsx
 import { EnvelopeEditor } from "@ryhrm-gz/audio-ui-react";
 
-export function AmpEnvelope() {
-  return (
-    <EnvelopeEditor.Root
-      defaultValue={{ attack: 0.02, decay: 0.18, sustain: 0.65, release: 0.4 }}
-      minTime={0}
-      maxTime={2}
-      stepTime={0.01}
-      stepLevel={0.01}
-      name="amp-envelope"
-    >
-      <EnvelopeEditor.Graph>
-        <EnvelopeEditor.Segments />
-        <EnvelopeEditor.Points />
-      </EnvelopeEditor.Graph>
-      <EnvelopeEditor.Value />
-      <EnvelopeEditor.HiddenInput />
-    </EnvelopeEditor.Root>
-  );
-}
+<EnvelopeEditor.Root>
+  <EnvelopeEditor.Graph>
+    <EnvelopeEditor.Segments />
+    <EnvelopeEditor.Points />
+  </EnvelopeEditor.Graph>
+  <EnvelopeEditor.Value />
+  <EnvelopeEditor.HiddenInput />
+</EnvelopeEditor.Root>;
+```
+
+## Examples
+
+### Fast pluck
+
+<EnvelopeFastPluckExample />
+
+Short attack and decay times create a plucky transient.
+
+```tsx
+<EnvelopeEditor.Root
+  defaultValue={{ attack: 0.01, decay: 0.18, sustain: 0.18, release: 0.16 }}
+  maxTime={1.2}
+>
+  <EnvelopeEditor.Graph>
+    <EnvelopeEditor.Segments />
+    <EnvelopeEditor.Points />
+  </EnvelopeEditor.Graph>
+</EnvelopeEditor.Root>
+```
+
+### Long pad
+
+<EnvelopeLongPadExample />
+
+Slow attack and long release suit pad and ambience layers.
+
+```tsx
+<EnvelopeEditor.Root
+  defaultValue={{ attack: 0.7, decay: 0.55, sustain: 0.82, release: 0.9 }}
+  maxTime={1.2}
+>
+  <EnvelopeEditor.Graph>
+    <EnvelopeEditor.Segments />
+    <EnvelopeEditor.Points />
+  </EnvelopeEditor.Graph>
+</EnvelopeEditor.Root>
 ```
 
 ## Controlled value

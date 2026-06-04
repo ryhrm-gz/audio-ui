@@ -4,6 +4,10 @@ description: Render compressor input-output curves from threshold, ratio, knee, 
 ---
 
 import { CompressorCurveDemo } from "../_components/CompressorCurveDemo.tsx";
+import {
+  CompressorLimiterExample,
+  CompressorSoftKneeExample,
+} from "../_components/examples/compressor-curve-examples.tsx";
 
 # CompressorCurve
 
@@ -16,21 +20,46 @@ import { CompressorCurveDemo } from "../_components/CompressorCurveDemo.tsx";
 ```tsx
 import { CompressorCurve } from "@ryhrm-gz/audio-ui-react";
 
-export function BusCompressor() {
-  return (
-    <CompressorCurve.Root
-      defaultValue={{ threshold: -24, ratio: 4, knee: 8, makeupGain: 3 }}
-      name="bus-compressor"
-    >
-      <CompressorCurve.Graph>
-        <CompressorCurve.Grid />
-        <CompressorCurve.Curve />
-      </CompressorCurve.Graph>
-      <CompressorCurve.Value />
-      <CompressorCurve.HiddenInput />
-    </CompressorCurve.Root>
-  );
-}
+<CompressorCurve.Root>
+  <CompressorCurve.Graph>
+    <CompressorCurve.Grid />
+    <CompressorCurve.Curve />
+  </CompressorCurve.Graph>
+  <CompressorCurve.Value />
+  <CompressorCurve.HiddenInput />
+</CompressorCurve.Root>;
+```
+
+## Examples
+
+### Soft knee
+
+<CompressorSoftKneeExample />
+
+Lower ratio and wider knee create gentler gain reduction.
+
+```tsx
+<CompressorCurve.Root value={{ threshold: -18, ratio: 2, knee: 14, makeupGain: 1.5 }}>
+  <CompressorCurve.Graph>
+    <CompressorCurve.Grid />
+    <CompressorCurve.Curve />
+  </CompressorCurve.Graph>
+</CompressorCurve.Root>
+```
+
+### Limiter
+
+<CompressorLimiterExample />
+
+High ratio and minimal knee approximate brick-wall limiting.
+
+```tsx
+<CompressorCurve.Root value={{ threshold: -6, ratio: 20, knee: 1, makeupGain: 0 }}>
+  <CompressorCurve.Graph>
+    <CompressorCurve.Grid />
+    <CompressorCurve.Curve />
+  </CompressorCurve.Graph>
+</CompressorCurve.Root>
 ```
 
 ## Value model

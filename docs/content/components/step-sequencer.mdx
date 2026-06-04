@@ -4,6 +4,11 @@ description: Build headless drum-machine and gate-sequencer grids with boolean s
 ---
 
 import { StepSequencerDemo } from "../_components/StepSequencerDemo.tsx";
+import {
+  StepSequencerBassExample,
+  StepSequencerDisabledExample,
+  StepSequencerReadOnlyExample,
+} from "../_components/examples/step-sequencer-examples.tsx";
 
 # StepSequencer
 
@@ -16,24 +21,62 @@ import { StepSequencerDemo } from "../_components/StepSequencerDemo.tsx";
 ```tsx
 import { StepSequencer } from "@ryhrm-gz/audio-ui-react";
 
-export function DrumPattern() {
-  return (
-    <StepSequencer.Root
-      defaultValue={[
-        [true, false, false, true],
-        [false, false, true, false],
-      ]}
-      stepCount={16}
-      trackCount={4}
-      playhead={3}
-      name="pattern"
-    >
-      <StepSequencer.Tracks />
-      <StepSequencer.Playhead />
-      <StepSequencer.HiddenInput />
-    </StepSequencer.Root>
-  );
-}
+<StepSequencer.Root>
+  <StepSequencer.Tracks>
+    <StepSequencer.Track>
+      <StepSequencer.Steps>
+        <StepSequencer.Step />
+      </StepSequencer.Steps>
+    </StepSequencer.Track>
+  </StepSequencer.Tracks>
+  <StepSequencer.Playhead />
+  <StepSequencer.HiddenInput />
+</StepSequencer.Root>;
+```
+
+## Examples
+
+### 8 step bass
+
+<StepSequencerBassExample />
+
+Smaller grids work for bass lines and simple gate patterns.
+
+```tsx
+<StepSequencer.Root trackCount={2} stepCount={8} value={pattern} onValueChange={setPattern}>
+  <StepSequencer.Tracks>
+    {(track) => <StepSequencer.Track track={track.trackIndex} />}
+  </StepSequencer.Tracks>
+  <StepSequencer.Playhead />
+</StepSequencer.Root>
+```
+
+### Read only
+
+<StepSequencerReadOnlyExample />
+
+`readOnly` shows the current pattern without allowing edits.
+
+```tsx
+<StepSequencer.Root trackCount={4} stepCount={16} value={pattern} readOnly>
+  <StepSequencer.Tracks>
+    {(track) => <StepSequencer.Track track={track.trackIndex} />}
+  </StepSequencer.Tracks>
+</StepSequencer.Root>
+```
+
+### Disabled
+
+<StepSequencerDisabledExample />
+
+`disabled` blocks step toggles and keyboard edits.
+
+```tsx
+<StepSequencer.Root trackCount={2} stepCount={8} value={pattern} disabled>
+  <StepSequencer.Tracks>
+    {(track) => <StepSequencer.Track track={track.trackIndex} />}
+  </StepSequencer.Tracks>
+</StepSequencer.Root>
 ```
 
 ## Controlled pattern

@@ -4,6 +4,7 @@ description: Build rotary audio controls with Knob parts, CSS angle variables, a
 ---
 
 import { KnobDemo } from "../_components/KnobDemo.tsx";
+import { KnobReadOnlyExample } from "../_components/examples/knob-examples.tsx";
 
 # Knob
 
@@ -16,17 +17,29 @@ import { KnobDemo } from "../_components/KnobDemo.tsx";
 ```tsx
 import { Knob } from "@ryhrm-gz/audio-ui-react";
 
-export function GainKnob() {
-  return (
-    <Knob.Root defaultValue={-6} min={-60} max={12} step={1} name="gain">
-      <Knob.Control aria-label="Gain">
-        <Knob.Thumb />
-      </Knob.Control>
-      <Knob.Value format={(value) => `${value} dB`} />
-      <Knob.HiddenInput />
-    </Knob.Root>
-  );
-}
+<Knob.Root>
+  <Knob.Control>
+    <Knob.Thumb />
+  </Knob.Control>
+  <Knob.Value />
+  <Knob.HiddenInput />
+</Knob.Root>;
+```
+
+## Examples
+
+### Read only
+
+<KnobReadOnlyExample />
+
+`readOnly` keeps the control focusable while preventing value changes.
+
+```tsx
+<Knob.Root defaultValue={0.7} min={0} max={1} readOnly>
+  <Knob.Control aria-label="Send">
+    <Knob.Thumb />
+  </Knob.Control>
+</Knob.Root>
 ```
 
 ## Styling hooks

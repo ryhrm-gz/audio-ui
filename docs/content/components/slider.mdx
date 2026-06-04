@@ -4,6 +4,11 @@ description: Compose horizontal or vertical Slider controls with track, range, t
 ---
 
 import { SliderDemo } from "../_components/SliderDemo.tsx";
+import {
+  SliderDisabledExample,
+  SliderInvertedExample,
+  SliderVerticalExample,
+} from "../_components/examples/slider-examples.tsx";
 
 # Slider
 
@@ -16,18 +21,61 @@ import { SliderDemo } from "../_components/SliderDemo.tsx";
 ```tsx
 import { Slider } from "@ryhrm-gz/audio-ui-react";
 
-export function PanSlider() {
-  return (
-    <Slider.Root defaultValue={0} min={-100} max={100} step={1} name="pan" origin="center">
-      <Slider.Track>
-        <Slider.Range />
-        <Slider.Thumb aria-label="Pan" />
-      </Slider.Track>
-      <Slider.Value format={(value) => `${value}%`} />
-      <Slider.HiddenInput />
-    </Slider.Root>
-  );
-}
+<Slider.Root>
+  <Slider.Track>
+    <Slider.Range />
+    <Slider.Thumb />
+  </Slider.Track>
+  <Slider.Value />
+  <Slider.HiddenInput />
+</Slider.Root>;
+```
+
+## Examples
+
+### Vertical
+
+<SliderVerticalExample />
+
+`orientation="vertical"` maps pointer movement and `aria-orientation` to a vertical track.
+
+```tsx
+<Slider.Root orientation="vertical" defaultValue={50} min={0} max={100}>
+  <Slider.Track>
+    <Slider.Range />
+    <Slider.Thumb aria-label="Send level" />
+  </Slider.Track>
+</Slider.Root>
+```
+
+### Inverted
+
+<SliderInvertedExample />
+
+`inverted` reverses the value-to-position mapping and adds `data-inverted`.
+
+```tsx
+<Slider.Root defaultValue={35} min={0} max={100} inverted origin="right">
+  <Slider.Track>
+    <Slider.Range />
+    <Slider.Thumb aria-label="Feedback" />
+  </Slider.Track>
+</Slider.Root>
+```
+
+### Disabled
+
+<SliderDisabledExample />
+
+`disabled` removes interaction and adds disabled state attributes.
+
+```tsx
+<Slider.Root defaultValue={60} min={0} max={100} disabled>
+  <Slider.Track>
+    <Slider.Range />
+    <Slider.Thumb aria-label="Width" />
+  </Slider.Track>
+</Slider.Root>
 ```
 
 ## Vertical orientation

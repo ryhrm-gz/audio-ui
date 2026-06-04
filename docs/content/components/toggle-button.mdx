@@ -4,12 +4,63 @@ description: Build controlled, uncontrolled, and momentary pressed buttons for m
 ---
 
 import { ToggleButtonDemo } from "../_components/ToggleButtonDemo.tsx";
+import {
+  ToggleButtonDefaultPressedExample,
+  ToggleButtonDisabledExample,
+  ToggleButtonRenderStateExample,
+} from "../_components/examples/toggle-button-examples.tsx";
 
 # ToggleButton
 
 `ToggleButton` renders a single pressable button with `aria-pressed` state. Use it for mute, solo, record arm, monitor, bypass, oscillator enable, sync, loop, and metronome controls.
 
 <ToggleButtonDemo />
+
+## Anatomy
+
+```tsx
+import { ToggleButton } from "@ryhrm-gz/audio-ui-react";
+
+<ToggleButton.Root>
+  <ToggleButton.HiddenInput />
+</ToggleButton.Root>;
+```
+
+## Examples
+
+### Default pressed
+
+<ToggleButtonDefaultPressedExample />
+
+`defaultPressed` sets the initial uncontrolled pressed state.
+
+```tsx
+<ToggleButton.Root defaultPressed>Bypass</ToggleButton.Root>
+```
+
+### Render state
+
+<ToggleButtonRenderStateExample />
+
+Function children receive render state, including `pressed`.
+
+```tsx
+<ToggleButton.Root pressed={armed} onPressedChange={setArmed}>
+  {(state) => (state.pressed ? "Armed" : "Arm")}
+</ToggleButton.Root>
+```
+
+### Disabled
+
+<ToggleButtonDisabledExample />
+
+`disabled` prevents interaction and adds disabled metadata.
+
+```tsx
+<ToggleButton.Root defaultPressed disabled>
+  Bypass
+</ToggleButton.Root>
+```
 
 ## Basic example
 

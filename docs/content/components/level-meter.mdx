@@ -4,6 +4,11 @@ description: Create DAW-style level meters for visualizing live signal levels, p
 ---
 
 import { LevelMeterDemo } from "../_components/LevelMeterDemo.tsx";
+import {
+  LevelMeterFourChannelExample,
+  LevelMeterHorizontalExample,
+  LevelMeterMonoExample,
+} from "../_components/examples/level-meter-examples.tsx";
 
 # LevelMeter
 
@@ -16,30 +21,59 @@ import { LevelMeterDemo } from "../_components/LevelMeterDemo.tsx";
 ```tsx
 import { LevelMeter } from "@ryhrm-gz/audio-ui-react";
 
-export function StereoMeter({ left, right, leftPeak, rightPeak }) {
-  return (
-    <LevelMeter.Root
-      aria-label="Input level"
-      channels={2}
-      value={[left, right]}
-      peak={[leftPeak, rightPeak]}
-    >
-      <LevelMeter.Scale />
-      <LevelMeter.Track>
-        <LevelMeter.Segments />
-        <LevelMeter.Bar channel={0}>
-          <LevelMeter.Segments channel={0} />
-        </LevelMeter.Bar>
-        <LevelMeter.Peak channel={0} />
-        <LevelMeter.Bar channel={1}>
-          <LevelMeter.Segments channel={1} />
-        </LevelMeter.Bar>
-        <LevelMeter.Peak channel={1} />
-      </LevelMeter.Track>
-      <LevelMeter.Value format={(value) => `${value.toFixed(1)} dB`} />
-    </LevelMeter.Root>
-  );
-}
+<LevelMeter.Root>
+  <LevelMeter.Scale />
+  <LevelMeter.Track>
+    <LevelMeter.Segments />
+    <LevelMeter.Bar />
+    <LevelMeter.Peak />
+  </LevelMeter.Track>
+  <LevelMeter.Value />
+</LevelMeter.Root>;
+```
+
+## Examples
+
+### Mono
+
+<LevelMeterMonoExample />
+
+`channels={1}` renders a single meter column.
+
+```tsx
+<LevelMeter.Root channels={1} value={-12.5} peak={-8}>
+  <LevelMeter.Scale />
+  <LevelMeter.Track>
+    <LevelMeter.Bar channel={0} />
+    <LevelMeter.Peak channel={0} />
+  </LevelMeter.Track>
+</LevelMeter.Root>
+```
+
+### Horizontal
+
+<LevelMeterHorizontalExample />
+
+`orientation="horizontal"` maps level to width instead of height.
+
+```tsx
+<LevelMeter.Root orientation="horizontal" channels={2} value={[-18, -10]} peak={[-12, -8]}>
+  <LevelMeter.Scale />
+  <LevelMeter.Track>{/* bars and peaks */}</LevelMeter.Track>
+</LevelMeter.Root>
+```
+
+### Four channel
+
+<LevelMeterFourChannelExample />
+
+Pass per-channel arrays when metering surround or stem beds.
+
+```tsx
+<LevelMeter.Root channels={4} value={[-20, -15, -10, -5]} peak={[-18, -12, -8, -4]}>
+  <LevelMeter.Scale />
+  <LevelMeter.Track>{/* bars and peaks */}</LevelMeter.Track>
+</LevelMeter.Root>
 ```
 
 ## Web Audio values
