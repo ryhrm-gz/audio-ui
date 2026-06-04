@@ -17,7 +17,7 @@ export function KnobDemo() {
         max={12}
         min={-60}
         onValueChange={setValue}
-        step={1}
+        step={0.1}
         value={value}
       >
         <Knob.Control aria-label="Gain" className="demo-knob-control">
