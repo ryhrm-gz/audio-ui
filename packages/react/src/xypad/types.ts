@@ -1,5 +1,6 @@
 import type { XYPadRangeOptions, XYPadState, XYPadValue } from "@ryhrm-gz/audio-ui-core";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import type { FineControlAxesProp } from "../shared/fine-control.ts";
 import type { ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
 
 export type { DataAttributes, ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
@@ -12,7 +13,7 @@ export interface XYPadRootProps
   defaultValue?: XYPadValue;
   disabled?: boolean;
   readOnly?: boolean;
-  fineControl?: boolean;
+  fineControl?: FineControlAxesProp<"x" | "y">;
   resetOnDoubleClick?: boolean;
   allowTrackClick?: boolean;
   name?: string;

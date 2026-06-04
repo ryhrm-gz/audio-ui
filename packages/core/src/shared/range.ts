@@ -80,7 +80,11 @@ export function getRangeValueFromPercent(
   });
 }
 
-export function getFineStep(step: number) {
+export function getFineStep(step: number, fineStep?: number) {
+  if (typeof fineStep === "number" && Number.isFinite(fineStep) && fineStep > 0) {
+    return fineStep;
+  }
+
   return step * fineStepFactor;
 }
 

@@ -100,6 +100,7 @@ test("creates a complete serializable state object", () => {
 
 test("preserves fine-resolution values without changing the configured step", () => {
   expect(getFineStep(2)).toBe(0.2);
+  expect(getFineStep(2, 0.05)).toBe(0.05);
   expect(createKnobState(10.24, { step: 2, valueStep: 0.2 })).toMatchObject({
     value: 10.2,
     step: 2,

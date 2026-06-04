@@ -1,4 +1,5 @@
-import { createSliderState, getFineStep, type SliderState } from "@ryhrm-gz/audio-ui-core";
+import { createSliderState, type SliderState } from "@ryhrm-gz/audio-ui-core";
+import { isFineControlEnabled, resolveFineValueStep } from "../shared/fine-control.ts";
 import {
   forwardRef,
   useCallback,
@@ -49,10 +50,17 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
   );
   const valueId = useId();
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const getFineValueStep = useCallback(
+    (step: number) => resolveFineValueStep(step, fineControl),
+    [fineControl],
+  );
 
   const getStateForValue = useCallback(
     (nextValue: number, options: SliderValueOptions = {}): SliderState => {
-      const nextValueStep = fineControl && options.fine ? getFineStep(state.step) : undefined;
+      const nextValueStep =
+        isFineControlEnabled(fineControl) && options.fine
+          ? getFineValueStep(state.step)
+          : undefined;
       return createSliderState(nextValue, {
         min,
         max,
@@ -63,13 +71,17 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
         valueStep: nextValueStep,
       });
     },
-    [fineControl, inverted, max, min, origin, orientation, state.step, step],
+    [fineControl, getFineValueStep, inverted, max, min, origin, orientation, state.step, step],
   );
 
   const setValue = useCallback(
     (nextValue: number, options: SliderValueOptions = {}) => {
       const nextState = getStateForValue(nextValue, options);
-      setValueStep(fineControl && options.fine ? getFineStep(state.step) : undefined);
+      setValueStep(
+        isFineControlEnabled(fineControl) && options.fine
+          ? getFineValueStep(state.step)
+          : undefined,
+      );
 
       if (!isControlled) {
         setInternalValue(nextState.value);
@@ -79,7 +91,15 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
         onValueChange?.(nextState.value);
       }
     },
-    [fineControl, getStateForValue, isControlled, onValueChange, state.step, state.value],
+    [
+      fineControl,
+      getFineValueStep,
+      getStateForValue,
+      isControlled,
+      onValueChange,
+      state.step,
+      state.value,
+    ],
   );
 
   const commitValue = useCallback(
@@ -101,6 +121,7 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
       disabled,
       readOnly,
       fineControl,
+      getFineValueStep,
       resetOnDoubleClick,
       allowTrackClick,
       dragging,
@@ -118,6 +139,7 @@ export const Root = forwardRef<HTMLDivElement, SliderRootProps>(function Root(pr
       disabled,
       readOnly,
       fineControl,
+      getFineValueStep,
       resetOnDoubleClick,
       allowTrackClick,
       dragging,

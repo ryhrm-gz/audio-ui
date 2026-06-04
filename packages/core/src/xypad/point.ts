@@ -36,8 +36,12 @@ export function getXYPadValueFromLinearDrag(
 
   return getXYPadValueFromPercent(nextPercent, {
     ...resolvedOptions,
-    valueStepX: dragOptions.fine ? getFineStep(resolvedOptions.stepX) : undefined,
-    valueStepY: dragOptions.fine ? getFineStep(resolvedOptions.stepY) : undefined,
+    valueStepX: dragOptions.fine
+      ? getFineStep(resolvedOptions.stepX, dragOptions.fineStepX)
+      : undefined,
+    valueStepY: dragOptions.fine
+      ? getFineStep(resolvedOptions.stepY, dragOptions.fineStepY)
+      : undefined,
   });
 }
 

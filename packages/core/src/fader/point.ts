@@ -27,7 +27,9 @@ export function getFaderValueFromLinearDrag(
   dragOptions: FaderDragOptions = {},
 ) {
   const resolvedOptions = resolveFaderOptions(options);
-  const valueStep = dragOptions.fine ? getFineStep(resolvedOptions.step) : resolvedOptions.step;
+  const valueStep = dragOptions.fine
+    ? getFineStep(resolvedOptions.step, dragOptions.fineStep)
+    : resolvedOptions.step;
   const dragFactor = dragOptions.fine ? 0.1 : 1;
   const trackSize =
     resolvedOptions.orientation === "vertical"

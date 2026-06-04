@@ -1,4 +1,5 @@
-import { createXYPadState, getFineStep, type XYPadState } from "@ryhrm-gz/audio-ui-core";
+import { createXYPadState, type XYPadState } from "@ryhrm-gz/audio-ui-core";
+import { isFineControlEnabled, resolveFineAxisValueStep } from "../shared/fine-control.ts";
 import {
   forwardRef,
   useCallback,
@@ -61,12 +62,22 @@ export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(pro
   );
   const valueId = useId();
   const areaRef = useRef<HTMLDivElement | null>(null);
+  const getFineValueStep = useCallback(
+    (step: number, axis: "x" | "y") => resolveFineAxisValueStep(step, axis, fineControl),
+    [fineControl],
+  );
 
   const getStateForValue = useCallback(
     (nextValue: { x: number; y: number }, options: XYPadValueChangeOptions = {}): XYPadState => {
       const nextValueStep = {
-        x: fineControl && options.fine ? getFineStep(state.stepX) : undefined,
-        y: fineControl && options.fine ? getFineStep(state.stepY) : undefined,
+        x:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepX, "x")
+            : undefined,
+        y:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepY, "y")
+            : undefined,
       };
 
       return createXYPadState(nextValue, {
@@ -80,15 +91,21 @@ export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(pro
         valueStepY: nextValueStep.y,
       });
     },
-    [fineControl, maxX, maxY, minX, minY, state.stepX, state.stepY, stepX, stepY],
+    [fineControl, getFineValueStep, maxX, maxY, minX, minY, state.stepX, state.stepY, stepX, stepY],
   );
 
   const setValue = useCallback(
     (nextValue: { x: number; y: number }, options: XYPadValueChangeOptions = {}) => {
       const nextState = getStateForValue(nextValue, options);
       const nextValueStep = {
-        x: fineControl && options.fine ? getFineStep(state.stepX) : undefined,
-        y: fineControl && options.fine ? getFineStep(state.stepY) : undefined,
+        x:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepX, "x")
+            : undefined,
+        y:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepY, "y")
+            : undefined,
       };
       setValueStep(nextValueStep);
 
@@ -102,6 +119,7 @@ export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(pro
     },
     [
       fineControl,
+      getFineValueStep,
       getStateForValue,
       isControlled,
       onValueChange,
@@ -131,6 +149,7 @@ export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(pro
       disabled,
       readOnly,
       fineControl,
+      getFineValueStep,
       resetOnDoubleClick,
       allowTrackClick,
       dragging,
@@ -148,6 +167,7 @@ export const Root = forwardRef<HTMLDivElement, XYPadRootProps>(function Root(pro
       disabled,
       readOnly,
       fineControl,
+      getFineValueStep,
       resetOnDoubleClick,
       allowTrackClick,
       dragging,

@@ -4,6 +4,7 @@ import type {
   SliderState,
 } from "@ryhrm-gz/audio-ui-core";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import type { FineControlProp } from "../shared/fine-control.ts";
 import type { ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
 
 export type { DataAttributes, ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
@@ -17,7 +18,7 @@ export interface SliderRootProps
   defaultValue?: number;
   disabled?: boolean;
   readOnly?: boolean;
-  fineControl?: boolean;
+  fineControl?: FineControlProp;
   resetOnDoubleClick?: boolean;
   allowTrackClick?: boolean;
   name?: string;

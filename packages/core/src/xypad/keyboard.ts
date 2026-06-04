@@ -4,6 +4,8 @@ import type { XYPadOptions, XYPadValue } from "./types.ts";
 
 export interface XYPadKeyboardOptions {
   fine?: boolean;
+  fineStepX?: number;
+  fineStepY?: number;
 }
 
 export function getNextXYPadKeyboardValue(
@@ -13,8 +15,8 @@ export function getNextXYPadKeyboardValue(
   keyboard: XYPadKeyboardOptions = {},
 ): XYPadValue | undefined {
   const { minX, maxX, stepX, minY, maxY, stepY } = resolveXYPadOptions(options);
-  const valueStepX = keyboard.fine ? getFineStep(stepX) : stepX;
-  const valueStepY = keyboard.fine ? getFineStep(stepY) : stepY;
+  const valueStepX = keyboard.fine ? getFineStep(stepX, keyboard.fineStepX) : stepX;
+  const valueStepY = keyboard.fine ? getFineStep(stepY, keyboard.fineStepY) : stepY;
   const largeStepY = valueStepY * 10;
 
   switch (key) {

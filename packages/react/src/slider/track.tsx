@@ -7,6 +7,7 @@ import {
   type MouseEvent,
   type PointerEvent,
 } from "react";
+import { isFineControlEnabled } from "../shared/fine-control.ts";
 import { useComposedRefs } from "../shared/refs.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { useSliderContext } from "./context.tsx";
@@ -63,7 +64,7 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
 
   const getValueFromDrag = useCallback(
     (event: PointerEvent<HTMLDivElement>, activeDrag: ActiveDrag) => {
-      const fine = context.fineControl && event.shiftKey;
+      const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
 
       if (!fine) {
         return {
@@ -104,7 +105,10 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
             pointY: event.clientY,
           },
           context.state,
-          { fine },
+          {
+            fine,
+            fineStep: context.getFineValueStep(context.state.step),
+          },
         ),
         fine,
         fineStartValue: activeDrag.fineStartValue,
@@ -112,7 +116,7 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
         fineStartPointY: activeDrag.fineStartPointY,
       };
     },
-    [context.fineControl, context.state, getValueFromPointer],
+    [context.getFineValueStep, context.state, getValueFromPointer],
   );
 
   const releasePointerCapture = (event: PointerEvent<HTMLDivElement>) => {
@@ -134,7 +138,7 @@ export const Track = forwardRef<HTMLDivElement, SliderTrackProps>(function Track
 
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
-    const fine = context.fineControl && event.shiftKey;
+    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
     const nextValue = allowTrackClick ? getValueFromPointer(event) : context.state.value;
     activeDragRef.current = {
       pointerId: event.pointerId,

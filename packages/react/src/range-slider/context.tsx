@@ -4,12 +4,14 @@ import type {
   RangeSliderValue,
 } from "@ryhrm-gz/audio-ui-core";
 import { createContext, useContext, type RefObject } from "react";
+import type { FineControlProp } from "../shared/fine-control.ts";
 
 export interface RangeSliderContextValue {
   state: RangeSliderState;
   disabled: boolean;
   readOnly: boolean;
-  fineControl: boolean;
+  fineControl: FineControlProp;
+  getFineValueStep: (step: number) => number;
   resetOnDoubleClick: boolean;
   dragging: boolean;
   activeThumb: RangeSliderThumbIndex | null;

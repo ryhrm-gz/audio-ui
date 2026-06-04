@@ -6,6 +6,7 @@ import type {
   RangeSliderValue,
 } from "@ryhrm-gz/audio-ui-core";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import type { FineControlProp } from "../shared/fine-control.ts";
 import type { ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
 
 export type { DataAttributes, ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
@@ -19,7 +20,7 @@ export interface RangeSliderRootProps
   defaultValue?: RangeSliderValue;
   disabled?: boolean;
   readOnly?: boolean;
-  fineControl?: boolean;
+  fineControl?: FineControlProp;
   resetOnDoubleClick?: boolean;
   name?: string;
   required?: boolean;

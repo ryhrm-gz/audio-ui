@@ -1,6 +1,5 @@
 import {
   getEQCurveValueFromBandRect,
-  getFineStep,
   getNextEQCurveKeyboardValue,
   type EQCurveBandState,
   type EQCurveValue,
@@ -12,6 +11,7 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from "react";
+import { isFineControlEnabled } from "../shared/fine-control.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { useEQCurveContext } from "./context.tsx";
 import type { EQCurveBandProps, EQCurveBandRenderState } from "./types.ts";
@@ -70,14 +70,16 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
       },
       {
         ...context.state,
-        valueStepFrequency: fine ? getFineStep(context.state.stepFrequency) : undefined,
-        valueStepGain: fine ? getFineStep(context.state.stepGain) : undefined,
+        valueStepFrequency: fine
+          ? context.getFineValueStep(context.state.stepFrequency, "frequency")
+          : undefined,
+        valueStepGain: fine ? context.getFineValueStep(context.state.stepGain, "gain") : undefined,
       },
     );
   };
 
   const getValueFromDrag = (event: PointerEvent<HTMLSpanElement>, activeDrag: ActiveDrag) => {
-    const fine = context.fineControl && event.shiftKey;
+    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
 
     if (!fine) {
       return {
@@ -127,8 +129,8 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
         },
         {
           ...context.state,
-          valueStepFrequency: getFineStep(context.state.stepFrequency),
-          valueStepGain: getFineStep(context.state.stepGain),
+          valueStepFrequency: context.getFineValueStep(context.state.stepFrequency, "frequency"),
+          valueStepGain: context.getFineValueStep(context.state.stepGain, "gain"),
         },
       ),
       fine: true,
@@ -145,13 +147,21 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
       return;
     }
 
-    const fine = context.fineControl && event.shiftKey;
+    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
     const nextValue = getNextEQCurveKeyboardValue(
       context.state.value,
       band.id,
       event.key,
       context.state,
-      { fine, q: event.altKey },
+      {
+        fine,
+        q: event.altKey,
+        fineStepFrequency: fine
+          ? context.getFineValueStep(context.state.stepFrequency, "frequency")
+          : undefined,
+        fineStepGain: fine ? context.getFineValueStep(context.state.stepGain, "gain") : undefined,
+        fineStepQ: fine ? context.getFineValueStep(context.state.stepQ, "q") : undefined,
+      },
     );
 
     if (nextValue === undefined) {
@@ -172,7 +182,7 @@ export const Band = forwardRef<HTMLSpanElement, EQCurveBandProps>(function Band(
 
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
-    const fine = context.fineControl && event.shiftKey;
+    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
     const nextValue = getValueFromPointer(
       event.clientX,
       event.clientY,

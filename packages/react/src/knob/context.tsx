@@ -1,11 +1,13 @@
 import type { KnobState } from "@ryhrm-gz/audio-ui-core";
 import { createContext, useContext } from "react";
+import type { FineControlProp } from "../shared/fine-control.ts";
 
 export interface KnobContextValue {
   state: KnobState;
   disabled: boolean;
   readOnly: boolean;
-  fineControl: boolean;
+  fineControl: FineControlProp;
+  getFineValueStep: (step: number) => number;
   resetOnDoubleClick: boolean;
   dragging: boolean;
   valueId: string;

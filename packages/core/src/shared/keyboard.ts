@@ -3,6 +3,7 @@ import { getFineStep, normalizeRangeValue, resolveRangeOptions } from "./range.t
 
 export interface RangeKeyboardOptions {
   fine?: boolean;
+  fineStep?: number;
 }
 
 export function getNextRangeKeyboardValue(
@@ -12,7 +13,7 @@ export function getNextRangeKeyboardValue(
   keyboard: RangeKeyboardOptions = {},
 ) {
   const { min, max, step } = resolveRangeOptions(options);
-  const valueStep = keyboard.fine ? getFineStep(step) : step;
+  const valueStep = keyboard.fine ? getFineStep(step, keyboard.fineStep) : step;
   const largeStep = valueStep * 10;
 
   switch (key) {

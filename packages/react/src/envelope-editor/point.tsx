@@ -1,6 +1,5 @@
 import {
   getEnvelopeEditorValueFromPointRect,
-  getFineStep,
   getNextEnvelopeEditorKeyboardValue,
   type EnvelopeEditorPoint as CoreEnvelopeEditorPoint,
   type EnvelopeEditorValue,
@@ -12,6 +11,7 @@ import {
   type KeyboardEvent,
   type PointerEvent,
 } from "react";
+import { isFineControlEnabled } from "../shared/fine-control.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { useEnvelopeEditorContext } from "./context.tsx";
 import type { EnvelopeEditorPointProps, EnvelopeEditorPointState } from "./types.ts";
@@ -74,14 +74,18 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
         context.state.value,
         {
           ...context.state,
-          valueStepTime: fine ? getFineStep(context.state.stepTime) : undefined,
-          valueStepLevel: fine ? getFineStep(context.state.stepLevel) : undefined,
+          valueStepTime: fine
+            ? context.getFineValueStep(context.state.stepTime, "time")
+            : undefined,
+          valueStepLevel: fine
+            ? context.getFineValueStep(context.state.stepLevel, "level")
+            : undefined,
         },
       );
     };
 
     const getValueFromDrag = (event: PointerEvent<HTMLSpanElement>, activeDrag: ActiveDrag) => {
-      const fine = context.fineControl && event.shiftKey;
+      const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
 
       if (!fine) {
         return {
@@ -134,8 +138,8 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
         activeDrag.fineStartValue,
         {
           ...context.state,
-          valueStepTime: getFineStep(context.state.stepTime),
-          valueStepLevel: getFineStep(context.state.stepLevel),
+          valueStepTime: context.getFineValueStep(context.state.stepTime, "time"),
+          valueStepLevel: context.getFineValueStep(context.state.stepLevel, "level"),
         },
       );
 
@@ -155,13 +159,19 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
         return;
       }
 
-      const fine = context.fineControl && event.shiftKey;
+      const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
       const nextValue = getNextEnvelopeEditorKeyboardValue(
         context.state.value,
         point.id,
         event.key,
         context.state,
-        { fine },
+        {
+          fine,
+          fineStepTime: fine ? context.getFineValueStep(context.state.stepTime, "time") : undefined,
+          fineStepLevel: fine
+            ? context.getFineValueStep(context.state.stepLevel, "level")
+            : undefined,
+        },
       );
 
       if (nextValue === undefined) {
@@ -182,7 +192,7 @@ export const Point = forwardRef<HTMLSpanElement, EnvelopeEditorPointProps>(
 
       event.preventDefault();
       event.currentTarget.setPointerCapture(event.pointerId);
-      const fine = context.fineControl && event.shiftKey;
+      const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
       const nextValue = getValueFromPointer(
         event.clientX,
         event.clientY,

@@ -6,6 +6,9 @@ import type { EQCurveOptions, EQCurveValue } from "./types.ts";
 export interface EQCurveKeyboardOptions {
   fine?: boolean;
   q?: boolean;
+  fineStepFrequency?: number;
+  fineStepGain?: number;
+  fineStepQ?: number;
 }
 
 export function getNextEQCurveKeyboardValue(
@@ -23,10 +26,14 @@ export function getNextEQCurveKeyboardValue(
   }
 
   const frequencyStep = keyboard.fine
-    ? getFineStep(resolvedOptions.stepFrequency)
+    ? getFineStep(resolvedOptions.stepFrequency, keyboard.fineStepFrequency)
     : resolvedOptions.stepFrequency;
-  const gainStep = keyboard.fine ? getFineStep(resolvedOptions.stepGain) : resolvedOptions.stepGain;
-  const qStep = keyboard.fine ? getFineStep(resolvedOptions.stepQ) : resolvedOptions.stepQ;
+  const gainStep = keyboard.fine
+    ? getFineStep(resolvedOptions.stepGain, keyboard.fineStepGain)
+    : resolvedOptions.stepGain;
+  const qStep = keyboard.fine
+    ? getFineStep(resolvedOptions.stepQ, keyboard.fineStepQ)
+    : resolvedOptions.stepQ;
   const valueSteps = {
     valueStepFrequency: frequencyStep,
     valueStepGain: gainStep,

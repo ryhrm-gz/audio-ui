@@ -22,6 +22,8 @@ export function getNextRangeSliderKeyboardValue(
   return normalizeRangeSliderValue(nextValue, {
     ...options,
     activeThumb,
-    valueStep: keyboard.fine ? getFineStep(resolveRangeOptions(options).step) : undefined,
+    valueStep: keyboard.fine
+      ? getFineStep(resolveRangeOptions(options).step, keyboard.fineStep)
+      : undefined,
   });
 }

@@ -34,6 +34,7 @@ export interface FaderLinearDrag extends FaderPoint {
 
 export interface FaderDragOptions {
   fine?: boolean;
+  fineStep?: number;
 }
 
 export interface FaderState {

@@ -1,7 +1,6 @@
 import {
   createEQCurveState,
   eqCurveValuesEqual,
-  getFineStep,
   type EQCurveState,
   type EQCurveValue,
 } from "@ryhrm-gz/audio-ui-core";
@@ -14,6 +13,7 @@ import {
   useState,
   type CSSProperties,
 } from "react";
+import { isFineControlEnabled, resolveFineAxisValueStep } from "../shared/fine-control.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import {
   EQCurveContext,
@@ -91,13 +91,27 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
   );
   const valueId = useId();
   const graphRef = useRef<HTMLDivElement | null>(null);
+  const getFineValueStep = useCallback(
+    (step: number, axis: "frequency" | "gain" | "q") =>
+      resolveFineAxisValueStep(step, axis, fineControl),
+    [fineControl],
+  );
 
   const getStateForValue = useCallback(
     (nextValue: EQCurveValue, options: EQCurveValueChangeOptions = {}): EQCurveState => {
       const nextValueStep = {
-        frequency: fineControl && options.fine ? getFineStep(state.stepFrequency) : undefined,
-        gain: fineControl && options.fine ? getFineStep(state.stepGain) : undefined,
-        q: fineControl && options.fine ? getFineStep(state.stepQ) : undefined,
+        frequency:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepFrequency, "frequency")
+            : undefined,
+        gain:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepGain, "gain")
+            : undefined,
+        q:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepQ, "q")
+            : undefined,
       };
 
       return createEQCurveState(nextValue, {
@@ -121,6 +135,7 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
       curveResolution,
       draggingBand,
       fineControl,
+      getFineValueStep,
       maxFrequency,
       maxGain,
       maxQ,
@@ -140,9 +155,18 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
     (nextValue: EQCurveValue, options: EQCurveValueChangeOptions = {}) => {
       const nextState = getStateForValue(nextValue, options);
       const nextValueStep = {
-        frequency: fineControl && options.fine ? getFineStep(state.stepFrequency) : undefined,
-        gain: fineControl && options.fine ? getFineStep(state.stepGain) : undefined,
-        q: fineControl && options.fine ? getFineStep(state.stepQ) : undefined,
+        frequency:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepFrequency, "frequency")
+            : undefined,
+        gain:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepGain, "gain")
+            : undefined,
+        q:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepQ, "q")
+            : undefined,
       };
       setValueStep(nextValueStep);
 
@@ -156,6 +180,7 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
     },
     [
       fineControl,
+      getFineValueStep,
       getStateForValue,
       isControlled,
       onValueChange,
@@ -180,6 +205,7 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
       disabled,
       readOnly,
       fineControl,
+      getFineValueStep,
       draggingBand,
       valueId,
       name,
@@ -194,6 +220,7 @@ export const Root = forwardRef<HTMLDivElement, EQCurveRootProps>(function Root(p
       disabled,
       readOnly,
       fineControl,
+      getFineValueStep,
       draggingBand,
       valueId,
       name,

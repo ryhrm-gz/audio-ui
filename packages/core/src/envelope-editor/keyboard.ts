@@ -5,6 +5,8 @@ import { normalizeEnvelopeEditorValue } from "./value.ts";
 
 export interface EnvelopeEditorKeyboardOptions {
   fine?: boolean;
+  fineStepTime?: number;
+  fineStepLevel?: number;
 }
 
 export function getNextEnvelopeEditorKeyboardValue(
@@ -15,9 +17,11 @@ export function getNextEnvelopeEditorKeyboardValue(
   keyboard: EnvelopeEditorKeyboardOptions = {},
 ): EnvelopeEditorValue | undefined {
   const resolvedOptions = resolveEnvelopeEditorOptions(options);
-  const timeStep = keyboard.fine ? getFineStep(resolvedOptions.stepTime) : resolvedOptions.stepTime;
+  const timeStep = keyboard.fine
+    ? getFineStep(resolvedOptions.stepTime, keyboard.fineStepTime)
+    : resolvedOptions.stepTime;
   const levelStep = keyboard.fine
-    ? getFineStep(resolvedOptions.stepLevel)
+    ? getFineStep(resolvedOptions.stepLevel, keyboard.fineStepLevel)
     : resolvedOptions.stepLevel;
   const largeTimeStep = timeStep * 10;
   const largeLevelStep = levelStep * 10;

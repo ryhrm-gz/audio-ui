@@ -4,12 +4,14 @@ import type {
   EnvelopeEditorValue,
 } from "@ryhrm-gz/audio-ui-core";
 import { createContext, useContext, type RefObject } from "react";
+import type { FineControlAxesProp } from "../shared/fine-control.ts";
 
 export interface EnvelopeEditorContextValue {
   state: EnvelopeEditorState;
   disabled: boolean;
   readOnly: boolean;
-  fineControl: boolean;
+  fineControl: FineControlAxesProp<"time" | "level">;
+  getFineValueStep: (step: number, axis: "time" | "level") => number;
   draggingPoint: EnvelopeEditorPointId | null;
   valueId: string;
   name?: string;

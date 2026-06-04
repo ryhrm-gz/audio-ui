@@ -7,6 +7,7 @@ import {
 } from "@ryhrm-gz/audio-ui-core";
 import { forwardRef, useCallback, useRef, type MouseEvent, type PointerEvent } from "react";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
+import { isFineControlEnabled } from "../shared/fine-control.ts";
 import { useComposedRefs } from "../shared/refs.ts";
 import { useRangeSliderContext } from "./context.tsx";
 import { getRangeSliderStyle } from "./root.tsx";
@@ -68,7 +69,7 @@ export const Track = forwardRef<HTMLDivElement, RangeSliderTrackProps>(function 
 
   const getValueFromDrag = useCallback(
     (event: PointerEvent<HTMLDivElement>, activeDrag: ActiveDrag) => {
-      const fine = context.fineControl && event.shiftKey;
+      const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
 
       if (!fine) {
         return {
@@ -111,7 +112,10 @@ export const Track = forwardRef<HTMLDivElement, RangeSliderTrackProps>(function 
           context.state.value,
           activeDrag.activeThumb,
           context.state,
-          { fine },
+          {
+            fine,
+            fineStep: context.getFineValueStep(context.state.step),
+          },
         ),
         fine,
         fineStartValue: activeDrag.fineStartValue,
@@ -119,7 +123,7 @@ export const Track = forwardRef<HTMLDivElement, RangeSliderTrackProps>(function 
         fineStartPointY: activeDrag.fineStartPointY,
       };
     },
-    [context.fineControl, context.state, getValueFromPointer],
+    [context.getFineValueStep, context.state, getValueFromPointer],
   );
 
   const releasePointerCapture = (event: PointerEvent<HTMLDivElement>) => {
@@ -140,7 +144,7 @@ export const Track = forwardRef<HTMLDivElement, RangeSliderTrackProps>(function 
     const activeThumb =
       getThumbIndexFromTarget(event) ??
       getClosestRangeSliderThumbIndexFromPoint(getPoint(event), context.state.value, context.state);
-    const fine = context.fineControl && event.shiftKey;
+    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
     const nextValue = getValueFromPointer(event, activeThumb);
     activeDragRef.current = {
       pointerId: event.pointerId,

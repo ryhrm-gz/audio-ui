@@ -1,11 +1,13 @@
 import type { EQCurveState, EQCurveValue } from "@ryhrm-gz/audio-ui-core";
 import { createContext, useContext, type RefObject } from "react";
+import type { FineControlAxesProp } from "../shared/fine-control.ts";
 
 export interface EQCurveContextValue {
   state: EQCurveState;
   disabled: boolean;
   readOnly: boolean;
-  fineControl: boolean;
+  fineControl: FineControlAxesProp<"frequency" | "gain" | "q">;
+  getFineValueStep: (step: number, axis: "frequency" | "gain" | "q") => number;
   draggingBand: string | null;
   valueId: string;
   name?: string;

@@ -8,6 +8,7 @@ import type {
   EQCurveValue as CoreEQCurveValue,
 } from "@ryhrm-gz/audio-ui-core";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import type { FineControlAxesProp } from "../shared/fine-control.ts";
 import type { ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
 
 export type { DataAttributes, ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
@@ -23,7 +24,7 @@ export interface EQCurveRootProps
   defaultValue?: EQCurveValue;
   disabled?: boolean;
   readOnly?: boolean;
-  fineControl?: boolean;
+  fineControl?: FineControlAxesProp<"frequency" | "gain" | "q">;
   name?: string;
   required?: boolean;
   children?: ReactNode | ((state: RenderState<EQCurveState>) => ReactNode);

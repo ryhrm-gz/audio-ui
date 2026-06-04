@@ -2,7 +2,6 @@ import {
   createEnvelopeEditorState,
   defaultEnvelopeEditorValue,
   envelopeEditorValuesEqual,
-  getFineStep,
   type EnvelopeEditorPointId,
   type EnvelopeEditorState,
   type EnvelopeEditorValue,
@@ -16,6 +15,7 @@ import {
   useState,
   type CSSProperties,
 } from "react";
+import { isFineControlEnabled, resolveFineAxisValueStep } from "../shared/fine-control.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import {
   EnvelopeEditorContext,
@@ -85,6 +85,10 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
   );
   const valueId = useId();
   const graphRef = useRef<HTMLDivElement | null>(null);
+  const getFineValueStep = useCallback(
+    (step: number, axis: "time" | "level") => resolveFineAxisValueStep(step, axis, fineControl),
+    [fineControl],
+  );
 
   const getStateForValue = useCallback(
     (
@@ -92,8 +96,14 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
       options: EnvelopeEditorValueChangeOptions = {},
     ): EnvelopeEditorState => {
       const nextValueStep = {
-        time: fineControl && options.fine ? getFineStep(state.stepTime) : undefined,
-        level: fineControl && options.fine ? getFineStep(state.stepLevel) : undefined,
+        time:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepTime, "time")
+            : undefined,
+        level:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepLevel, "level")
+            : undefined,
       };
 
       return createEnvelopeEditorState(nextValue, {
@@ -115,6 +125,7 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
       disabled,
       draggingPoint,
       fineControl,
+      getFineValueStep,
       maxLevel,
       maxTime,
       minLevel,
@@ -132,8 +143,14 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
     (nextValue: EnvelopeEditorValue, options: EnvelopeEditorValueChangeOptions = {}) => {
       const nextState = getStateForValue(nextValue, options);
       const nextValueStep = {
-        time: fineControl && options.fine ? getFineStep(state.stepTime) : undefined,
-        level: fineControl && options.fine ? getFineStep(state.stepLevel) : undefined,
+        time:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepTime, "time")
+            : undefined,
+        level:
+          isFineControlEnabled(fineControl) && options.fine
+            ? getFineValueStep(state.stepLevel, "level")
+            : undefined,
       };
       setValueStep(nextValueStep);
 
@@ -147,6 +164,7 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
     },
     [
       fineControl,
+      getFineValueStep,
       getStateForValue,
       isControlled,
       onValueChange,
@@ -170,6 +188,7 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
       disabled,
       readOnly,
       fineControl,
+      getFineValueStep,
       draggingPoint,
       valueId,
       name,
@@ -184,6 +203,7 @@ export const Root = forwardRef<HTMLDivElement, EnvelopeEditorRootProps>(function
       disabled,
       readOnly,
       fineControl,
+      getFineValueStep,
       draggingPoint,
       valueId,
       name,

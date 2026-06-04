@@ -7,6 +7,7 @@ import {
   type MouseEvent,
   type PointerEvent,
 } from "react";
+import { isFineControlEnabled } from "../shared/fine-control.ts";
 import { useComposedRefs } from "../shared/refs.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { useXYPadContext } from "./context.tsx";
@@ -63,7 +64,7 @@ export const Area = forwardRef<HTMLDivElement, XYPadAreaProps>(function Area(pro
 
   const getValueFromDrag = useCallback(
     (event: PointerEvent<HTMLDivElement>, activeDrag: ActiveDrag) => {
-      const fine = context.fineControl && event.shiftKey;
+      const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
 
       if (!fine) {
         return {
@@ -104,7 +105,11 @@ export const Area = forwardRef<HTMLDivElement, XYPadAreaProps>(function Area(pro
             pointY: event.clientY,
           },
           context.state,
-          { fine },
+          {
+            fine,
+            fineStepX: context.getFineValueStep(context.state.stepX, "x"),
+            fineStepY: context.getFineValueStep(context.state.stepY, "y"),
+          },
         ),
         fine,
         fineStartValue: activeDrag.fineStartValue,
@@ -112,7 +117,7 @@ export const Area = forwardRef<HTMLDivElement, XYPadAreaProps>(function Area(pro
         fineStartPointY: activeDrag.fineStartPointY,
       };
     },
-    [context.fineControl, context.state, getValueFromPointer],
+    [context.getFineValueStep, context.state, getValueFromPointer],
   );
 
   const releasePointerCapture = (event: PointerEvent<HTMLDivElement>) => {
@@ -134,7 +139,7 @@ export const Area = forwardRef<HTMLDivElement, XYPadAreaProps>(function Area(pro
 
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
-    const fine = context.fineControl && event.shiftKey;
+    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
     const nextValue = allowTrackClick ? getValueFromPointer(event) : context.state.value;
     activeDragRef.current = {
       pointerId: event.pointerId,

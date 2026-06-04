@@ -1,4 +1,5 @@
 import { getKnobValueFromLinearDrag, getNextKeyboardValue } from "@ryhrm-gz/audio-ui-core";
+import { isFineControlEnabled } from "../shared/fine-control.ts";
 import {
   forwardRef,
   useCallback,
@@ -51,7 +52,7 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
         return;
       }
 
-      const fine = context.fineControl && event.shiftKey;
+      const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
       const startValue = fine ? activeDrag.fineStartValue : activeDrag.startValue;
       const startY = fine ? activeDrag.fineStartY : activeDrag.startY;
 
@@ -73,7 +74,10 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
           trackSize: activeDrag.trackSize,
         },
         context.state,
-        { fine },
+        {
+          fine,
+          fineStep: fine ? context.getFineValueStep(context.state.step) : undefined,
+        },
       );
 
       activeDragRef.current = {
@@ -105,7 +109,7 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
     event.currentTarget.focus();
     event.currentTarget.setPointerCapture(event.pointerId);
     const rect = event.currentTarget.getBoundingClientRect();
-    const fine = context.fineControl && event.shiftKey;
+    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
     activeDragRef.current = {
       pointerId: event.pointerId,
       startValue: context.state.value,
@@ -174,8 +178,11 @@ export const Control = forwardRef<HTMLDivElement, KnobControlProps>(function Con
       return;
     }
 
-    const fine = context.fineControl && event.shiftKey;
-    const nextValue = getNextKeyboardValue(context.state.value, event.key, context.state, { fine });
+    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
+    const nextValue = getNextKeyboardValue(context.state.value, event.key, context.state, {
+      fine,
+      fineStep: fine ? context.getFineValueStep(context.state.step) : undefined,
+    });
 
     if (nextValue === undefined) {
       return;

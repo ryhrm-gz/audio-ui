@@ -1,5 +1,6 @@
 import { getNextRangeSliderKeyboardValue } from "@ryhrm-gz/audio-ui-core";
 import { forwardRef, type CSSProperties, type KeyboardEvent } from "react";
+import { isFineControlEnabled } from "../shared/fine-control.ts";
 import { getRenderState, mergeProps, renderElement } from "../shared/render.tsx";
 import { useRangeSliderContext } from "./context.tsx";
 import { getRangeSliderStyle } from "./root.tsx";
@@ -20,13 +21,16 @@ export const Thumb = forwardRef<HTMLSpanElement, RangeSliderThumbProps>(function
       return;
     }
 
-    const fine = context.fineControl && event.shiftKey;
+    const fine = isFineControlEnabled(context.fineControl) && event.shiftKey;
     const nextValue = getNextRangeSliderKeyboardValue(
       context.state.value,
       index,
       event.key,
       context.state,
-      { fine },
+      {
+        fine,
+        fineStep: fine ? context.getFineValueStep(context.state.step) : undefined,
+      },
     );
 
     if (nextValue === undefined) {

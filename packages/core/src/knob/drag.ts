@@ -9,7 +9,7 @@ export function getKnobValueFromLinearDrag(
   dragOptions: KnobDragOptions = {},
 ) {
   const { min, max, step } = resolveKnobOptions(options);
-  const valueStep = dragOptions.fine ? getFineStep(step) : step;
+  const valueStep = dragOptions.fine ? getFineStep(step, dragOptions.fineStep) : step;
   const dragFactor = dragOptions.fine ? 0.1 : 1;
   const range = max - min;
   const trackSize =
