@@ -7,8 +7,8 @@
     min-height: 15rem;
   }
 
-  .demo-knob-control {
-    width: 7.5rem;
+  .demo-knob {
+    --demo-knob-size: 7.5rem;
   }
 
   .demo-fader-scale,

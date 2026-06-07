@@ -1,23 +1,50 @@
-.demo-knob-control {
+.demo-knob {
+  --demo-knob-inner-inset: 1.4rem;
+  --demo-knob-size: 8.5rem;
+
   position: relative;
-  width: 8.5rem;
+  isolation: isolate;
+}
+
+.demo-knob::before {
+  position: relative;
+  display: block;
+  width: var(--demo-knob-size);
   aspect-ratio: 1;
+  grid-area: 1 / 1;
   border: 1px solid var(--demo-line);
   border-radius: 50%;
-  outline: none;
   background: var(--demo-soft);
   box-shadow:
     inset 0 0 0 0.75rem var(--demo-bg),
     inset 0 0 0 0.85rem var(--demo-line);
-  touch-action: none;
+  content: "";
+  z-index: 0;
 }
 
-.demo-knob-control::before {
+.demo-knob::after {
   position: absolute;
-  inset: 1.4rem;
+  top: var(--demo-knob-inner-inset);
+  left: 50%;
+  width: calc(var(--demo-knob-size) - var(--demo-knob-inner-inset) * 2);
+  aspect-ratio: 1;
   border: 1px solid var(--demo-line);
-  border-radius: inherit;
+  border-radius: 50%;
   content: "";
+  pointer-events: none;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.demo-knob-control {
+  position: relative;
+  width: var(--demo-knob-size);
+  aspect-ratio: 1;
+  grid-area: 1 / 1;
+  border-radius: 50%;
+  outline: none;
+  touch-action: none;
+  z-index: 2;
 }
 
 .demo-knob-thumb {
@@ -39,10 +66,15 @@
   transform: translateX(-50%);
 }
 
-.demo-knob-marks {
+.demo-knob-scale {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 50%;
+  width: var(--demo-knob-size);
+  aspect-ratio: 1;
   pointer-events: none;
+  transform: translateX(-50%);
+  z-index: 1;
 }
 
 .demo-knob-ticks [data-part="tick"],

@@ -110,19 +110,19 @@ describe("Knob", () => {
   test("renders custom knob marks and generated ticks", () => {
     const markup = renderToStaticMarkup(
       <Knob.Root defaultValue={0} max={12} min={-60}>
-        <Knob.Control aria-label="Gain" />
-        <Knob.Marks>
+        <Knob.Scale>
           <Knob.Ticks count={3} />
           <Knob.Mark value={-60}>-inf</Knob.Mark>
           <Knob.Mark value={0}>
             <span data-icon="unity" />
           </Knob.Mark>
           <Knob.Mark value={12}>+12</Knob.Mark>
-        </Knob.Marks>
+        </Knob.Scale>
+        <Knob.Control aria-label="Gain" />
       </Knob.Root>,
     );
 
-    expect(markup).toContain('data-part="marks"');
+    expect(markup).toContain('data-part="scale"');
     expect(markup).toContain('data-part="ticks"');
     expect(markup).toContain('data-part="tick"');
     expect(markup).toContain('data-part="mark"');
@@ -140,10 +140,10 @@ describe("Knob", () => {
   test("passes resolved mark and tick positions to function children", () => {
     const markup = renderToStaticMarkup(
       <Knob.Root defaultValue={0} max={100} min={0}>
-        <Knob.Marks>
+        <Knob.Scale>
           <Knob.Ticks count={2}>{(tick) => `${tick.value}:${tick.angle}`}</Knob.Ticks>
           <Knob.Mark value={50}>{(mark, state) => `${mark.percent}:${state.value}`}</Knob.Mark>
-        </Knob.Marks>
+        </Knob.Scale>
       </Knob.Root>,
     );
 
@@ -156,8 +156,8 @@ describe("Knob", () => {
     expect(() => renderToStaticMarkup(<Knob.Control />)).toThrow(
       "Knob.Control must be used inside Knob.Root.",
     );
-    expect(() => renderToStaticMarkup(<Knob.Marks />)).toThrow(
-      "Knob.Marks must be used inside Knob.Root.",
+    expect(() => renderToStaticMarkup(<Knob.Scale />)).toThrow(
+      "Knob.Scale must be used inside Knob.Root.",
     );
     expect(() => renderToStaticMarkup(<Knob.Mark value={0} />)).toThrow(
       "Knob.Mark must be used inside Knob.Root.",

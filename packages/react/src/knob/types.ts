@@ -31,7 +31,7 @@ export interface KnobControlProps extends Omit<
   render?: RenderProp<ElementProps, KnobState>;
 }
 
-export interface KnobMarksProps extends Omit<
+export interface KnobScaleProps extends Omit<
   ComponentPropsWithoutRef<"span">,
   "children" | "defaultValue" | "onChange"
 > {

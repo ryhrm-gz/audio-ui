@@ -1,21 +1,21 @@
 import { forwardRef, type CSSProperties } from "react";
 import { useKnobContext } from "./context.tsx";
 import { getRenderState, mergeProps, renderElement } from "./render.tsx";
-import type { KnobMarksProps } from "./types.ts";
+import type { KnobScaleProps } from "./types.ts";
 
-export const Marks = forwardRef<HTMLSpanElement, KnobMarksProps>(function Marks(props, ref) {
+export const Scale = forwardRef<HTMLSpanElement, KnobScaleProps>(function Scale(props, ref) {
   const { render, children, style, ...elementProps } = props;
-  const context = useKnobContext("Knob.Marks");
+  const context = useKnobContext("Knob.Scale");
   const renderState = getRenderState(context.state, {
     disabled: context.disabled,
     readOnly: context.readOnly,
     dragging: context.dragging,
   });
   const content = typeof children === "function" ? children(renderState) : children;
-  const marksProps = mergeProps(elementProps, {
+  const scaleProps = mergeProps(elementProps, {
     ref,
     "aria-hidden": true,
-    "data-part": "marks",
+    "data-part": "scale",
     "data-disabled": context.disabled ? "" : undefined,
     "data-readonly": context.readOnly ? "" : undefined,
     "data-dragging": context.dragging ? "" : undefined,
@@ -27,5 +27,5 @@ export const Marks = forwardRef<HTMLSpanElement, KnobMarksProps>(function Marks(
     } as CSSProperties,
   });
 
-  return renderElement("span", render, marksProps, renderState, content);
+  return renderElement("span", render, scaleProps, renderState, content);
 });

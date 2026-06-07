@@ -20,19 +20,19 @@ export function KnobDemo() {
         step={0.1}
         value={value}
       >
+        <Knob.Scale className="demo-knob-scale">
+          <Knob.Ticks className="demo-knob-ticks" count={13} />
+          <Knob.Mark className="demo-knob-mark" value={-60}>
+            <span className="demo-knob-mark-label">-inf</span>
+          </Knob.Mark>
+          <Knob.Mark className="demo-knob-mark" value={0}>
+            <span className="demo-knob-mark-label">0</span>
+          </Knob.Mark>
+          <Knob.Mark className="demo-knob-mark" value={12}>
+            <span className="demo-knob-mark-label">+12</span>
+          </Knob.Mark>
+        </Knob.Scale>
         <Knob.Control aria-label="Gain" className="demo-knob-control">
-          <Knob.Marks className="demo-knob-marks">
-            <Knob.Ticks className="demo-knob-ticks" count={13} />
-            <Knob.Mark className="demo-knob-mark" value={-60}>
-              <span className="demo-knob-mark-label">-inf</span>
-            </Knob.Mark>
-            <Knob.Mark className="demo-knob-mark" value={0}>
-              <span className="demo-knob-mark-label">0</span>
-            </Knob.Mark>
-            <Knob.Mark className="demo-knob-mark" value={12}>
-              <span className="demo-knob-mark-label">+12</span>
-            </Knob.Mark>
-          </Knob.Marks>
           <Knob.Thumb className="demo-knob-thumb" />
         </Knob.Control>
         <Knob.Value
