@@ -34,7 +34,7 @@ function EnvelopeExample({
           <EnvelopeEditor.Points className={styles.envelopePoints} />
         </EnvelopeEditor.Graph>
         <EnvelopeEditor.Value
-          className={[styles.readout, styles.envelopeReadout].join(" ")}
+          className={styles.readout}
           format={(nextValue) =>
             `A ${nextValue.attack.toFixed(2)} D ${nextValue.decay.toFixed(2)} S ${nextValue.sustain.toFixed(2)} R ${nextValue.release.toFixed(2)}`
           }

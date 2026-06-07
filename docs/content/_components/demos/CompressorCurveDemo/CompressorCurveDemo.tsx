@@ -27,7 +27,7 @@ export function CompressorCurveDemo() {
           <CompressorCurve.Curve className={styles.compressorLine} />
         </CompressorCurve.Graph>
         <CompressorCurve.Value
-          className={[styles.readout, styles.compressorReadout].join(" ")}
+          className={styles.readout}
           format={(nextValue) =>
             `${nextValue.threshold.toFixed(1)} dB / ${nextValue.ratio.toFixed(1)}:1 / knee ${nextValue.knee.toFixed(1)} dB / makeup ${nextValue.makeupGain.toFixed(1)} dB`
           }

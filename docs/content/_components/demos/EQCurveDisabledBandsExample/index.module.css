@@ -26,6 +26,7 @@
 }
 
 .readout {
+  width: min(100%, 18rem);
   min-width: 6rem;
   color: var(--demo-ink);
   font-size: 0.9rem;
@@ -125,8 +126,4 @@
 .eqBand[data-enabled="false"],
 .eqBand:not([data-enabled]) {
   opacity: 0.45;
-}
-
-.eqReadout {
-  width: min(100%, 18rem);
 }

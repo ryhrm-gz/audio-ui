@@ -56,7 +56,7 @@ export function SpectrumAnalyzerDemo() {
           <SpectrumAnalyzer.Curve className={styles.spectrumCurve} />
         </SpectrumAnalyzer.Graph>
         <SpectrumAnalyzer.Value
-          className={[styles.readout, styles.spectrumReadout].join(" ")}
+          className={styles.readout}
           format={(peak) =>
             peak === null
               ? "No spectrum data"

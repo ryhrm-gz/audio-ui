@@ -26,7 +26,11 @@
 }
 
 .readout {
-  min-width: 6rem;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 5.5rem;
   color: var(--demo-ink);
   font-size: 0.9rem;
   font-weight: 800;
@@ -165,14 +169,6 @@
 
 .knobMarkLabel {
   display: inline-block;
-}
-
-.knobReadout {
-  display: inline-flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 0.25rem;
-  min-width: 5.5rem;
 }
 
 .knobReadoutValue {

@@ -37,7 +37,7 @@ export function KnobDemo() {
           <Knob.Thumb className={styles.knobThumb} />
         </Knob.Control>
         <Knob.Value
-          className={[styles.readout, styles.knobReadout].join(" ")}
+          className={styles.readout}
           format={(nextValue) => (
             <>
               <span className={styles.knobReadoutValue}>{formatGainDb(nextValue)}</span>

@@ -26,6 +26,7 @@
 }
 
 .readout {
+  width: min(100%, 16rem);
   min-width: 6rem;
   color: var(--demo-ink);
   font-size: 0.9rem;
@@ -84,8 +85,4 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 2px;
-}
-
-.spectrumReadout {
-  width: min(100%, 16rem);
 }

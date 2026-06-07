@@ -40,7 +40,7 @@ export function EQCurveDemo() {
           </EQCurve.Bands>
         </EQCurve.Graph>
         <EQCurve.Value
-          className={[styles.readout, styles.eqReadout].join(" ")}
+          className={styles.readout}
           format={(nextValue, state) => {
             const activeBand =
               state.bands.find((band) => band.id === state.activeBand) ??

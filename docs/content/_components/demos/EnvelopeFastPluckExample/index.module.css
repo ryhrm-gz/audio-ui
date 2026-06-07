@@ -26,6 +26,7 @@
 }
 
 .readout {
+  width: min(100%, 22rem);
   min-width: 6rem;
   color: var(--demo-ink);
   font-size: 0.9rem;
@@ -115,8 +116,4 @@
 
 .envelopePoints [data-point="sustain"] {
   background: var(--demo-accent);
-}
-
-.envelopeReadout {
-  width: min(100%, 22rem);
 }
