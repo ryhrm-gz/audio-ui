@@ -9,6 +9,14 @@ export interface KnobAngleRange {
 
 export interface KnobOptions extends KnobRange, KnobAngleRange {}
 
+export interface KnobMarkPoint {
+  value: number;
+  percent: number;
+  angle: number;
+  x: number;
+  y: number;
+}
+
 export interface KnobPoint {
   centerX: number;
   centerY: number;

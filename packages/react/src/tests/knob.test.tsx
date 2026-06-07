@@ -107,9 +107,63 @@ describe("Knob", () => {
     expect(markup).toContain(">0.5</span>");
   });
 
+  test("renders custom knob marks and generated ticks", () => {
+    const markup = renderToStaticMarkup(
+      <Knob.Root defaultValue={0} max={12} min={-60}>
+        <Knob.Control aria-label="Gain" />
+        <Knob.Marks>
+          <Knob.Ticks count={3} />
+          <Knob.Mark value={-60}>-inf</Knob.Mark>
+          <Knob.Mark value={0}>
+            <span data-icon="unity" />
+          </Knob.Mark>
+          <Knob.Mark value={12}>+12</Knob.Mark>
+        </Knob.Marks>
+      </Knob.Root>,
+    );
+
+    expect(markup).toContain('data-part="marks"');
+    expect(markup).toContain('data-part="ticks"');
+    expect(markup).toContain('data-part="tick"');
+    expect(markup).toContain('data-part="mark"');
+    expect(markup).toContain("--knob-mark-value:-60");
+    expect(markup).toContain("--knob-mark-percent:0");
+    expect(markup).toContain("--knob-mark-angle:-135deg");
+    expect(markup).toContain("--knob-mark-angle-inverse:135deg");
+    expect(markup).toContain("--knob-mark-x:-0.707");
+    expect(markup).toContain("--knob-mark-y:0.707");
+    expect(markup).toContain("-inf");
+    expect(markup).toContain('data-icon="unity"');
+    expect(markup).toContain("+12");
+  });
+
+  test("passes resolved mark and tick positions to function children", () => {
+    const markup = renderToStaticMarkup(
+      <Knob.Root defaultValue={0} max={100} min={0}>
+        <Knob.Marks>
+          <Knob.Ticks count={2}>{(tick) => `${tick.value}:${tick.angle}`}</Knob.Ticks>
+          <Knob.Mark value={50}>{(mark, state) => `${mark.percent}:${state.value}`}</Knob.Mark>
+        </Knob.Marks>
+      </Knob.Root>,
+    );
+
+    expect(markup).toContain(">0:-135</span>");
+    expect(markup).toContain(">100:135</span>");
+    expect(markup).toContain(">0.5:0</span>");
+  });
+
   test("throws when a part is rendered outside the root", () => {
     expect(() => renderToStaticMarkup(<Knob.Control />)).toThrow(
       "Knob.Control must be used inside Knob.Root.",
+    );
+    expect(() => renderToStaticMarkup(<Knob.Marks />)).toThrow(
+      "Knob.Marks must be used inside Knob.Root.",
+    );
+    expect(() => renderToStaticMarkup(<Knob.Mark value={0} />)).toThrow(
+      "Knob.Mark must be used inside Knob.Root.",
+    );
+    expect(() => renderToStaticMarkup(<Knob.Ticks count={1} />)).toThrow(
+      "Knob.Ticks must be used inside Knob.Root.",
     );
   });
 });

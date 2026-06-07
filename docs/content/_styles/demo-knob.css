@@ -39,6 +39,52 @@
   transform: translateX(-50%);
 }
 
+.demo-knob-marks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.demo-knob-ticks [data-part="tick"],
+.demo-knob-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demo-knob-ticks [data-part="tick"] {
+  --demo-knob-tick-radius: 3.65rem;
+
+  width: 0.08rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: var(--demo-muted);
+  transform: translate(
+      calc(-50% + var(--knob-mark-x) * var(--demo-knob-tick-radius)),
+      calc(-50% + var(--knob-mark-y) * var(--demo-knob-tick-radius))
+    )
+    rotate(var(--knob-mark-angle));
+}
+
+.demo-knob-mark {
+  --demo-knob-mark-radius: 4.35rem;
+
+  color: var(--demo-muted);
+  font-size: 0.68rem;
+  line-height: 1;
+  transform: translate(
+    calc(-50% + var(--knob-mark-x) * var(--demo-knob-mark-radius)),
+    calc(-50% + var(--knob-mark-y) * var(--demo-knob-mark-radius))
+  );
+}
+
+.demo-knob-mark-label {
+  display: inline-block;
+}
+
 .demo-knob-readout {
   display: inline-flex;
   align-items: baseline;

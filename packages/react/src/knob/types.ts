@@ -1,4 +1,4 @@
-import type { KnobAngleRange, KnobRange, KnobState } from "@ryhrm-gz/audio-ui-core";
+import type { KnobAngleRange, KnobMarkPoint, KnobRange, KnobState } from "@ryhrm-gz/audio-ui-core";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import type { FineControlProp } from "../shared/fine-control.ts";
 import type { ElementProps, RenderProp, RenderState } from "../shared/render.tsx";
@@ -28,6 +28,36 @@ export interface KnobControlProps extends Omit<
   ComponentPropsWithoutRef<"div">,
   "defaultValue" | "onChange"
 > {
+  render?: RenderProp<ElementProps, KnobState>;
+}
+
+export interface KnobMarksProps extends Omit<
+  ComponentPropsWithoutRef<"span">,
+  "children" | "defaultValue" | "onChange"
+> {
+  children?: ReactNode | ((state: RenderState<KnobState>) => ReactNode);
+  render?: RenderProp<ElementProps, KnobState>;
+}
+
+export interface KnobMarkState extends KnobState {
+  mark: KnobMarkPoint;
+}
+
+export interface KnobMarkProps extends Omit<
+  ComponentPropsWithoutRef<"span">,
+  "children" | "defaultValue" | "onChange"
+> {
+  value: number;
+  children?: ReactNode | ((mark: KnobMarkPoint, state: RenderState<KnobState>) => ReactNode);
+  render?: RenderProp<ElementProps, KnobMarkState>;
+}
+
+export interface KnobTicksProps extends Omit<
+  ComponentPropsWithoutRef<"span">,
+  "children" | "defaultValue" | "onChange"
+> {
+  count: number;
+  children?: ReactNode | ((tick: KnobMarkPoint, state: RenderState<KnobState>) => ReactNode);
   render?: RenderProp<ElementProps, KnobState>;
 }
 

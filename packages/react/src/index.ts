@@ -42,8 +42,11 @@ export { Fader } from "./fader/index.ts";
 export {
   Control as KnobControl,
   HiddenInput as KnobHiddenInput,
+  Mark as KnobMark,
+  Marks as KnobMarks,
   Root as KnobRoot,
   Thumb as KnobThumb,
+  Ticks as KnobTicks,
   Value as KnobValue,
 } from "./knob/index.ts";
 export { Knob } from "./knob/index.ts";
@@ -150,8 +153,12 @@ export type {
 export type {
   KnobControlProps,
   KnobHiddenInputProps,
+  KnobMarkProps,
+  KnobMarksProps,
+  KnobMarkState,
   KnobRootProps,
   KnobThumbProps,
+  KnobTicksProps,
   KnobValueProps,
 } from "./knob/index.ts";
 export type {

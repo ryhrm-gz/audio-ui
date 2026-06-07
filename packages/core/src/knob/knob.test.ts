@@ -2,6 +2,8 @@ import { expect, test } from "vite-plus/test";
 import {
   createKnobState,
   getKnobAngle,
+  getKnobMarkPoint,
+  getKnobTickPoints,
   getKnobValueFromLinearDrag,
   getKnobValueFromPoint,
   getNextKeyboardValue,
@@ -19,6 +21,41 @@ test("maps values to angles", () => {
   expect(getKnobAngle(0)).toBe(-135);
   expect(getKnobAngle(50)).toBe(0);
   expect(getKnobAngle(100)).toBe(135);
+});
+
+test("resolves value marks to clamped positions", () => {
+  const mark = getKnobMarkPoint(25, { min: 0, max: 100, minAngle: -120, maxAngle: 120 });
+
+  expect(mark).toMatchObject({
+    value: 25,
+    percent: 0.25,
+    angle: -60,
+  });
+  expect(mark.x).toBeCloseTo(-0.866);
+  expect(mark.y).toBeCloseTo(-0.5);
+  expect(getKnobMarkPoint(120, { min: 0, max: 100 })).toMatchObject({
+    value: 100,
+    percent: 1,
+    angle: 135,
+  });
+});
+
+test("generates evenly spaced knob ticks", () => {
+  const ticks = getKnobTickPoints(3, { min: -10, max: 10, minAngle: -90, maxAngle: 90 });
+
+  expect(ticks).toMatchObject([
+    { value: -10, percent: 0, angle: -90 },
+    { value: 0, percent: 0.5, angle: 0 },
+    { value: 10, percent: 1, angle: 90 },
+  ]);
+  expect(ticks[0]?.x).toBeCloseTo(-1);
+  expect(ticks[1]?.y).toBeCloseTo(-1);
+  expect(ticks[2]?.x).toBeCloseTo(1);
+  expect(getKnobTickPoints(1, { min: -10, max: 10 })).toMatchObject([
+    { value: -10, percent: 0, angle: -135 },
+  ]);
+  expect(getKnobTickPoints(0)).toEqual([]);
+  expect(getKnobTickPoints(Number.NaN)).toEqual([]);
 });
 
 test("maps pointer positions to values", () => {

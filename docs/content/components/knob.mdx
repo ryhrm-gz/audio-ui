@@ -19,6 +19,10 @@ import { Knob } from "@ryhrm-gz/audio-ui-react";
 
 <Knob.Root>
   <Knob.Control>
+    <Knob.Marks>
+      <Knob.Ticks count={11} />
+      <Knob.Mark value={0}>0</Knob.Mark>
+    </Knob.Marks>
     <Knob.Thumb />
   </Knob.Control>
   <Knob.Value />
@@ -27,6 +31,25 @@ import { Knob } from "@ryhrm-gz/audio-ui-react";
 ```
 
 ## Examples
+
+### Value marks
+
+Use `Knob.Marks` with generated `Knob.Ticks` and explicit `Knob.Mark` children when the knob needs a scale, labels, or icon positions. Mark placement is exposed through CSS variables, so the primitive stays layout-agnostic.
+
+```tsx
+<Knob.Root defaultValue={0} min={-60} max={12}>
+  <Knob.Control aria-label="Gain">
+    <Knob.Marks>
+      <Knob.Ticks count={13} />
+      <Knob.Mark value={-60}>-inf</Knob.Mark>
+      <Knob.Mark value={0}>●</Knob.Mark>
+      <Knob.Mark value={12}>+12</Knob.Mark>
+    </Knob.Marks>
+    <Knob.Thumb />
+  </Knob.Control>
+  <Knob.Value />
+</Knob.Root>
+```
 
 ### Read only
 
@@ -44,11 +67,18 @@ import { Knob } from "@ryhrm-gz/audio-ui-react";
 
 ## Styling hooks
 
-Use `--knob-angle` to rotate the visual thumb and state attributes to branch on interaction state.
+Use `--knob-angle` to rotate the visual thumb, `--knob-mark-x` and `--knob-mark-y` to position marks from the knob center, and state attributes to branch on interaction state.
 
 ```css
 .knob-thumb {
   transform: rotate(var(--knob-angle));
+}
+
+.knob-mark {
+  transform: translate(
+    calc(-50% + var(--knob-mark-x) * 4rem),
+    calc(-50% + var(--knob-mark-y) * 4rem)
+  );
 }
 
 [data-audio-ui="knob"][data-disabled] {
@@ -84,9 +114,12 @@ Use `--knob-angle` to rotate the visual thumb and state attributes to branch on 
 
 ### Parts
 
-| Part               | Props and behavior                                                                                                                                                                                                                                                                               |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `Knob.Control`     | Renders a focusable `div` with `role="slider"` and generated ARIA value metadata. It accepts standard `div` props except `defaultValue` and `onChange`, plus `render`. Vertical pointer dragging, double-click reset, Arrow keys, Page Up/Down, Home, and End are handled by generated behavior. |
-| `Knob.Thumb`       | Renders an `aria-hidden` `span` and accepts standard `span` props plus `render`. Use it for the visual indicator; it exposes `--knob-value`, `--knob-percent`, and `--knob-angle` for styling.                                                                                                   |
-| `Knob.Value`       | Renders a `span` connected to the control by `aria-describedby`. It accepts standard `span` props except `children`, plus `children`, `format`, and `render`. `format(value, state)` customizes display text when explicit children are not supplied.                                            |
-| `Knob.HiddenInput` | Renders `<input type="hidden">` for native form submission. It accepts input props except `children`, `type`, and `value`; `name`, `required`, and `disabled` default to the matching root props and can be overridden directly on the hidden input.                                             |
+| Part               | Props and behavior                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Knob.Control`     | Renders a focusable `div` with `role="slider"` and generated ARIA value metadata. It accepts standard `div` props except `defaultValue` and `onChange`, plus `render`. Vertical pointer dragging, double-click reset, Arrow keys, Page Up/Down, Home, and End are handled by generated behavior.                                                                                            |
+| `Knob.Marks`       | Renders an `aria-hidden` `span` for decorative scale content. It accepts standard `span` props except `children`, `defaultValue`, and `onChange`, plus `children` and `render`. Function children receive the knob render state.                                                                                                                                                            |
+| `Knob.Mark`        | Renders one `aria-hidden` `span` at a value position. It accepts standard `span` props except `children`, `defaultValue`, and `onChange`, plus required `value`, `children`, and `render`. Function children receive `(mark, state)`. Each mark exposes `--knob-mark-value`, `--knob-mark-percent`, `--knob-mark-angle`, `--knob-mark-angle-inverse`, `--knob-mark-x`, and `--knob-mark-y`. |
+| `Knob.Ticks`       | Renders an `aria-hidden` `span` containing evenly spaced tick spans from `count`. It accepts standard `span` props except `children`, `defaultValue`, and `onChange`, plus required `count`, `children`, and `render`. Function children receive `(tick, state)`. Each tick exposes the same mark CSS variables.                                                                            |
+| `Knob.Thumb`       | Renders an `aria-hidden` `span` and accepts standard `span` props plus `render`. Use it for the visual indicator; it exposes `--knob-value`, `--knob-percent`, and `--knob-angle` for styling.                                                                                                                                                                                              |
+| `Knob.Value`       | Renders a `span` connected to the control by `aria-describedby`. It accepts standard `span` props except `children`, plus `children`, `format`, and `render`. `format(value, state)` customizes display text when explicit children are not supplied.                                                                                                                                       |
+| `Knob.HiddenInput` | Renders `<input type="hidden">` for native form submission. It accepts input props except `children`, `type`, and `value`; `name`, `required`, and `disabled` default to the matching root props and can be overridden directly on the hidden input.                                                                                                                                        |
