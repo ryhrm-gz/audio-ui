@@ -3,17 +3,24 @@ title: EnvelopeEditor
 description: Build ADSR envelope editors with headless points, segments, ARIA sliders, CSS variables, and form serialization.
 ---
 
-import { EnvelopeEditorDemo } from "../_components/EnvelopeEditorDemo.tsx";
-import {
-  EnvelopeFastPluckExample,
-  EnvelopeLongPadExample,
-} from "../_components/examples/envelope-editor-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { EnvelopeEditorDemo } from "../_components/demos/EnvelopeEditorDemo/EnvelopeEditorDemo.tsx";
+import EnvelopeEditorDemoSource from "../_components/demos/EnvelopeEditorDemo/EnvelopeEditorDemo.tsx?raw";
+import EnvelopeEditorDemoStylesSource from "../_components/demos/EnvelopeEditorDemo/index.module.css?raw";
+import { EnvelopeFastPluckExample } from "../_components/demos/EnvelopeFastPluckExample/EnvelopeFastPluckExample.tsx";
+import EnvelopeFastPluckExampleSource from "../_components/demos/EnvelopeFastPluckExample/EnvelopeFastPluckExample.tsx?raw";
+import EnvelopeFastPluckExampleStylesSource from "../_components/demos/EnvelopeFastPluckExample/index.module.css?raw";
+import { EnvelopeLongPadExample } from "../_components/demos/EnvelopeLongPadExample/EnvelopeLongPadExample.tsx";
+import EnvelopeLongPadExampleSource from "../_components/demos/EnvelopeLongPadExample/EnvelopeLongPadExample.tsx?raw";
+import EnvelopeLongPadExampleStylesSource from "../_components/demos/EnvelopeLongPadExample/index.module.css?raw";
 
 # EnvelopeEditor
 
 `EnvelopeEditor` is a headless ADSR editor for synth, sampler, modulation, and automation-style interfaces. It models envelope values and interaction state without generating audio or owning a fixed rendering strategy.
 
-<EnvelopeEditorDemo />
+<DemoWithCode source={EnvelopeEditorDemoSource} cssSource={EnvelopeEditorDemoStylesSource}>
+  <EnvelopeEditorDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -34,7 +41,12 @@ import { EnvelopeEditor } from "@ryhrm-gz/audio-ui-react";
 
 ### Fast pluck
 
-<EnvelopeFastPluckExample />
+<DemoWithCode
+  source={EnvelopeFastPluckExampleSource}
+  cssSource={EnvelopeFastPluckExampleStylesSource}
+>
+  <EnvelopeFastPluckExample />
+</DemoWithCode>
 
 Short attack and decay times create a plucky transient.
 
@@ -52,7 +64,9 @@ Short attack and decay times create a plucky transient.
 
 ### Long pad
 
-<EnvelopeLongPadExample />
+<DemoWithCode source={EnvelopeLongPadExampleSource} cssSource={EnvelopeLongPadExampleStylesSource}>
+  <EnvelopeLongPadExample />
+</DemoWithCode>
 
 Slow attack and long release suit pad and ambience layers.
 

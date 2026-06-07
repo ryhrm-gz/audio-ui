@@ -1,0 +1,180 @@
+.root {
+  display: grid;
+  place-items: center;
+  min-height: 17rem;
+  margin: 0;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background: var(--demo-bg);
+  color: var(--demo-ink);
+}
+
+@media (width <= 600px) {
+  .root {
+    min-height: 15rem;
+  }
+}
+
+.label {
+  margin-bottom: 1rem;
+  color: var(--demo-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.meterHeader .label {
+  margin-bottom: 0;
+}
+
+.readout {
+  min-width: 6rem;
+  color: var(--demo-ink);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.meterConsole {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+}
+
+.meterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 16rem);
+  gap: 1rem;
+}
+
+.playButton {
+  min-width: 4.75rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--demo-line);
+  border-radius: 6px;
+  background: var(--demo-soft);
+  color: var(--demo-ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.playButton:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 3px;
+}
+
+.audioPlayer {
+  display: none;
+}
+
+.fader {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+}
+
+.faderStrip {
+  display: grid;
+  grid-template-columns: 2.75rem 2.4rem;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.faderScale {
+  position: relative;
+  width: 2.75rem;
+  height: 12rem;
+  color: var(--demo-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.faderScale [data-part="scale-mark"] {
+  position: absolute;
+  top: calc((1 - var(--fader-mark-percent)) * 100%);
+  right: 0;
+  transform: translateY(-50%);
+}
+
+@media (width <= 600px) {
+  .faderScale,
+  .faderTrack {
+    height: 10rem;
+  }
+}
+
+.faderTrack {
+  position: relative;
+  width: 2.4rem;
+  height: 12rem;
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background: var(--demo-soft);
+  touch-action: none;
+}
+
+.faderTrack::before {
+  position: absolute;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  left: 50%;
+  width: 1px;
+  background: var(--demo-line);
+  content: "";
+  transform: translateX(-50%);
+}
+
+.faderRange {
+  position: absolute;
+  inset: auto 0 0;
+  height: calc(var(--fader-percent) * 100%);
+  border-radius: inherit;
+  background: rgb(0 0 0 / 6%);
+}
+
+:global(html.rp-dark) .faderRange,
+:global(.dark) .faderRange {
+  background: rgb(255 255 255 / 10%);
+}
+
+.faderThumb {
+  position: absolute;
+  top: calc((1 - var(--fader-percent)) * 100%);
+  left: 50%;
+  width: 3.75rem;
+  height: 1.35rem;
+  border: 1px solid var(--demo-line);
+  border-radius: 6px;
+  background: var(--demo-bg);
+  box-shadow: 0 1px 0 rgb(0 0 0 / 10%);
+  transform: translate(-50%, -50%);
+}
+
+.faderThumb:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 4px;
+}
+
+:global(html.rp-dark) .faderThumb,
+:global(.dark) .faderThumb {
+  box-shadow: 0 1px 0 rgb(255 255 255 / 10%);
+}
+
+.faderThumb::before {
+  position: absolute;
+  top: 50%;
+  left: 0.65rem;
+  right: 0.65rem;
+  height: 1px;
+  background: var(--demo-line);
+  content: "";
+  transform: translateY(-50%);
+}

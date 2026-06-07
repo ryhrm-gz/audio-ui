@@ -1,0 +1,172 @@
+.root {
+  display: grid;
+  place-items: center;
+  min-height: 17rem;
+  margin: 0;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background: var(--demo-bg);
+  color: var(--demo-ink);
+}
+
+@media (width <= 600px) {
+  .root {
+    min-height: 15rem;
+  }
+}
+
+.label {
+  margin-bottom: 1rem;
+  color: var(--demo-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.meterHeader .label {
+  margin-bottom: 0;
+}
+
+.readout {
+  min-width: 6rem;
+  color: var(--demo-ink);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.meterConsole {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+}
+
+.meterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 16rem);
+  gap: 1rem;
+}
+
+.playButton {
+  min-width: 4.75rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--demo-line);
+  border-radius: 6px;
+  background: var(--demo-soft);
+  color: var(--demo-ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.playButton:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 3px;
+}
+
+.audioPlayer {
+  display: none;
+}
+
+.eqCurve {
+  display: grid;
+  justify-items: center;
+  width: min(100%, 30rem);
+  gap: 1rem;
+}
+
+.eqGraph {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 2.4;
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background: var(--demo-bg);
+  touch-action: none;
+}
+
+.eqGrid {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(var(--demo-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--demo-line) 1px, transparent 1px),
+    linear-gradient(
+      transparent calc(50% - 0.5px),
+      var(--demo-muted) 50%,
+      transparent calc(50% + 0.5px)
+    ),
+    var(--demo-soft);
+  background-size:
+    100% 25%,
+    12.5% 100%,
+    100% 100%;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.eqLine {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.eqLine [data-part="curve-path"] {
+  stroke: var(--demo-accent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3px;
+}
+
+.eqBands {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.eqBand {
+  position: absolute;
+  top: calc((1 - var(--eq-curve-band-y)) * 100%);
+  left: calc(var(--eq-curve-band-x) * 100%);
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 2px solid var(--demo-bg);
+  border-radius: 50%;
+  background: var(--demo-fill);
+  box-shadow: 0 0 0 1px var(--demo-line);
+  transform: translate(-50%, -50%);
+}
+
+.eqBand:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 4px;
+}
+
+.eqBand[data-band-type="bell"] {
+  background: var(--demo-accent);
+}
+
+.eqBand[data-band-type="low-shelf"],
+.eqBand[data-band-type="high-shelf"] {
+  border-radius: 6px;
+}
+
+.eqBand[data-enabled="false"],
+.eqBand:not([data-enabled]) {
+  opacity: 0.45;
+}
+
+.eqReadout {
+  width: min(100%, 18rem);
+}

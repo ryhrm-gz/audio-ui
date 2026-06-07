@@ -3,18 +3,27 @@ title: Fader
 description: Create console-style dB faders with scale markings, non-linear value mapping, and hidden form inputs.
 ---
 
-import { FaderDemo } from "../_components/FaderDemo.tsx";
-import {
-  FaderCustomUnityExample,
-  FaderHorizontalExample,
-  FaderReadOnlyExample,
-} from "../_components/examples/fader-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { FaderDemo } from "../_components/demos/FaderDemo/FaderDemo.tsx";
+import FaderDemoSource from "../_components/demos/FaderDemo/FaderDemo.tsx?raw";
+import FaderDemoStylesSource from "../_components/demos/FaderDemo/index.module.css?raw";
+import { FaderHorizontalExample } from "../_components/demos/FaderHorizontalExample/FaderHorizontalExample.tsx";
+import FaderHorizontalExampleSource from "../_components/demos/FaderHorizontalExample/FaderHorizontalExample.tsx?raw";
+import FaderHorizontalExampleStylesSource from "../_components/demos/FaderHorizontalExample/index.module.css?raw";
+import { FaderCustomUnityExample } from "../_components/demos/FaderCustomUnityExample/FaderCustomUnityExample.tsx";
+import FaderCustomUnityExampleSource from "../_components/demos/FaderCustomUnityExample/FaderCustomUnityExample.tsx?raw";
+import FaderCustomUnityExampleStylesSource from "../_components/demos/FaderCustomUnityExample/index.module.css?raw";
+import { FaderReadOnlyExample } from "../_components/demos/FaderReadOnlyExample/FaderReadOnlyExample.tsx";
+import FaderReadOnlyExampleSource from "../_components/demos/FaderReadOnlyExample/FaderReadOnlyExample.tsx?raw";
+import FaderReadOnlyExampleStylesSource from "../_components/demos/FaderReadOnlyExample/index.module.css?raw";
 
 # Fader
 
 `Fader` is a dB control for console-style channel strips. It defaults to vertical orientation, `-60..+12 dB`, `0.1 dB` steps, a `0 dB` unity point, and a non-linear scale with more usable resolution around common mix positions.
 
-<FaderDemo />
+<DemoWithCode source={FaderDemoSource} cssSource={FaderDemoStylesSource}>
+  <FaderDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -36,7 +45,9 @@ import { Fader } from "@ryhrm-gz/audio-ui-react";
 
 ### Horizontal
 
-<FaderHorizontalExample />
+<DemoWithCode source={FaderHorizontalExampleSource} cssSource={FaderHorizontalExampleStylesSource}>
+  <FaderHorizontalExample />
+</DemoWithCode>
 
 `orientation="horizontal"` maps pointer movement from left to right.
 
@@ -52,7 +63,12 @@ import { Fader } from "@ryhrm-gz/audio-ui-react";
 
 ### Custom unity
 
-<FaderCustomUnityExample />
+<DemoWithCode
+  source={FaderCustomUnityExampleSource}
+  cssSource={FaderCustomUnityExampleStylesSource}
+>
+  <FaderCustomUnityExample />
+</DemoWithCode>
 
 `unity` moves the unity gain marker and `data-unity` styling hook.
 
@@ -68,7 +84,9 @@ import { Fader } from "@ryhrm-gz/audio-ui-react";
 
 ### Read only
 
-<FaderReadOnlyExample />
+<DemoWithCode source={FaderReadOnlyExampleSource} cssSource={FaderReadOnlyExampleStylesSource}>
+  <FaderReadOnlyExample />
+</DemoWithCode>
 
 `readOnly` keeps the fader visible without allowing value changes.
 

@@ -3,18 +3,27 @@ title: SpectrumAnalyzer
 description: Render headless frequency spectrum displays from external bin and dB magnitude arrays.
 ---
 
-import { SpectrumAnalyzerDemo } from "../_components/SpectrumAnalyzerDemo.tsx";
-import {
-  SpectrumBassFocusExample,
-  SpectrumEmptyValueExample,
-  SpectrumVocalRangeExample,
-} from "../_components/examples/spectrum-analyzer-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { SpectrumAnalyzerDemo } from "../_components/demos/SpectrumAnalyzerDemo/SpectrumAnalyzerDemo.tsx";
+import SpectrumAnalyzerDemoSource from "../_components/demos/SpectrumAnalyzerDemo/SpectrumAnalyzerDemo.tsx?raw";
+import SpectrumAnalyzerDemoStylesSource from "../_components/demos/SpectrumAnalyzerDemo/index.module.css?raw";
+import { SpectrumVocalRangeExample } from "../_components/demos/SpectrumVocalRangeExample/SpectrumVocalRangeExample.tsx";
+import SpectrumVocalRangeExampleSource from "../_components/demos/SpectrumVocalRangeExample/SpectrumVocalRangeExample.tsx?raw";
+import SpectrumVocalRangeExampleStylesSource from "../_components/demos/SpectrumVocalRangeExample/index.module.css?raw";
+import { SpectrumBassFocusExample } from "../_components/demos/SpectrumBassFocusExample/SpectrumBassFocusExample.tsx";
+import SpectrumBassFocusExampleSource from "../_components/demos/SpectrumBassFocusExample/SpectrumBassFocusExample.tsx?raw";
+import SpectrumBassFocusExampleStylesSource from "../_components/demos/SpectrumBassFocusExample/index.module.css?raw";
+import { SpectrumEmptyValueExample } from "../_components/demos/SpectrumEmptyValueExample/SpectrumEmptyValueExample.tsx";
+import SpectrumEmptyValueExampleSource from "../_components/demos/SpectrumEmptyValueExample/SpectrumEmptyValueExample.tsx?raw";
+import SpectrumEmptyValueExampleStylesSource from "../_components/demos/SpectrumEmptyValueExample/index.module.css?raw";
 
 # SpectrumAnalyzer
 
 `SpectrumAnalyzer` is a read-only primitive for drawing frequency spectrum data. It does not read from the Web Audio API directly; pass magnitude arrays or `{ frequency, magnitude }` bins from your own analyzer, worker, server, or test fixture.
 
-<SpectrumAnalyzerDemo />
+<DemoWithCode source={SpectrumAnalyzerDemoSource} cssSource={SpectrumAnalyzerDemoStylesSource}>
+  <SpectrumAnalyzerDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -35,7 +44,12 @@ import { SpectrumAnalyzer } from "@ryhrm-gz/audio-ui-react";
 
 ### Vocal range
 
-<SpectrumVocalRangeExample />
+<DemoWithCode
+  source={SpectrumVocalRangeExampleSource}
+  cssSource={SpectrumVocalRangeExampleStylesSource}
+>
+  <SpectrumVocalRangeExample />
+</DemoWithCode>
 
 Narrow `minFrequency` and `maxFrequency` to zoom into a vocal band.
 
@@ -49,7 +63,12 @@ Narrow `minFrequency` and `maxFrequency` to zoom into a vocal band.
 
 ### Bass focus
 
-<SpectrumBassFocusExample />
+<DemoWithCode
+  source={SpectrumBassFocusExampleSource}
+  cssSource={SpectrumBassFocusExampleStylesSource}
+>
+  <SpectrumBassFocusExample />
+</DemoWithCode>
 
 Combine a tighter frequency window with a higher `minMagnitude` floor for low-end detail.
 
@@ -63,7 +82,12 @@ Combine a tighter frequency window with a higher `minMagnitude` floor for low-en
 
 ### Empty value
 
-<SpectrumEmptyValueExample />
+<DemoWithCode
+  source={SpectrumEmptyValueExampleSource}
+  cssSource={SpectrumEmptyValueExampleStylesSource}
+>
+  <SpectrumEmptyValueExample />
+</DemoWithCode>
 
 An empty `value` array renders an idle analyzer state.
 

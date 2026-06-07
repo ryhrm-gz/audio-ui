@@ -3,17 +3,24 @@ title: EQCurve
 description: Build parametric EQ curve editors with draggable bands, log-frequency mapping, preview curves, and JSON form values.
 ---
 
-import { EQCurveDemo } from "../_components/EQCurveDemo.tsx";
-import {
-  EQCurveDisabledBandsExample,
-  EQCurveMasteringExample,
-} from "../_components/examples/eq-curve-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { EQCurveDemo } from "../_components/demos/EQCurveDemo/EQCurveDemo.tsx";
+import EQCurveDemoSource from "../_components/demos/EQCurveDemo/EQCurveDemo.tsx?raw";
+import EQCurveDemoStylesSource from "../_components/demos/EQCurveDemo/index.module.css?raw";
+import { EQCurveMasteringExample } from "../_components/demos/EQCurveMasteringExample/EQCurveMasteringExample.tsx";
+import EQCurveMasteringExampleSource from "../_components/demos/EQCurveMasteringExample/EQCurveMasteringExample.tsx?raw";
+import EQCurveMasteringExampleStylesSource from "../_components/demos/EQCurveMasteringExample/index.module.css?raw";
+import { EQCurveDisabledBandsExample } from "../_components/demos/EQCurveDisabledBandsExample/EQCurveDisabledBandsExample.tsx";
+import EQCurveDisabledBandsExampleSource from "../_components/demos/EQCurveDisabledBandsExample/EQCurveDisabledBandsExample.tsx?raw";
+import EQCurveDisabledBandsExampleStylesSource from "../_components/demos/EQCurveDisabledBandsExample/index.module.css?raw";
 
 # EQCurve
 
 `EQCurve` is a headless editor for parametric EQ bands. It maps frequency on a logarithmic X axis, gain on a vertical dB axis, and generates deterministic preview curve points for bell, shelf, and pass-filter bands.
 
-<EQCurveDemo />
+<DemoWithCode source={EQCurveDemoSource} cssSource={EQCurveDemoStylesSource}>
+  <EQCurveDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -37,7 +44,12 @@ import { EQCurve } from "@ryhrm-gz/audio-ui-react";
 
 ### Mastering
 
-<EQCurveMasteringExample />
+<DemoWithCode
+  source={EQCurveMasteringExampleSource}
+  cssSource={EQCurveMasteringExampleStylesSource}
+>
+  <EQCurveMasteringExample />
+</DemoWithCode>
 
 Tighter `minGain` and `maxGain` bounds suit gentle mastering moves.
 
@@ -53,7 +65,12 @@ Tighter `minGain` and `maxGain` bounds suit gentle mastering moves.
 
 ### Disabled bands
 
-<EQCurveDisabledBandsExample />
+<DemoWithCode
+  source={EQCurveDisabledBandsExampleSource}
+  cssSource={EQCurveDisabledBandsExampleStylesSource}
+>
+  <EQCurveDisabledBandsExample />
+</DemoWithCode>
 
 `disabled` keeps the curve visible while blocking band edits.
 

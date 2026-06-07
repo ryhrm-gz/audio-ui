@@ -3,17 +3,24 @@ title: CompressorCurve
 description: Render compressor input-output curves from threshold, ratio, knee, and makeup gain values with JSON form values.
 ---
 
-import { CompressorCurveDemo } from "../_components/CompressorCurveDemo.tsx";
-import {
-  CompressorLimiterExample,
-  CompressorSoftKneeExample,
-} from "../_components/examples/compressor-curve-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { CompressorCurveDemo } from "../_components/demos/CompressorCurveDemo/CompressorCurveDemo.tsx";
+import CompressorCurveDemoSource from "../_components/demos/CompressorCurveDemo/CompressorCurveDemo.tsx?raw";
+import CompressorCurveDemoStylesSource from "../_components/demos/CompressorCurveDemo/index.module.css?raw";
+import { CompressorSoftKneeExample } from "../_components/demos/CompressorSoftKneeExample/CompressorSoftKneeExample.tsx";
+import CompressorSoftKneeExampleSource from "../_components/demos/CompressorSoftKneeExample/CompressorSoftKneeExample.tsx?raw";
+import CompressorSoftKneeExampleStylesSource from "../_components/demos/CompressorSoftKneeExample/index.module.css?raw";
+import { CompressorLimiterExample } from "../_components/demos/CompressorLimiterExample/CompressorLimiterExample.tsx";
+import CompressorLimiterExampleSource from "../_components/demos/CompressorLimiterExample/CompressorLimiterExample.tsx?raw";
+import CompressorLimiterExampleStylesSource from "../_components/demos/CompressorLimiterExample/index.module.css?raw";
 
 # CompressorCurve
 
 `CompressorCurve` is a headless display primitive for audio compressor curves. It maps input level to output level in dB and renders hard or soft knee behavior from threshold, ratio, knee, and makeup gain values.
 
-<CompressorCurveDemo />
+<DemoWithCode source={CompressorCurveDemoSource} cssSource={CompressorCurveDemoStylesSource}>
+  <CompressorCurveDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -34,7 +41,12 @@ import { CompressorCurve } from "@ryhrm-gz/audio-ui-react";
 
 ### Soft knee
 
-<CompressorSoftKneeExample />
+<DemoWithCode
+  source={CompressorSoftKneeExampleSource}
+  cssSource={CompressorSoftKneeExampleStylesSource}
+>
+  <CompressorSoftKneeExample />
+</DemoWithCode>
 
 Lower ratio and wider knee create gentler gain reduction.
 
@@ -49,7 +61,12 @@ Lower ratio and wider knee create gentler gain reduction.
 
 ### Limiter
 
-<CompressorLimiterExample />
+<DemoWithCode
+  source={CompressorLimiterExampleSource}
+  cssSource={CompressorLimiterExampleStylesSource}
+>
+  <CompressorLimiterExample />
+</DemoWithCode>
 
 High ratio and minimal knee approximate brick-wall limiting.
 

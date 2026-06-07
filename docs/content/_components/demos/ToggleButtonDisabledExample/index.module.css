@@ -1,0 +1,124 @@
+.root {
+  display: grid;
+  place-items: center;
+  min-height: 17rem;
+  margin: 0;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background: var(--demo-bg);
+  color: var(--demo-ink);
+}
+
+@media (width <= 600px) {
+  .root {
+    min-height: 15rem;
+  }
+}
+
+.label {
+  margin-bottom: 1rem;
+  color: var(--demo-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.meterHeader .label {
+  margin-bottom: 0;
+}
+
+.readout {
+  min-width: 6rem;
+  color: var(--demo-ink);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.meterConsole {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+}
+
+.meterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 16rem);
+  gap: 1rem;
+}
+
+.playButton {
+  min-width: 4.75rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--demo-line);
+  border-radius: 6px;
+  background: var(--demo-soft);
+  color: var(--demo-ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.playButton:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 3px;
+}
+
+.audioPlayer {
+  display: none;
+}
+
+.togglePanel,
+.toggleGroup {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.toggleStack {
+  display: grid;
+  justify-items: center;
+  width: min(100%, 24rem);
+  gap: 1rem;
+}
+
+.toggleButton,
+.toggleGroupItem {
+  min-width: 5.25rem;
+  min-height: 2.4rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--demo-line);
+  border-radius: 6px;
+  background: var(--demo-soft);
+  color: var(--demo-ink);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.toggleButton:focus-visible,
+.toggleGroupItem:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 3px;
+}
+
+.toggleButton[data-state="on"],
+.toggleGroupItem[data-state="on"] {
+  border-color: var(--demo-fill);
+  background: var(--demo-fill);
+  color: var(--demo-bg);
+}
+
+.toggleButton[data-disabled],
+.toggleGroupItem[data-disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

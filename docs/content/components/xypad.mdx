@@ -3,18 +3,27 @@ title: XYPad
 description: Compose two-dimensional XYPad controls with pointer drag, keyboard movement, value display, and hidden form input parts.
 ---
 
-import { XYPadDemo } from "../_components/XYPadDemo.tsx";
-import {
-  XYPadBipolarExample,
-  XYPadCoarseStepsExample,
-  XYPadDisabledExample,
-} from "../_components/examples/xypad-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { XYPadDemo } from "../_components/demos/XYPadDemo/XYPadDemo.tsx";
+import XYPadDemoSource from "../_components/demos/XYPadDemo/XYPadDemo.tsx?raw";
+import XYPadDemoStylesSource from "../_components/demos/XYPadDemo/index.module.css?raw";
+import { XYPadBipolarExample } from "../_components/demos/XYPadBipolarExample/XYPadBipolarExample.tsx";
+import XYPadBipolarExampleSource from "../_components/demos/XYPadBipolarExample/XYPadBipolarExample.tsx?raw";
+import XYPadBipolarExampleStylesSource from "../_components/demos/XYPadBipolarExample/index.module.css?raw";
+import { XYPadCoarseStepsExample } from "../_components/demos/XYPadCoarseStepsExample/XYPadCoarseStepsExample.tsx";
+import XYPadCoarseStepsExampleSource from "../_components/demos/XYPadCoarseStepsExample/XYPadCoarseStepsExample.tsx?raw";
+import XYPadCoarseStepsExampleStylesSource from "../_components/demos/XYPadCoarseStepsExample/index.module.css?raw";
+import { XYPadDisabledExample } from "../_components/demos/XYPadDisabledExample/XYPadDisabledExample.tsx";
+import XYPadDisabledExampleSource from "../_components/demos/XYPadDisabledExample/XYPadDisabledExample.tsx?raw";
+import XYPadDisabledExampleStylesSource from "../_components/demos/XYPadDisabledExample/index.module.css?raw";
 
 # XYPad
 
 `XYPad` is a two-dimensional control for paired parameters such as filter cutoff and resonance, delay time and feedback, or spatial X/Y positions. It exposes independent X and Y ranges while keeping value math in the framework-agnostic core package.
 
-<XYPadDemo />
+<DemoWithCode source={XYPadDemoSource} cssSource={XYPadDemoStylesSource}>
+  <XYPadDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -34,7 +43,9 @@ import { XYPad } from "@ryhrm-gz/audio-ui-react";
 
 ### Bipolar
 
-<XYPadBipolarExample />
+<DemoWithCode source={XYPadBipolarExampleSource} cssSource={XYPadBipolarExampleStylesSource}>
+  <XYPadBipolarExample />
+</DemoWithCode>
 
 Negative minimums create a centered pad for pan/width or other signed pairs.
 
@@ -56,7 +67,12 @@ Negative minimums create a centered pad for pan/width or other signed pairs.
 
 ### Coarse steps
 
-<XYPadCoarseStepsExample />
+<DemoWithCode
+  source={XYPadCoarseStepsExampleSource}
+  cssSource={XYPadCoarseStepsExampleStylesSource}
+>
+  <XYPadCoarseStepsExample />
+</DemoWithCode>
 
 Larger `stepX` and `stepY` values snap movement to macro positions.
 
@@ -78,7 +94,9 @@ Larger `stepX` and `stepY` values snap movement to macro positions.
 
 ### Disabled
 
-<XYPadDisabledExample />
+<DemoWithCode source={XYPadDisabledExampleSource} cssSource={XYPadDisabledExampleStylesSource}>
+  <XYPadDisabledExample />
+</DemoWithCode>
 
 `disabled` blocks pointer and keyboard interaction.
 

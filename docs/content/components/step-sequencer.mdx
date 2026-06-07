@@ -3,18 +3,27 @@ title: StepSequencer
 description: Build headless drum-machine and gate-sequencer grids with boolean step state, keyboard navigation, and form serialization.
 ---
 
-import { StepSequencerDemo } from "../_components/StepSequencerDemo.tsx";
-import {
-  StepSequencerBassExample,
-  StepSequencerDisabledExample,
-  StepSequencerReadOnlyExample,
-} from "../_components/examples/step-sequencer-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { StepSequencerDemo } from "../_components/demos/StepSequencerDemo/StepSequencerDemo.tsx";
+import StepSequencerDemoSource from "../_components/demos/StepSequencerDemo/StepSequencerDemo.tsx?raw";
+import StepSequencerDemoStylesSource from "../_components/demos/StepSequencerDemo/index.module.css?raw";
+import { StepSequencerBassExample } from "../_components/demos/StepSequencerBassExample/StepSequencerBassExample.tsx";
+import StepSequencerBassExampleSource from "../_components/demos/StepSequencerBassExample/StepSequencerBassExample.tsx?raw";
+import StepSequencerBassExampleStylesSource from "../_components/demos/StepSequencerBassExample/index.module.css?raw";
+import { StepSequencerReadOnlyExample } from "../_components/demos/StepSequencerReadOnlyExample/StepSequencerReadOnlyExample.tsx";
+import StepSequencerReadOnlyExampleSource from "../_components/demos/StepSequencerReadOnlyExample/StepSequencerReadOnlyExample.tsx?raw";
+import StepSequencerReadOnlyExampleStylesSource from "../_components/demos/StepSequencerReadOnlyExample/index.module.css?raw";
+import { StepSequencerDisabledExample } from "../_components/demos/StepSequencerDisabledExample/StepSequencerDisabledExample.tsx";
+import StepSequencerDisabledExampleSource from "../_components/demos/StepSequencerDisabledExample/StepSequencerDisabledExample.tsx?raw";
+import StepSequencerDisabledExampleStylesSource from "../_components/demos/StepSequencerDisabledExample/index.module.css?raw";
 
 # StepSequencer
 
 `StepSequencer` renders a headless boolean step grid for drum machines, gate sequencers, trigger lanes, and DAW-style pattern editors. It owns UI state, accessibility, keyboard navigation, styling hooks, and form serialization without providing audio playback, clocking, or MIDI output.
 
-<StepSequencerDemo />
+<DemoWithCode source={StepSequencerDemoSource} cssSource={StepSequencerDemoStylesSource}>
+  <StepSequencerDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -38,7 +47,12 @@ import { StepSequencer } from "@ryhrm-gz/audio-ui-react";
 
 ### 8 step bass
 
-<StepSequencerBassExample />
+<DemoWithCode
+  source={StepSequencerBassExampleSource}
+  cssSource={StepSequencerBassExampleStylesSource}
+>
+  <StepSequencerBassExample />
+</DemoWithCode>
 
 Smaller grids work for bass lines and simple gate patterns.
 
@@ -53,7 +67,12 @@ Smaller grids work for bass lines and simple gate patterns.
 
 ### Read only
 
-<StepSequencerReadOnlyExample />
+<DemoWithCode
+  source={StepSequencerReadOnlyExampleSource}
+  cssSource={StepSequencerReadOnlyExampleStylesSource}
+>
+  <StepSequencerReadOnlyExample />
+</DemoWithCode>
 
 `readOnly` shows the current pattern without allowing edits.
 
@@ -67,7 +86,12 @@ Smaller grids work for bass lines and simple gate patterns.
 
 ### Disabled
 
-<StepSequencerDisabledExample />
+<DemoWithCode
+  source={StepSequencerDisabledExampleSource}
+  cssSource={StepSequencerDisabledExampleStylesSource}
+>
+  <StepSequencerDisabledExample />
+</DemoWithCode>
 
 `disabled` blocks step toggles and keyboard edits.
 

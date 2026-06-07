@@ -1,0 +1,227 @@
+.root {
+  display: grid;
+  place-items: center;
+  min-height: 17rem;
+  margin: 0;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background: var(--demo-bg);
+  color: var(--demo-ink);
+}
+
+@media (width <= 600px) {
+  .root {
+    min-height: 15rem;
+  }
+}
+
+.label {
+  margin-bottom: 1rem;
+  color: var(--demo-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.meterHeader .label {
+  margin-bottom: 0;
+}
+
+.readout {
+  min-width: 6rem;
+  color: var(--demo-ink);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.meterConsole {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+}
+
+.meterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 16rem);
+  gap: 1rem;
+}
+
+.playButton {
+  min-width: 4.75rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--demo-line);
+  border-radius: 6px;
+  background: var(--demo-soft);
+  color: var(--demo-ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.playButton:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 3px;
+}
+
+.audioPlayer {
+  display: none;
+}
+
+.knob {
+  --demo-knob-inner-inset: 1.4rem;
+  --demo-knob-size: 8.5rem;
+
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  isolation: isolate;
+}
+
+.knob::before {
+  position: relative;
+  display: block;
+  width: var(--demo-knob-size);
+  aspect-ratio: 1;
+  grid-area: 1 / 1;
+  border: 1px solid var(--demo-line);
+  border-radius: 50%;
+  background: var(--demo-soft);
+  box-shadow:
+    inset 0 0 0 0.75rem var(--demo-bg),
+    inset 0 0 0 0.85rem var(--demo-line);
+  content: "";
+  z-index: 0;
+}
+
+.knob::after {
+  position: absolute;
+  top: var(--demo-knob-inner-inset);
+  left: 50%;
+  width: calc(var(--demo-knob-size) - var(--demo-knob-inner-inset) * 2);
+  aspect-ratio: 1;
+  border: 1px solid var(--demo-line);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+@media (width <= 600px) {
+  .knob {
+    --demo-knob-size: 7.5rem;
+  }
+}
+
+.knobControl {
+  position: relative;
+  width: var(--demo-knob-size);
+  aspect-ratio: 1;
+  grid-area: 1 / 1;
+  border-radius: 50%;
+  outline: none;
+  touch-action: none;
+  z-index: 2;
+}
+
+.knobControl:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 4px;
+}
+
+.knobThumb {
+  position: absolute;
+  inset: 0.95rem;
+  border-radius: 50%;
+  transform: rotate(var(--knob-angle));
+}
+
+.knobThumb::before {
+  position: absolute;
+  top: 0.4rem;
+  left: 50%;
+  width: 0.18rem;
+  height: 2.45rem;
+  border-radius: 999px;
+  background: var(--demo-fill);
+  content: "";
+  transform: translateX(-50%);
+}
+
+.knobScale {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--demo-knob-size);
+  aspect-ratio: 1;
+  pointer-events: none;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.knobTicks [data-part="tick"],
+.knobMark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.knobTicks [data-part="tick"] {
+  --demo-knob-tick-radius: 3.65rem;
+
+  width: 0.08rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: var(--demo-muted);
+  transform: translate(
+      calc(-50% + var(--knob-mark-x) * var(--demo-knob-tick-radius)),
+      calc(-50% + var(--knob-mark-y) * var(--demo-knob-tick-radius))
+    )
+    rotate(var(--knob-mark-angle));
+}
+
+.knobMark {
+  --demo-knob-mark-radius: 4.35rem;
+
+  color: var(--demo-muted);
+  font-size: 0.68rem;
+  line-height: 1;
+  transform: translate(
+    calc(-50% + var(--knob-mark-x) * var(--demo-knob-mark-radius)),
+    calc(-50% + var(--knob-mark-y) * var(--demo-knob-mark-radius))
+  );
+}
+
+.knobMarkLabel {
+  display: inline-block;
+}
+
+.knobReadout {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 5.5rem;
+}
+
+.knobReadoutValue {
+  min-width: 5ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.knobReadoutUnit {
+  min-width: 2ch;
+  text-align: left;
+}

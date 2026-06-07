@@ -3,18 +3,27 @@ title: Piano
 description: Compose pressable Piano keyboards that report pressed key state and can drive external audio engines.
 ---
 
-import { PianoDemo } from "../_components/PianoDemo.tsx";
-import {
-  PianoDefaultChordExample,
-  PianoDisabledExample,
-  PianoSingleNoteExample,
-} from "../_components/examples/piano-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { PianoDemo } from "../_components/demos/PianoDemo/PianoDemo.tsx";
+import PianoDemoSource from "../_components/demos/PianoDemo/PianoDemo.tsx?raw";
+import PianoDemoStylesSource from "../_components/demos/PianoDemo/index.module.css?raw";
+import { PianoDefaultChordExample } from "../_components/demos/PianoDefaultChordExample/PianoDefaultChordExample.tsx";
+import PianoDefaultChordExampleSource from "../_components/demos/PianoDefaultChordExample/PianoDefaultChordExample.tsx?raw";
+import PianoDefaultChordExampleStylesSource from "../_components/demos/PianoDefaultChordExample/index.module.css?raw";
+import { PianoSingleNoteExample } from "../_components/demos/PianoSingleNoteExample/PianoSingleNoteExample.tsx";
+import PianoSingleNoteExampleSource from "../_components/demos/PianoSingleNoteExample/PianoSingleNoteExample.tsx?raw";
+import PianoSingleNoteExampleStylesSource from "../_components/demos/PianoSingleNoteExample/index.module.css?raw";
+import { PianoDisabledExample } from "../_components/demos/PianoDisabledExample/PianoDisabledExample.tsx";
+import PianoDisabledExampleSource from "../_components/demos/PianoDisabledExample/PianoDisabledExample.tsx?raw";
+import PianoDisabledExampleStylesSource from "../_components/demos/PianoDisabledExample/index.module.css?raw";
 
 # Piano
 
 `Piano` renders a pressable keyboard for MIDI note input, chord pickers, virtual instruments, and step sequencers. It reports pressed key objects and leaves sound generation to your application.
 
-<PianoDemo />
+<DemoWithCode source={PianoDemoSource} cssSource={PianoDemoStylesSource}>
+  <PianoDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -32,7 +41,12 @@ import { Piano } from "@ryhrm-gz/audio-ui-react";
 
 ### Default chord
 
-<PianoDefaultChordExample />
+<DemoWithCode
+  source={PianoDefaultChordExampleSource}
+  cssSource={PianoDefaultChordExampleStylesSource}
+>
+  <PianoDefaultChordExample />
+</DemoWithCode>
 
 `defaultPressedKeys` sets the initial uncontrolled pressed keys.
 
@@ -44,7 +58,9 @@ import { Piano } from "@ryhrm-gz/audio-ui-react";
 
 ### Single note
 
-<PianoSingleNoteExample />
+<DemoWithCode source={PianoSingleNoteExampleSource} cssSource={PianoSingleNoteExampleStylesSource}>
+  <PianoSingleNoteExample />
+</DemoWithCode>
 
 `pressedKeys` controls which keys are pressed from external state.
 
@@ -56,7 +72,9 @@ import { Piano } from "@ryhrm-gz/audio-ui-react";
 
 ### Disabled
 
-<PianoDisabledExample />
+<DemoWithCode source={PianoDisabledExampleSource} cssSource={PianoDisabledExampleStylesSource}>
+  <PianoDisabledExample />
+</DemoWithCode>
 
 `disabled` blocks key presses while keeping the layout visible.
 

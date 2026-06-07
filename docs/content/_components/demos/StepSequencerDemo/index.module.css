@@ -1,0 +1,175 @@
+.root {
+  display: grid;
+  place-items: center;
+  min-height: 17rem;
+  margin: 0;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background: var(--demo-bg);
+  color: var(--demo-ink);
+}
+
+@media (width <= 600px) {
+  .root {
+    min-height: 15rem;
+  }
+}
+
+.label {
+  margin-bottom: 1rem;
+  color: var(--demo-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.meterHeader .label {
+  margin-bottom: 0;
+}
+
+.readout {
+  min-width: 6rem;
+  color: var(--demo-ink);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.meterConsole {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+}
+
+.meterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 16rem);
+  gap: 1rem;
+}
+
+.playButton {
+  min-width: 4.75rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--demo-line);
+  border-radius: 6px;
+  background: var(--demo-soft);
+  color: var(--demo-ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.playButton:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 3px;
+}
+
+.audioPlayer {
+  display: none;
+}
+
+.stepSequencer {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: min(100%, 36rem);
+  gap: 1rem;
+}
+
+.stepSequencerTracks {
+  display: grid;
+  width: 100%;
+  gap: 0.55rem;
+}
+
+.stepSequencerTrack {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media (width <= 600px) {
+  .stepSequencerTrack {
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+}
+
+.stepSequencerLabel {
+  overflow: hidden;
+  color: var(--demo-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.stepSequencerSteps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--step-sequencer-step-count), minmax(0, 1fr));
+  gap: 0.3rem;
+}
+
+@media (width <= 600px) {
+  .stepSequencerSteps {
+    gap: 0.2rem;
+  }
+}
+
+.stepSequencerStep {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--demo-line);
+  border-radius: 5px;
+  background: var(--demo-soft);
+  color: transparent;
+  cursor: pointer;
+}
+
+.stepSequencerStep:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 4px;
+}
+
+.stepSequencerStep:nth-child(4n + 1) {
+  box-shadow: inset 0 0 0 1px var(--demo-muted);
+}
+
+.stepSequencerStep[data-active] {
+  border-color: #0f766e;
+  background: #14b8a6;
+}
+
+.stepSequencerStep[data-playhead] {
+  box-shadow:
+    inset 0 0 0 2px var(--demo-ink),
+    0 0 0 1px var(--demo-bg);
+}
+
+.stepSequencerPlayhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(4.75rem + var(--step-sequencer-playhead-percent) * (100% - 4.75rem));
+  display: block;
+  width: 2px;
+  background: var(--demo-ink);
+  opacity: 0.55;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+@media (width <= 600px) {
+  .stepSequencerPlayhead {
+    left: calc(3.75rem + var(--step-sequencer-playhead-percent) * (100% - 3.75rem));
+  }
+}

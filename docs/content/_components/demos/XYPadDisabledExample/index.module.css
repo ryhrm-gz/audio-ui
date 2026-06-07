@@ -1,0 +1,137 @@
+.root {
+  display: grid;
+  place-items: center;
+  min-height: 17rem;
+  margin: 0;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background: var(--demo-bg);
+  color: var(--demo-ink);
+}
+
+@media (width <= 600px) {
+  .root {
+    min-height: 15rem;
+  }
+}
+
+.label {
+  margin-bottom: 1rem;
+  color: var(--demo-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.meterHeader .label {
+  margin-bottom: 0;
+}
+
+.readout {
+  min-width: 6rem;
+  color: var(--demo-ink);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.meterConsole {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+}
+
+.meterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 16rem);
+  gap: 1rem;
+}
+
+.playButton {
+  min-width: 4.75rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--demo-line);
+  border-radius: 6px;
+  background: var(--demo-soft);
+  color: var(--demo-ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.playButton:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 3px;
+}
+
+.audioPlayer {
+  display: none;
+}
+
+.xypad {
+  display: grid;
+  justify-items: center;
+  width: min(100%, 18rem);
+  gap: 1rem;
+}
+
+.xypadArea {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--demo-line);
+  border-radius: 8px;
+  background:
+    linear-gradient(var(--demo-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--demo-line) 1px, transparent 1px), var(--demo-soft);
+  background-size: 25% 25%;
+  touch-action: none;
+}
+
+.xypadCrosshair::before,
+.xypadCrosshair::after {
+  position: absolute;
+  background: var(--demo-muted);
+  opacity: 0.35;
+  content: "";
+  pointer-events: none;
+}
+
+.xypadCrosshair::before {
+  top: 0;
+  bottom: 0;
+  left: calc(var(--xypad-x-percent) * 100%);
+  width: 1px;
+}
+
+.xypadCrosshair::after {
+  top: calc((1 - var(--xypad-y-percent)) * 100%);
+  right: 0;
+  left: 0;
+  height: 1px;
+}
+
+.xypadThumb {
+  position: absolute;
+  top: calc((1 - var(--xypad-y-percent)) * 100%);
+  left: calc(var(--xypad-x-percent) * 100%);
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 2px solid var(--demo-bg);
+  border-radius: 50%;
+  background: var(--demo-fill);
+  box-shadow: 0 0 0 1px var(--demo-line);
+  transform: translate(-50%, -50%);
+}
+
+.xypadThumb:focus-visible {
+  outline: 2px solid var(--demo-focus);
+  outline-offset: 4px;
+}

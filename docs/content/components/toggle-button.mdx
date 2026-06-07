@@ -3,18 +3,27 @@ title: ToggleButton
 description: Build controlled, uncontrolled, and momentary pressed buttons for mute, solo, bypass, and monitor controls.
 ---
 
-import { ToggleButtonDemo } from "../_components/ToggleButtonDemo.tsx";
-import {
-  ToggleButtonDefaultPressedExample,
-  ToggleButtonDisabledExample,
-  ToggleButtonRenderStateExample,
-} from "../_components/examples/toggle-button-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { ToggleButtonDemo } from "../_components/demos/ToggleButtonDemo/ToggleButtonDemo.tsx";
+import ToggleButtonDemoSource from "../_components/demos/ToggleButtonDemo/ToggleButtonDemo.tsx?raw";
+import ToggleButtonDemoStylesSource from "../_components/demos/ToggleButtonDemo/index.module.css?raw";
+import { ToggleButtonDefaultPressedExample } from "../_components/demos/ToggleButtonDefaultPressedExample/ToggleButtonDefaultPressedExample.tsx";
+import ToggleButtonDefaultPressedExampleSource from "../_components/demos/ToggleButtonDefaultPressedExample/ToggleButtonDefaultPressedExample.tsx?raw";
+import ToggleButtonDefaultPressedExampleStylesSource from "../_components/demos/ToggleButtonDefaultPressedExample/index.module.css?raw";
+import { ToggleButtonRenderStateExample } from "../_components/demos/ToggleButtonRenderStateExample/ToggleButtonRenderStateExample.tsx";
+import ToggleButtonRenderStateExampleSource from "../_components/demos/ToggleButtonRenderStateExample/ToggleButtonRenderStateExample.tsx?raw";
+import ToggleButtonRenderStateExampleStylesSource from "../_components/demos/ToggleButtonRenderStateExample/index.module.css?raw";
+import { ToggleButtonDisabledExample } from "../_components/demos/ToggleButtonDisabledExample/ToggleButtonDisabledExample.tsx";
+import ToggleButtonDisabledExampleSource from "../_components/demos/ToggleButtonDisabledExample/ToggleButtonDisabledExample.tsx?raw";
+import ToggleButtonDisabledExampleStylesSource from "../_components/demos/ToggleButtonDisabledExample/index.module.css?raw";
 
 # ToggleButton
 
 `ToggleButton` renders a single pressable button with `aria-pressed` state. Use it for mute, solo, record arm, monitor, bypass, oscillator enable, sync, loop, and metronome controls.
 
-<ToggleButtonDemo />
+<DemoWithCode source={ToggleButtonDemoSource} cssSource={ToggleButtonDemoStylesSource}>
+  <ToggleButtonDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -30,7 +39,12 @@ import { ToggleButton } from "@ryhrm-gz/audio-ui-react";
 
 ### Default pressed
 
-<ToggleButtonDefaultPressedExample />
+<DemoWithCode
+  source={ToggleButtonDefaultPressedExampleSource}
+  cssSource={ToggleButtonDefaultPressedExampleStylesSource}
+>
+  <ToggleButtonDefaultPressedExample />
+</DemoWithCode>
 
 `defaultPressed` sets the initial uncontrolled pressed state.
 
@@ -40,7 +54,12 @@ import { ToggleButton } from "@ryhrm-gz/audio-ui-react";
 
 ### Render state
 
-<ToggleButtonRenderStateExample />
+<DemoWithCode
+  source={ToggleButtonRenderStateExampleSource}
+  cssSource={ToggleButtonRenderStateExampleStylesSource}
+>
+  <ToggleButtonRenderStateExample />
+</DemoWithCode>
 
 Function children receive render state, including `pressed`.
 
@@ -52,7 +71,12 @@ Function children receive render state, including `pressed`.
 
 ### Disabled
 
-<ToggleButtonDisabledExample />
+<DemoWithCode
+  source={ToggleButtonDisabledExampleSource}
+  cssSource={ToggleButtonDisabledExampleStylesSource}
+>
+  <ToggleButtonDisabledExample />
+</DemoWithCode>
 
 `disabled` prevents interaction and adds disabled metadata.
 

@@ -2,40 +2,4 @@
   .rp-home-hero {
     margin: 2rem auto;
   }
-
-  .audio-demo {
-    min-height: 15rem;
-  }
-
-  .demo-knob {
-    --demo-knob-size: 7.5rem;
-  }
-
-  .demo-fader-scale,
-  .demo-fader-track,
-  .demo-level-meter-scale,
-  .demo-level-meter-track {
-    height: 10rem;
-  }
-
-  .demo-piano-keys {
-    height: 8rem;
-  }
-
-  .demo-piano-key[data-color="white"] {
-    color: transparent;
-  }
-
-  .demo-step-sequencer-track {
-    grid-template-columns: 3.25rem minmax(0, 1fr);
-    gap: 0.5rem;
-  }
-
-  .demo-step-sequencer-steps {
-    gap: 0.2rem;
-  }
-
-  .demo-step-sequencer-playhead {
-    left: calc(3.75rem + var(--step-sequencer-playhead-percent) * (100% - 3.75rem));
-  }
 }

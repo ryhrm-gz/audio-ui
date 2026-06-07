@@ -1,17 +1,3 @@
 @import url("./variables.css");
 @import url("./home.css");
-@import url("./demo-common.css");
-@import url("./demo-knob.css");
-@import url("./demo-slider.css");
-@import url("./demo-range-slider.css");
-@import url("./demo-toggle.css");
-@import url("./demo-level-meter.css");
-@import url("./demo-spectrum-analyzer.css");
-@import url("./demo-fader.css");
-@import url("./demo-xypad.css");
-@import url("./demo-envelope.css");
-@import url("./demo-eq-curve.css");
-@import url("./demo-compressor-curve.css");
-@import url("./demo-piano.css");
-@import url("./demo-step-sequencer.css");
 @import url("./responsive.css");

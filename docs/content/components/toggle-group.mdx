@@ -3,18 +3,27 @@ title: ToggleGroup
 description: Compose single-select and multi-select toggle button groups with keyboard navigation and form inputs.
 ---
 
-import { ToggleGroupDemo } from "../_components/ToggleGroupDemo.tsx";
-import {
-  ToggleGroupAllowEmptyExample,
-  ToggleGroupDisabledExample,
-  ToggleGroupVerticalExample,
-} from "../_components/examples/toggle-group-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { ToggleGroupDemo } from "../_components/demos/ToggleGroupDemo/ToggleGroupDemo.tsx";
+import ToggleGroupDemoSource from "../_components/demos/ToggleGroupDemo/ToggleGroupDemo.tsx?raw";
+import ToggleGroupDemoStylesSource from "../_components/demos/ToggleGroupDemo/index.module.css?raw";
+import { ToggleGroupAllowEmptyExample } from "../_components/demos/ToggleGroupAllowEmptyExample/ToggleGroupAllowEmptyExample.tsx";
+import ToggleGroupAllowEmptyExampleSource from "../_components/demos/ToggleGroupAllowEmptyExample/ToggleGroupAllowEmptyExample.tsx?raw";
+import ToggleGroupAllowEmptyExampleStylesSource from "../_components/demos/ToggleGroupAllowEmptyExample/index.module.css?raw";
+import { ToggleGroupVerticalExample } from "../_components/demos/ToggleGroupVerticalExample/ToggleGroupVerticalExample.tsx";
+import ToggleGroupVerticalExampleSource from "../_components/demos/ToggleGroupVerticalExample/ToggleGroupVerticalExample.tsx?raw";
+import ToggleGroupVerticalExampleStylesSource from "../_components/demos/ToggleGroupVerticalExample/index.module.css?raw";
+import { ToggleGroupDisabledExample } from "../_components/demos/ToggleGroupDisabledExample/ToggleGroupDisabledExample.tsx";
+import ToggleGroupDisabledExampleSource from "../_components/demos/ToggleGroupDisabledExample/ToggleGroupDisabledExample.tsx?raw";
+import ToggleGroupDisabledExampleStylesSource from "../_components/demos/ToggleGroupDisabledExample/index.module.css?raw";
 
 # ToggleGroup
 
 `ToggleGroup` groups related pressed buttons for mode selection, exclusive states, and multi-select audio states such as mute, solo, arm, and monitor.
 
-<ToggleGroupDemo />
+<DemoWithCode source={ToggleGroupDemoSource} cssSource={ToggleGroupDemoStylesSource}>
+  <ToggleGroupDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -31,7 +40,12 @@ import { ToggleGroup } from "@ryhrm-gz/audio-ui-react";
 
 ### Allow empty
 
-<ToggleGroupAllowEmptyExample />
+<DemoWithCode
+  source={ToggleGroupAllowEmptyExampleSource}
+  cssSource={ToggleGroupAllowEmptyExampleStylesSource}
+>
+  <ToggleGroupAllowEmptyExample />
+</DemoWithCode>
 
 `allowEmpty` lets a single-selection group clear back to no value.
 
@@ -44,7 +58,12 @@ import { ToggleGroup } from "@ryhrm-gz/audio-ui-react";
 
 ### Vertical
 
-<ToggleGroupVerticalExample />
+<DemoWithCode
+  source={ToggleGroupVerticalExampleSource}
+  cssSource={ToggleGroupVerticalExampleStylesSource}
+>
+  <ToggleGroupVerticalExample />
+</DemoWithCode>
 
 `orientation="vertical"` stacks items for routing or mode pickers.
 
@@ -57,7 +76,12 @@ import { ToggleGroup } from "@ryhrm-gz/audio-ui-react";
 
 ### Disabled
 
-<ToggleGroupDisabledExample />
+<DemoWithCode
+  source={ToggleGroupDisabledExampleSource}
+  cssSource={ToggleGroupDisabledExampleStylesSource}
+>
+  <ToggleGroupDisabledExample />
+</DemoWithCode>
 
 `disabled` prevents all items from changing.
 

@@ -3,26 +3,43 @@ title: Slider
 description: Compose horizontal or vertical Slider controls with track, range, thumb, value, and hidden input parts.
 ---
 
-import { SliderDemo } from "../_components/SliderDemo.tsx";
-import { SliderRangeDemo } from "../_components/SliderRangeDemo.tsx";
-import {
-  SliderDisabledExample,
-  SliderInvertedExample,
-  SliderVerticalExample,
-} from "../_components/examples/slider-examples.tsx";
-import {
-  SliderRangeInvertedExample,
-  SliderRangeReadOnlyExample,
-  SliderRangeVerticalExample,
-} from "../_components/examples/slider-range-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { SliderDemo } from "../_components/demos/SliderDemo/SliderDemo.tsx";
+import SliderDemoSource from "../_components/demos/SliderDemo/SliderDemo.tsx?raw";
+import SliderDemoStylesSource from "../_components/demos/SliderDemo/index.module.css?raw";
+import { SliderRangeDemo } from "../_components/demos/SliderRangeDemo/SliderRangeDemo.tsx";
+import SliderRangeDemoSource from "../_components/demos/SliderRangeDemo/SliderRangeDemo.tsx?raw";
+import SliderRangeDemoStylesSource from "../_components/demos/SliderRangeDemo/index.module.css?raw";
+import { SliderVerticalExample } from "../_components/demos/SliderVerticalExample/SliderVerticalExample.tsx";
+import SliderVerticalExampleSource from "../_components/demos/SliderVerticalExample/SliderVerticalExample.tsx?raw";
+import SliderVerticalExampleStylesSource from "../_components/demos/SliderVerticalExample/index.module.css?raw";
+import { SliderInvertedExample } from "../_components/demos/SliderInvertedExample/SliderInvertedExample.tsx";
+import SliderInvertedExampleSource from "../_components/demos/SliderInvertedExample/SliderInvertedExample.tsx?raw";
+import SliderInvertedExampleStylesSource from "../_components/demos/SliderInvertedExample/index.module.css?raw";
+import { SliderDisabledExample } from "../_components/demos/SliderDisabledExample/SliderDisabledExample.tsx";
+import SliderDisabledExampleSource from "../_components/demos/SliderDisabledExample/SliderDisabledExample.tsx?raw";
+import SliderDisabledExampleStylesSource from "../_components/demos/SliderDisabledExample/index.module.css?raw";
+import { SliderRangeVerticalExample } from "../_components/demos/SliderRangeVerticalExample/SliderRangeVerticalExample.tsx";
+import SliderRangeVerticalExampleSource from "../_components/demos/SliderRangeVerticalExample/SliderRangeVerticalExample.tsx?raw";
+import SliderRangeVerticalExampleStylesSource from "../_components/demos/SliderRangeVerticalExample/index.module.css?raw";
+import { SliderRangeInvertedExample } from "../_components/demos/SliderRangeInvertedExample/SliderRangeInvertedExample.tsx";
+import SliderRangeInvertedExampleSource from "../_components/demos/SliderRangeInvertedExample/SliderRangeInvertedExample.tsx?raw";
+import SliderRangeInvertedExampleStylesSource from "../_components/demos/SliderRangeInvertedExample/index.module.css?raw";
+import { SliderRangeReadOnlyExample } from "../_components/demos/SliderRangeReadOnlyExample/SliderRangeReadOnlyExample.tsx";
+import SliderRangeReadOnlyExampleSource from "../_components/demos/SliderRangeReadOnlyExample/SliderRangeReadOnlyExample.tsx?raw";
+import SliderRangeReadOnlyExampleStylesSource from "../_components/demos/SliderRangeReadOnlyExample/index.module.css?raw";
 
 # Slider
 
 `Slider` is a linear control for normalized parameters, pan, wet/dry balance, bounded ranges, and other values that map cleanly to a percentage. Pass a `number[]` with one or more thumb values.
 
-<SliderDemo />
+<DemoWithCode source={SliderDemoSource} cssSource={SliderDemoStylesSource}>
+  <SliderDemo />
+</DemoWithCode>
 
-<SliderRangeDemo />
+<DemoWithCode source={SliderRangeDemoSource} cssSource={SliderRangeDemoStylesSource}>
+  <SliderRangeDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -70,7 +87,9 @@ Set thumb-specific bounds with the `thumbs` array.
 
 ### Vertical
 
-<SliderVerticalExample />
+<DemoWithCode source={SliderVerticalExampleSource} cssSource={SliderVerticalExampleStylesSource}>
+  <SliderVerticalExample />
+</DemoWithCode>
 
 `orientation="vertical"` maps pointer movement and `aria-orientation` to a vertical track.
 
@@ -85,7 +104,9 @@ Set thumb-specific bounds with the `thumbs` array.
 
 ### Inverted
 
-<SliderInvertedExample />
+<DemoWithCode source={SliderInvertedExampleSource} cssSource={SliderInvertedExampleStylesSource}>
+  <SliderInvertedExample />
+</DemoWithCode>
 
 `inverted` reverses the value-to-position mapping and adds `data-inverted`.
 
@@ -100,7 +121,9 @@ Set thumb-specific bounds with the `thumbs` array.
 
 ### Disabled
 
-<SliderDisabledExample />
+<DemoWithCode source={SliderDisabledExampleSource} cssSource={SliderDisabledExampleStylesSource}>
+  <SliderDisabledExample />
+</DemoWithCode>
 
 `disabled` removes interaction and adds disabled state attributes.
 
@@ -117,7 +140,12 @@ Set thumb-specific bounds with the `thumbs` array.
 
 `defaultValue={[lower, upper]}` enables two-thumb behavior. Any number of values can be supplied; values are normalized in ascending order and each thumb receives bounded ARIA metadata.
 
-<SliderRangeVerticalExample />
+<DemoWithCode
+  source={SliderRangeVerticalExampleSource}
+  cssSource={SliderRangeVerticalExampleStylesSource}
+>
+  <SliderRangeVerticalExample />
+</DemoWithCode>
 
 ```tsx
 <Slider.Root orientation="vertical" defaultValue={[200, 4000]} min={20} max={12000}>
@@ -156,9 +184,19 @@ Use `minStepsBetweenThumbs` to keep thumbs at least a number of steps apart. `mi
 
 ### Range inverted and read only
 
-<SliderRangeInvertedExample />
+<DemoWithCode
+  source={SliderRangeInvertedExampleSource}
+  cssSource={SliderRangeInvertedExampleStylesSource}
+>
+  <SliderRangeInvertedExample />
+</DemoWithCode>
 
-<SliderRangeReadOnlyExample />
+<DemoWithCode
+  source={SliderRangeReadOnlyExampleSource}
+  cssSource={SliderRangeReadOnlyExampleStylesSource}
+>
+  <SliderRangeReadOnlyExample />
+</DemoWithCode>
 
 ## Vertical orientation
 

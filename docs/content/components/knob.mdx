@@ -3,14 +3,21 @@ title: Knob
 description: Build rotary audio controls with Knob parts, CSS angle variables, and controlled or uncontrolled state.
 ---
 
-import { KnobDemo } from "../_components/KnobDemo.tsx";
-import { KnobReadOnlyExample } from "../_components/examples/knob-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { KnobDemo } from "../_components/demos/KnobDemo/KnobDemo.tsx";
+import KnobDemoSource from "../_components/demos/KnobDemo/KnobDemo.tsx?raw";
+import KnobDemoStylesSource from "../_components/demos/KnobDemo/index.module.css?raw";
+import { KnobReadOnlyExample } from "../_components/demos/KnobReadOnlyExample/KnobReadOnlyExample.tsx";
+import KnobReadOnlyExampleSource from "../_components/demos/KnobReadOnlyExample/KnobReadOnlyExample.tsx?raw";
+import KnobReadOnlyExampleStylesSource from "../_components/demos/KnobReadOnlyExample/index.module.css?raw";
 
 # Knob
 
 `Knob` is a rotary control for gain, pan, filter cutoff, send amount, and similar audio parameters. It uses vertical pointer dragging and keyboard interaction while exposing `--knob-angle` for styling.
 
-<KnobDemo />
+<DemoWithCode source={KnobDemoSource} cssSource={KnobDemoStylesSource}>
+  <KnobDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -53,7 +60,9 @@ Use `Knob.Scale` with generated `Knob.Ticks` and explicit `Knob.Mark` children w
 
 ### Read only
 
-<KnobReadOnlyExample />
+<DemoWithCode source={KnobReadOnlyExampleSource} cssSource={KnobReadOnlyExampleStylesSource}>
+  <KnobReadOnlyExample />
+</DemoWithCode>
 
 `readOnly` keeps the control focusable while preventing value changes.
 

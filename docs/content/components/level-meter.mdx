@@ -3,18 +3,27 @@ title: LevelMeter
 description: Create DAW-style level meters for visualizing live signal levels, peaks, clipping, and dB scale marks.
 ---
 
-import { LevelMeterDemo } from "../_components/LevelMeterDemo.tsx";
-import {
-  LevelMeterFourChannelExample,
-  LevelMeterHorizontalExample,
-  LevelMeterMonoExample,
-} from "../_components/examples/level-meter-examples.tsx";
+import { DemoWithCode } from "../_components/DemoWithCode.tsx";
+import { LevelMeterDemo } from "../_components/demos/LevelMeterDemo/LevelMeterDemo.tsx";
+import LevelMeterDemoSource from "../_components/demos/LevelMeterDemo/LevelMeterDemo.tsx?raw";
+import LevelMeterDemoStylesSource from "../_components/demos/LevelMeterDemo/index.module.css?raw";
+import { LevelMeterMonoExample } from "../_components/demos/LevelMeterMonoExample/LevelMeterMonoExample.tsx";
+import LevelMeterMonoExampleSource from "../_components/demos/LevelMeterMonoExample/LevelMeterMonoExample.tsx?raw";
+import LevelMeterMonoExampleStylesSource from "../_components/demos/LevelMeterMonoExample/index.module.css?raw";
+import { LevelMeterHorizontalExample } from "../_components/demos/LevelMeterHorizontalExample/LevelMeterHorizontalExample.tsx";
+import LevelMeterHorizontalExampleSource from "../_components/demos/LevelMeterHorizontalExample/LevelMeterHorizontalExample.tsx?raw";
+import LevelMeterHorizontalExampleStylesSource from "../_components/demos/LevelMeterHorizontalExample/index.module.css?raw";
+import { LevelMeterFourChannelExample } from "../_components/demos/LevelMeterFourChannelExample/LevelMeterFourChannelExample.tsx";
+import LevelMeterFourChannelExampleSource from "../_components/demos/LevelMeterFourChannelExample/LevelMeterFourChannelExample.tsx?raw";
+import LevelMeterFourChannelExampleStylesSource from "../_components/demos/LevelMeterFourChannelExample/index.module.css?raw";
 
 # LevelMeter
 
 `LevelMeter` is a read-only dB meter for console and channel-strip interfaces. It accepts one or more dBFS values, supports vertical and horizontal layouts, exposes per-channel fill and peak CSS variables, and marks clipping at the configured threshold.
 
-<LevelMeterDemo />
+<DemoWithCode source={LevelMeterDemoSource} cssSource={LevelMeterDemoStylesSource}>
+  <LevelMeterDemo />
+</DemoWithCode>
 
 ## Anatomy
 
@@ -36,7 +45,9 @@ import { LevelMeter } from "@ryhrm-gz/audio-ui-react";
 
 ### Mono
 
-<LevelMeterMonoExample />
+<DemoWithCode source={LevelMeterMonoExampleSource} cssSource={LevelMeterMonoExampleStylesSource}>
+  <LevelMeterMonoExample />
+</DemoWithCode>
 
 `channels={1}` renders a single meter column.
 
@@ -52,7 +63,12 @@ import { LevelMeter } from "@ryhrm-gz/audio-ui-react";
 
 ### Horizontal
 
-<LevelMeterHorizontalExample />
+<DemoWithCode
+  source={LevelMeterHorizontalExampleSource}
+  cssSource={LevelMeterHorizontalExampleStylesSource}
+>
+  <LevelMeterHorizontalExample />
+</DemoWithCode>
 
 `orientation="horizontal"` maps level to width instead of height.
 
@@ -65,7 +81,12 @@ import { LevelMeter } from "@ryhrm-gz/audio-ui-react";
 
 ### Four channel
 
-<LevelMeterFourChannelExample />
+<DemoWithCode
+  source={LevelMeterFourChannelExampleSource}
+  cssSource={LevelMeterFourChannelExampleStylesSource}
+>
+  <LevelMeterFourChannelExample />
+</DemoWithCode>
 
 Pass per-channel arrays when metering surround or stem beds.
 
